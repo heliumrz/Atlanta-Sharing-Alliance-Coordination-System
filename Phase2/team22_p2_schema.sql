@@ -65,34 +65,34 @@ CREATE TABLE ClientService (
    );
 
 CREATE TABLE Shelter (
-   ShelterId int(16) unsigned NOT NULL,
+   FacilityId int(16) unsigned NOT NULL,
    BunkType varchar(50) NOT NULL,
    BunkCountMale int NOT NULL,
    BunkCountFemale int NOT NULL,
    BunkCountMixed int NOT NULL,
-   PRIMARY KEY (ShelterId),
-   CONSTRAINT fk_Shelter_ShelterId_ClientService_FacilityId FOREIGN KEY (ShelterId) REFERENCES ClientService (FacilityId) ON DELETE CASCADE
+   PRIMARY KEY (FacilityId),
+   CONSTRAINT fk_Shelter_FacilityId_ClientService_FacilityId FOREIGN KEY (FacilityId) REFERENCES ClientService (FacilityId) ON DELETE CASCADE
    );
    
-CREATE TABLE FoodPantry (
-   FoodPantryId int(16) unsigned NOT NULL,
-   PRIMARY KEY (FoodPantryId),
-   CONSTRAINT fk_FoodPantry_FoodPantryId_ClientService_FacilityId FOREIGN KEY (FoodPantryId) REFERENCES ClientService (FacilityId) ON DELETE CASCADE
+CREATE TABLE (
+   FacilityId int(16) unsigned NOT NULL,
+   PRIMARY KEY (FacilityId),
+   CONSTRAINT fk_FoodPantry_FacilityId_ClientService_FacilityId FOREIGN KEY (FacilityId) REFERENCES ClientService (FacilityId) ON DELETE CASCADE
    );
    
 CREATE TABLE SoupKitchen (
-   SoupKitchenId int(16) unsigned NOT NULL,
+   FacilityId int(16) unsigned NOT NULL,
    EligibilityCondition varchar(200) NOT NULL,
    HoursOfOperation varchar(50) NOT NULL,
    SeatCount int NOT NULL,
-   PRIMARY KEY (SoupKitchenId),
-   CONSTRAINT fk_SoupKitchen_SoupKitchenId_Service_FacilityId FOREIGN KEY (SoupKitchenId) REFERENCES ClientService (FacilityId) ON DELETE CASCADE   
+   PRIMARY KEY (FacilityId),
+   CONSTRAINT fk_SoupKitchen_FacilityId_Service_FacilityId FOREIGN KEY (FacilityId) REFERENCES ClientService (FacilityId) ON DELETE CASCADE   
    );
    
 CREATE TABLE FoodBank (
-   FoodBankId int(16) unsigned NOT NULL,
-   PRIMARY KEY (FoodBankId),
-   CONSTRAINT fk_FoodBank_FoodBankId_Service_FacilityId FOREIGN KEY (FoodBankId) REFERENCES ClientService (FacilityId) ON DELETE CASCADE   
+   FacilityId int(16) unsigned NOT NULL,
+   PRIMARY KEY (FacilityId),
+   CONSTRAINT fk_FoodBank_FacilityId_Service_FacilityId FOREIGN KEY (FacilityId) REFERENCES ClientService (FacilityId) ON DELETE CASCADE   
    );
 
 CREATE TABLE Item (
@@ -135,21 +135,21 @@ CREATE TABLE ClientLog (
    CONSTRAINT fk_ClientLog_Username_User_Username FOREIGN KEY (Username) REFERENCES `User` (Username) ON DELETE CASCADE
    );
    
-CREATE TABLE Provides (
+CREATE TABLE Provide (
    SiteId int(16) unsigned NOT NULL,
    FacilityId int(16) unsigned NOT NULL,
    UNIQUE(SiteId, FacilityId),
-   CONSTRAINT fk_Provides_SiteId_Site_SiteId FOREIGN KEY (SiteId) REFERENCES Site (SiteId) ON DELETE CASCADE, 
-   CONSTRAINT fk_Provides_FacilityId_Service_FacilityId FOREIGN KEY (FacilityId) REFERENCES Service (FacilityId) ON DELETE CASCADE
+   CONSTRAINT fk_Provide_SiteId_Site_SiteId FOREIGN KEY (SiteId) REFERENCES Site (SiteId) ON DELETE CASCADE, 
+   CONSTRAINT fk_Provide_FacilityId_Service_FacilityId FOREIGN KEY (FacilityId) REFERENCES Service (FacilityId) ON DELETE CASCADE
    );
 
-CREATE TABLE Stores (
-   FoodBankId int(16) unsigned NOT NULL,
+CREATE TABLE Store (
+   FacilityId int(16) unsigned NOT NULL,
    ItemId varchar(50) NOT NULL,
    AvailableQuantity int(10) NOT NULL,
-   UNIQUE(FoodBankId, ItemId),
-   CONSTRAINT fk_Stores_FoodBankId_FoodBank_FoodBankId FOREIGN KEY (FoodBankId) REFERENCES FoodBank (FoodBankId) ON DELETE CASCADE,
-   CONSTRAINT fk_Stores_ItemId_Item_ItemId FOREIGN KEY (ItemId) REFERENCES Item (ItemId) ON DELETE CASCADE
+   UNIQUE(FacilityId, ItemId),
+   CONSTRAINT fk_Store_FacilityId_FoodBank_FacilityId FOREIGN KEY (FacilityId) REFERENCES FoodBank (FacilityId) ON DELETE CASCADE,
+   CONSTRAINT fk_Store_ItemId_Item_ItemId FOREIGN KEY (ItemId) REFERENCES Item (ItemId) ON DELETE CASCADE
    );
    
    
