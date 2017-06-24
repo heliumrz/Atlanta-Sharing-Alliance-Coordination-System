@@ -74,7 +74,7 @@ CREATE TABLE Shelter (
    CONSTRAINT fk_Shelter_FacilityId_ClientService_FacilityId FOREIGN KEY (FacilityId) REFERENCES ClientService (FacilityId) ON DELETE CASCADE
    );
    
-CREATE TABLE (
+CREATE TABLE FoodPantry(
    FacilityId int(16) unsigned NOT NULL,
    PRIMARY KEY (FacilityId),
    CONSTRAINT fk_FoodPantry_FacilityId_ClientService_FacilityId FOREIGN KEY (FacilityId) REFERENCES ClientService (FacilityId) ON DELETE CASCADE
