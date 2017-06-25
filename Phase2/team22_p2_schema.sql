@@ -131,6 +131,7 @@ CREATE TABLE ClientLog (
    ModifiedDateTime date NOT NULL,
    FieldModified varchar(50) NOT NULL,
    PreviousValue varchar(2000),
+   PRIMARY KEY (ClientId,Username,ModifiedDateTime,FieldModified),
    CONSTRAINT fk_ClientLog_ClientId_Client_ClientId FOREIGN KEY (ClientId) REFERENCES Client (ClientId) ON DELETE CASCADE,
    CONSTRAINT fk_ClientLog_Username_User_Username FOREIGN KEY (Username) REFERENCES `User` (Username) ON DELETE CASCADE
    );
