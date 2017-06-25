@@ -97,9 +97,13 @@ CREATE TABLE FoodBank (
 
 CREATE TABLE Item (
    ItemId varchar(50) NOT NULL,
+   Name varchar(50) NOT NULL,
+   StorageType varchar(50) NOT NULL,
+   ExpirationDate varchar(50) NOT NULL,
+   ItemType varchar(50) NOT NULL,
    PRIMARY KEY (ItemId)
-   );
-   
+);
+
 -- Table Matrix   
    
 CREATE TABLE UserSite (
@@ -152,5 +156,32 @@ CREATE TABLE FoodBankToItem (
    CONSTRAINT fk_FoodBankToItem_FacilityId_FoodBank_FacilityId FOREIGN KEY (FacilityId) REFERENCES FoodBank (FacilityId) ON DELETE CASCADE,
    CONSTRAINT fk_FoodBankToItem_ItemId_Item_ItemId FOREIGN KEY (ItemId) REFERENCES Item (ItemId) ON DELETE CASCADE
    );
-   
-   
+
+CREATE TABLE Request (
+   RequestID int(16) unsigned NOT NULL AUTO_INCREMENT,
+   Username varchar(30) NOT NULL,
+   FacilityId int(16) unsigned NOT NULL,
+   ItemId varchar(50) NOT NULL,
+   Status varchar(50) NOT NULL,
+   QuantityRequested int NOT NULL,
+   QuantityFulfilled int NOT NULL,
+   PRIMARY KEY (RequestID, Username, FacilityId),
+   CONSTRAINT fk_Request_Username_User_Username FOREIGN KEY (Username) REFERENCES `User` (Username) ON DELETE CASCADE,
+   CONSTRAINT fk_Request_FacilityId_FoodBank_FacilityId FOREIGN KEY (FacilityId) REFERENCES FoodBank (FacilityId) ON DELETE CASCADE,
+   CONSTRAINT fk_Request_ItemId_Item_ItemId FOREIGN KEY (ItemId) REFERENCES Item (ItemId) ON DELETE CASCADE
+);
+
+CREATE TABLE Food (
+   ItemId varchar(50) NOT NULL,
+   FoodCategory varchar(50) NOT NULL,
+   PRIMARY KEY (ItemId),
+   CONSTRAINT fk_Food_ItemId_Item_ItemId FOREIGN KEY (ItemId) REFERENCES Item (ItemId) ON DELETE CASCADE
+);
+
+CREATE TABLE Supply (
+   ItemId varchar(50) NOT NULL,
+   SupplyCategory varchar(50) NOT NULL,
+   PRIMARY KEY (ItemId),
+   CONSTRAINT fk_Supply_ItemId_Item_ItemId FOREIGN KEY (ItemId) REFERENCES Item (ItemId) ON DELETE CASCADE
+);   
+
