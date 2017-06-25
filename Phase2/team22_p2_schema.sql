@@ -82,8 +82,6 @@ CREATE TABLE FoodPantry(
    
 CREATE TABLE SoupKitchen (
    FacilityId int(16) unsigned NOT NULL,
-   EligibilityCondition varchar(200) NOT NULL,
-   HoursOfOperation varchar(50) NOT NULL,
    SeatCount int NOT NULL,
    PRIMARY KEY (FacilityId),
    CONSTRAINT fk_SoupKitchen_FacilityId_Service_FacilityId FOREIGN KEY (FacilityId) REFERENCES ClientService (FacilityId) ON DELETE CASCADE   
