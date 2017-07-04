@@ -1,7 +1,7 @@
 <?php
    include 'lib.php';
   
-   $pageTitle = "Client Search";  
+   $pageTitle = "User Home";  
    
    function displaySearchResult($result) {
       $searchValid = false;
@@ -41,86 +41,73 @@
                  <strong>" . $errorMsg . "</strong>
                </label>";
       }     
-   }
-   
-   session_start();
-   $result = null;
-   
-   logout(isset($_POST['logout']));
-   goToUserHome(isset($_POST['userHome']));
-   goToAddNewClient(isset($_POST['addNewClient']));
-
-   if (isset($_POST['search']) && !empty($_POST['firstName']) && !empty($_POST['lastName']) && !empty($_POST['description'])) {
-      $firstName = $_POST['firstName'];
-      $lastName = $_POST['lastName'];
-      $description = $_POST['description'];
-      $phoneNumber = $_POST['phoneNumber'];
-   
-   
-      $sql = "SELECT clientId, firstName, lastName, description, phoneNumber FROM Client " .
-             "WHERE firstName like '%" . $firstName . "%' " .
-             "AND lastName like '%" . $lastName . "%' " .
-             "AND description like '%" . $description . "%' ";
-               
-      if (!empty($phoneNumber )) {
-         $sql = $sql . "AND phoneNumber like '%" . $phoneNumber . "%'";
-      }
-
-      $result = executeSql($sql);
-   } 
+  }
 ?>
 <html>
    <head>
       <title><?php displayText($pageTitle);?></title>
    </head>
+   <?php
+      session_start();
+      $result = null;
+      $userRow = null;
+      
+      logout(isset($_POST['logout']));
+      
+      if (isset($_POST['clientSearch'])) {
+         header("Location: /client_search.php");
+         exit;
+      } else {
+         $username = $_SESSION["username"];
+               
+         $sql = "SELECT firstName, lastName, email FROM User " .
+                "WHERE username = '" . $username . "' ";
+
+         $result = executeSql($sql);
+         $userRow = $result->fetch_assoc();
+      } 
+   ?>
    <body>
-      <form action="/client_search.php" method="post">
+      <form action="/user_home.php" method="post">
          <div>
             <div style="float: left"><strong><?php displayText($pageTitle);?></strong>
             </div>
             <?php 
                displayLogout();
-               displayUserHome();
             ?>
          </div>
          <br>
          <div>
             <p>
                <label>
-                  <strong>First Name</strong>
+                  First Name: <?php echo $userRow['firstName']?>
                </label> 
-               <input name="firstName" required="" type="text" value="Jane" />
             </p>
             <p>
                <label>
-                  <strong>Last Name</strong>
+                  Last Name: <?php echo $userRow['lastName']?>
                </label> 
-               <input name="lastName" required="" type="text" value="Doe" />
             </p>
             <p>
                <label>
-                  <strong>Description</strong>
+                  Email: <?php echo $userRow['email']?>
                </label> 
-               <input name="description" required="" type="text" value="FL" />
             </p>
             <p>
                <label>
-                  <strong>Phone Number</strong>
+                  <strong>Actions</strong>
                </label> 
-               <input name="phoneNumber" type="text" />
             </p>
             <p>
-               <button name="search" type="submit">Search</button>
-               <button name="addNewClient" type="submit">Add New Client</button>
+               <button name="clientSearch" type="submit">Client Search</button>
             </p>
          </div>
          <?php
+            // Show search results if search button was pressed prior
             if (isset($_POST['search'])) {
                displaySearchResult($result);
             }
         ?>
-      </tbody>
-   </table>
-</form>
-</body>
+      </form>
+   </body>
 </html>

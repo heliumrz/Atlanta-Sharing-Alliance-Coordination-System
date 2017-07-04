@@ -1,5 +1,7 @@
 <?php
    include 'lib.php';
+   
+   $pageTitle = "Client Detail";
   
    function retrieveModificationHistory($clientId) {
       $sql = "SELECT modifiedDateTime, fieldModified, previousValue FROM ClientLog " .
@@ -64,57 +66,56 @@
       echo "   </tbody>" . 
            "</table>";
    }
+   
+   session_start();
+   $result = null;
+   $clientRow = null;
+   $clientModificationHistory = null;
+   $clientServiceUsageHistory = null;
+
+   logout(isset($_POST['logout']));
+   goToUserHome(isset($_POST['userHome']));
+   
+   // Go back to Client Search if Cancel button is pressed
+   goToLocation(isset($_POST['cancel']),"/client_search.php");
+
+   $clientId = $_SESSION["clientId"];
+      
+   if (!empty($clientId)) {
+      $sql = "SELECT clientId, firstName, lastName, description, phoneNumber FROM Client " .
+             "WHERE clientId = " . $clientId;
+
+      $result = executeSql($sql);
+      
+      if ($result->num_rows > 0) {
+         // Client exists, pull back data and process.
+         $clientRow = $result->fetch_assoc();
+
+         // Retrieve history
+         $clientModificationHistory = retrieveModificationHistory($clientId);
+         $clientServiceUsageHistory = retrieveServiceUsageHistory($clientId);
+      } else {
+         // If no client exist, go to Client Search screen
+         header("Location: /client_search.php");
+         exit;            
+      }
+   } 
 ?>
 <html>
    <head>
-      <title>Client Detail</title>
+      <title><?php displayText($pageTitle);?></title>
    </head>
-   <?php
-      session_start();
-      $result = null;
-      $clientRow = null;
-      $clientModificationHistory = null;
-      $clientServiceUsageHistory = null;
-
-      // If Cancel button is pressed, go back to Client Search screen
-      if (isset($_POST['cancel'])) {
-         header("Location: /client_search.php");
-         exit;
-      }
-      
-      if (isset($_POST['add'])) {
-         header("Location: /client_add.php");
-         exit;
-      }
-
-      if (true) {
-         // $clientId = $_SESSION["clientId"];
-         $clientId = 1;
-         
-         $sql = "SELECT clientId, firstName, lastName, description, phoneNumber FROM Client " .
-                "WHERE clientId = " . $clientId;
-
-         $result = executeSql($sql);
-         
-         if ($result->num_rows > 0) {
-            // Client exists, pull back data and process.
-            $clientRow = $result->fetch_assoc();
-
-            // Retrieve history
-            $clientModificationHistory = retrieveModificationHistory($clientId);
-            $clientServiceUsageHistory = retrieveServiceUsageHistory($clientId);
-         } else {
-            // If no client exist, go to Client Search screen
-            header("Location: /client_search.php");
-            exit;            
-         }
-      } 
-    ?>
    <body>
       <form action="/client_detail.php" method="post">
-         <label>
-            <strong>Client Detail</strong>
-         </label>
+         <div>
+            <div style="float: left"><strong><?php displayText($pageTitle);?></strong>
+            </div>
+            <?php 
+               displayLogout();
+               displayUserHome();
+            ?>
+         </div>
+         <br>
          <div>
             <p>
                <label>
