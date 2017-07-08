@@ -34,28 +34,24 @@
 ?>
    
 <html>
-  <head>
+   <head>
       <title><?php displayText($pageTitle);?></title>
-  </head>
+   </head>
    <body>
-     <form action="/login.php" method="post">
+      <form action="/login.php" method="post">
+         <div style="float: left">
+            <label><strong><?php displayText($pageTitle);?></strong></label>
+         </div>
+       <br>
        <div>
-       <label>
-         <strong>Username</strong>
-       </label> 
-       <input name="username" required="" type="text" value="test1" />
+         <?php displayUsernamePasswordField(); ?>
        <p>
-       <label>
-         <strong>Password</strong>
-       </label> 
-       <input name="pwd" required="" type="password" value="test1" /></p>
-       <p>
-         <button name="login" type="submit">Login</button>
+         <?php displayLoginSubmitButton(); ?>
        </p>
        <p>
          <?php 
             if (isset($_POST['login']) && $loginvalid == false) {
-               echo "Username and password are required. Please try again.";
+               echo "Username and password are invalid. Please try again.";
             }
          ?>
        </p></div>

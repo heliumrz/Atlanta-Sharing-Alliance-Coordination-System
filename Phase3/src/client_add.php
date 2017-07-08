@@ -8,11 +8,14 @@
    $insertSql = null;
    $clientExists = false;
    
+   // Ensure session is valid. If not, go to login page.
+   checkValidSession();
+   
    logout(isset($_POST['logout']));
    goToUserHome(isset($_POST['userHome']));   
-   goToClientSearch(isset($_POST['cancel']));
+   goToClientSearch(isset($_POST['clientSearch']));
 
-   if (isset($_POST['save']) && !empty($_POST['firstName']) && !empty($_POST['lastName']) && !empty($_POST['description'])) {
+   if (isset($_POST['addClient']) && !empty($_POST['firstName']) && !empty($_POST['lastName']) && !empty($_POST['description'])) {
       $firstName = $_POST['firstName'];
       $lastName = $_POST['lastName'];
       $description = $_POST['description'];
@@ -49,6 +52,20 @@
 <html>
    <head>
       <title><?php displayText($pageTitle);?></title>
+      <?php displayCss();?>
+      <script>
+         <?php displayJsLib();?>
+         <?php displayValidateField();?>
+      
+         function validateInput() {
+            if (validateField("firstName") && validateField("firstName") && validateField("firstName")) {
+               return true;
+            } else {
+               alert("First Name, Last Name, and Description are required in search. \nThe following characters are not allowed: ;");
+               return false;
+            }
+         }
+      </script>
    </head>
    <body>
       <form action="/client_add.php" method="post">
@@ -62,33 +79,10 @@
          </div>
          <br>
          <div>
+            <?php displayClientDataField("");?>
             <p>
-               <label>
-                  <strong>First Name</strong>
-               </label> 
-               <input name="firstName" required="" type="text" />
-            </p>
-            <p>
-               <label>
-                  <strong>Last Name</strong>
-               </label> 
-               <input name="lastName" required="" type="text" />
-            </p>
-            <p>
-               <label>
-                  <strong>Description</strong>
-               </label> 
-               <input name="description" required="" type="text" />
-            </p>
-            <p>
-               <label>
-                  <strong>Phone Number</strong>
-               </label> 
-               <input name="phoneNumber" type="text" />
-            </p>
-            <p>
-               <button name="save" type="submit">Save</button>
-               <button name="cancel" type="submit">Client Search</button>
+               <?php displayAddClientSubmitButton(); ?>
+               <?php displayClientSearchSubmitButton(); ?>
             </p>
          </div>
          <?php

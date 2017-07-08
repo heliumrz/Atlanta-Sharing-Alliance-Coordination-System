@@ -3,59 +3,21 @@
   
    $pageTitle = "Client Search";  
    
-   function displaySearchResult($result) {
-      $searchValid = false;
-      $errorMsg = "";
-      $rowcnt = $result->num_rows;
-      if ($rowcnt > 0 && $rowcnt < 5 ) {
-          $searchValid = true;
-      } elseif ($rowcnt == 0) {
-         $errorMsg = "No Client found, please try again.";
-      } elseif ($rowcnt >= 5) {
-         $errorMsg = "Too many Clients found, please narrow search criteria(s).";
-      }
-      
-      if ($searchValid) {
-         echo "<table>
-                  <thead>
-                    <tr>
-                      <th>First Name</th>
-                      <th>Last Name</th>
-                      <th>Description</th>
-                      <th>Phone Number</th>
-                    </tr>
-                  </thead>
-                  <tbody>";
-         
-         while($row = $result->fetch_assoc()) {
-               echo "<tr>";
-               echo "<td>" . $row['firstName'] . "</td>";
-               echo "<td>" . $row['lastName'] . "</td>";
-               echo "<td>" . $row['description'] . "</td>";
-               echo "<td>" . $row['phoneNumber'] . "</td>";
-               echo "</tr>";
-         }
-      } else {
-         echo "<p>
-               <label>
-                 <strong>" . $errorMsg . "</strong>
-               </label>";
-      }     
-   }
-   
    session_start();
    $result = null;
+   
+   // Ensure session is valid. If not, go to login page.
+   checkValidSession();
    
    logout(isset($_POST['logout']));
    goToUserHome(isset($_POST['userHome']));
    goToAddNewClient(isset($_POST['addNewClient']));
-
+   
    if (isset($_POST['search']) && !empty($_POST['firstName']) && !empty($_POST['lastName']) && !empty($_POST['description'])) {
       $firstName = $_POST['firstName'];
       $lastName = $_POST['lastName'];
       $description = $_POST['description'];
       $phoneNumber = $_POST['phoneNumber'];
-   
    
       $sql = "SELECT clientId, firstName, lastName, description, phoneNumber FROM Client " .
              "WHERE firstName like '%" . $firstName . "%' " .
@@ -72,9 +34,23 @@
 <html>
    <head>
       <title><?php displayText($pageTitle);?></title>
+      <?php displayCss();?>
+      <script>
+         <?php displayJsLib();?>
+         <?php displayValidateField();?>
+      
+         function validateInput() {
+            if (validateField("firstName") && validateField("lastName") && validateField("description")) {
+               return true;
+            } else {
+               alert("First Name, Last Name, and Description are required. \nThe following characters are not allowed in fields: ;");
+               return false;
+            }
+         }
+      </script>
    </head>
    <body>
-      <form action="/client_search.php" method="post">
+      <form id="mainForm" action="/client_search.php" method="post" onSubmit="return formValidation()">
          <div>
             <div style="float: left"><strong><?php displayText($pageTitle);?></strong>
             </div>
@@ -85,42 +61,17 @@
          </div>
          <br>
          <div>
+            <?php displayClientDataField(""); ?>
             <p>
-               <label>
-                  <strong>First Name</strong>
-               </label> 
-               <input name="firstName" required="" type="text" value="Jane" />
-            </p>
-            <p>
-               <label>
-                  <strong>Last Name</strong>
-               </label> 
-               <input name="lastName" required="" type="text" value="Doe" />
-            </p>
-            <p>
-               <label>
-                  <strong>Description</strong>
-               </label> 
-               <input name="description" required="" type="text" value="FL" />
-            </p>
-            <p>
-               <label>
-                  <strong>Phone Number</strong>
-               </label> 
-               <input name="phoneNumber" type="text" />
-            </p>
-            <p>
-               <button name="search" type="submit">Search</button>
-               <button name="addNewClient" type="submit">Add New Client</button>
+               <?php displaySearchSubmitButton(); ?>
+               <?php displayAddNewClientSubmitButton(); ?>
             </p>
          </div>
          <?php
             if (isset($_POST['search'])) {
-               displaySearchResult($result);
+               displayClientSearchResult($result);
             }
         ?>
-      </tbody>
-   </table>
-</form>
-</body>
+      </form>
+   </body>
 </html>
