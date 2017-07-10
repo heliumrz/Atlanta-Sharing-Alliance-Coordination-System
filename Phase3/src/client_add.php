@@ -11,8 +11,9 @@
    // Ensure session is valid. If not, go to login page.
    checkValidSession();
    
-   logout(isset($_POST['logout']));
-   goToUserHome(isset($_POST['userHome']));   
+   // Inlude in all pages
+   logout(isset($_POST['formAction']) && ($_POST['formAction'] == 'logout'));
+   goToUserHome(isset($_POST['formAction']) && ($_POST['formAction'] == 'userHome'));
    goToClientSearch(isset($_POST['clientSearch']));
 
    if (isset($_POST['addClient']) && !empty($_POST['firstName']) && !empty($_POST['lastName']) && !empty($_POST['description'])) {
@@ -51,27 +52,27 @@
 ?>
 <html>
    <head>
-      <title><?php displayText($pageTitle);?></title>
-      <?php displayCss();?>
+      <?php 
+         displayTitle($pageTitle);
+         displayCss();
+      ?>
       <script>
-         <?php displayJsLib();?>
-         <?php displayValidateField();?>
+         <?php displayJavascriptLib();?>
       
          function validateInput() {
-            if (validateField("firstName") && validateField("firstName") && validateField("firstName")) {
+            if (validateField("firstName") && validateField("lastName") && validateField("description") && validateValidCharacter("phoneNumber")) {
                return true;
             } else {
-               alert("First Name, Last Name, and Description are required in search. \nThe following characters are not allowed: ;");
+               alert(clientRequiredField);
                return false;
             }
          }
       </script>
    </head>
    <body>
-      <form action="/client_add.php" method="post">
+      <?php displayFormHeader($MAIN_FORM,$CLIENT_ADD_URL); ?>
          <div>
-            <div style="float: left"><strong><?php displayText($pageTitle);?></strong>
-            </div>
+            <?php displayPageHeading($pageTitle); ?>            
             <?php 
                displayLogout();
                displayUserHome();
@@ -83,11 +84,12 @@
             <p>
                <?php displayAddClientSubmitButton(); ?>
                <?php displayClientSearchSubmitButton(); ?>
+               <?php displayHiddenField(); ?>               
             </p>
          </div>
          <?php
             displayClientExistsMessage($clientExists);
-        ?>
+         ?>
       </tbody>
    </table>
 </form>

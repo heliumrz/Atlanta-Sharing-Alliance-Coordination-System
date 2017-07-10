@@ -3,85 +3,65 @@
    
    $pageTitle = "Client Detail";
   
-   // Display client data modification history
-   function displayModificationHistory($result) {
-      echo "
-         <label>
-            <strong>Modification History:</strong>
-         </label> 
-         <table border='1'>
-            <thead>
-              <tr>
-                <th>Modified DateTime</th>
-                <th>Field Modified</th>
-                <th>Previous Value</th>
-              </tr>
-            </thead>
-            <tbody>";
-      
-      while($row = $result->fetch_assoc()) {
-            echo "
-               <tr>
-                  <td>" . $row['modifiedDateTime'] . "</td>
-                  <td>" . $row['fieldModified'] . "</td>
-                  <td>" . $row['previousValue'] . "</td>
-               </tr>";
-      }
-      
-      echo "
-            </tbody>
-         </table>
-         <p></p>";
-   }
-   
-   // Display client service usage history
-   function displayServiceUsageHistory($result) {
-      echo "
-         <label>
-            <strong>Service Usage History:</strong>
-         </label> 
-         <table border='1'>
-            <thead>
-            <tr>
-               <th>Site Id</th>
-               <th>Facility Id</th>
-               <th>Service DateTime</th>
-               <th>Description</th>
-               <th>Note</th>
-            </tr>
-            </thead>
-            <tbody>";
-      
-      while($row = $result->fetch_assoc()) {
-            echo "
-               <tr>
-                  <td>" . $row['siteId'] . "</td>
-                  <td>" . $row['facilityId'] . "</td>
-                  <td>" . $row['serviceDateTime'] . "</td>
-                  <td>" . $row['description'] . "</td>
-                  <td>" . $row['note'] . "</td>
-               </tr>";
-      }
-      echo "
-            </tbody>
-         </table>";
-   }
-   
    session_start();
-   $result = null;
+   $currentClient = null;
    $clientRow = null;
+   $clientUpdated = false;
    $clientModificationHistory = null;
    $clientServiceUsageHistory = null;
    
    // Ensure session is valid. If not, go to login page.
    checkValidSession();
    
-   logout(isset($_POST['logout']));
-   goToUserHome(isset($_POST['userHome']));
+   // Inlude in all pages
+   logout(isset($_POST['formAction']) && ($_POST['formAction'] == 'logout'));
+   goToUserHome(isset($_POST['formAction']) && ($_POST['formAction'] == 'userHome'));
    goToClientSearch(isset($_POST['clientSearch']));
 
    $clientId = $_SESSION["clientId"];
+   $username = $_SESSION["username"];
+
+   if (isset($_POST['updateClient']) && !empty($clientId) && !empty($username)) {
+      $updatedFirstName = $_POST['firstName'];
+      $updatedLastName = $_POST['lastName'];
+      $updatedDescription = $_POST['description'];
+      $updatedPhoneNumber = $_POST['phoneNumber'];
       
+      $sql = "SELECT clientId, firstName, lastName, description, phoneNumber FROM Client " .
+             "WHERE clientId = " . $clientId;
+      $currentClient = executeSql($sql)->fetch_assoc();
+      
+      $currentFirstName = $currentClient['firstName'];
+      $currentLastName = $currentClient['lastName'];
+      $currentDescription = $currentClient['description'];
+      $currentPhoneNumber = $currentClient['phoneNumber'];
+      
+      if (isDifferent($currentFirstName,$updatedFirstName)) {
+         $clientUpdated = true;
+         insertClientLog($clientId,$username,"FirstName",$currentFirstName);
+      }
+      
+      if (isDifferent($currentLastName,$updatedLastName)) {
+         $clientUpdated = true;
+         insertClientLog($clientId,$username,"LastName",$currentLastName);
+      }
+      
+      if (isDifferent($currentDescription,$updatedDescription)) {
+         $clientUpdated = true;
+         insertClientLog($clientId,$username,"Description",$currentDescription);
+      }
+      
+      if (isDifferent($currentPhoneNumber,$updatedPhoneNumber)) {
+         $clientUpdated = true;
+         insertClientLog($clientId,$username,"PhoneNumber",$currentPhoneNumber);
+      }
+      
+      // If any field was updated, update client record
+      if ($clientUpdated) {
+         updateClient($clientId,$updatedFirstName,$updatedLastName,$updatedDescription,$updatedPhoneNumber);
+      }
+   }
+   
    if (!empty($clientId)) {
       $sql = "SELECT clientId, firstName, lastName, description, phoneNumber FROM Client " .
              "WHERE clientId = " . $clientId;
@@ -97,34 +77,33 @@
          $clientServiceUsageHistory = retrieveServiceUsageHistory($clientId);
       } else {
          // If no client exist, go to Client Search screen
-         header("Location: /client_search.php");
-         exit;            
+         goToClientSearch(true);          
       }
    } 
 ?>
 <html>
    <head>
-      <title><?php displayText($pageTitle);?></title>
-      <?php displayCss();?>
+      <?php 
+         displayTitle($pageTitle);
+         displayCss();
+      ?>
       <script>
-         <?php displayJsLib();?>
-         <?php displayValidateField();?>
+         <?php displayJavascriptLib();?>
       
          function validateInput() {
-            if (validateField("firstName") && validateField("firstName") && validateField("firstName")) {
+            if (validateField("firstName") && validateField("lastName") && validateField("description") && validateValidCharacter("phoneNumber")) {
                return true;
             } else {
-               alert("First Name, Last Name, and Description are required in search. \nThe following characters are not allowed: ;");
+               alert(clientRequiredField);
                return false;
             }
          }
       </script>
    </head>
    <body>
-      <form action="/client_detail.php" method="post">
+      <?php displayFormHeader($MAIN_FORM,$CLIENT_DETAIL_URL); ?>
          <div>
-            <div style="float: left"><strong><?php displayText($pageTitle);?></strong>
-            </div>
+            <?php displayPageHeading($pageTitle); ?>            
             <?php 
                displayLogout();
                displayUserHome();
@@ -134,17 +113,17 @@
          <div>
             <?php displayClientDataField($clientRow);?>
             <p>
-               <button name="updateClient" type="submit">Update Info</button>
-               <button name="checkinClient" type="submit">Check In Client</button>
-               <button name="clientSearch" type="submit">Client Search</button>
+               <?php displayUpdateClientSubmitButton(); ?>
+               <?php displayCheckinClientSubmitButton(); ?>
+               <?php displayClientSearchSubmitButton(); ?>
+               <?php displayHiddenField(); ?>               
             </p>
          </div>
          <?php
            displayModificationHistory($clientModificationHistory);
            displayServiceUsageHistory($clientServiceUsageHistory);
          ?>
-      </tbody>
-   </table>
+   </tbody>
 </form>
 </body>
 </html>

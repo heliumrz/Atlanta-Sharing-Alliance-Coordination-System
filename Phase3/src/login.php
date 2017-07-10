@@ -35,27 +35,25 @@
    
 <html>
    <head>
-      <title><?php displayText($pageTitle);?></title>
+      <?php displayTitle($pageTitle); ?>
    </head>
    <body>
-      <form action="/login.php" method="post">
-         <div style="float: left">
-            <label><strong><?php displayText($pageTitle);?></strong></label>
+      <?php displayFormHeader($MAIN_FORM,$LOGIN_URL); ?>
+         <?php displayPageHeading($pageTitle); ?>
+         <br>
+         <div>
+            <?php displayUsernamePasswordField(); ?>
+            <p>
+               <?php displayLoginSubmitButton(); ?>
+            </p>
+            <p>
+               <?php 
+                  if (isset($_POST['login']) && $loginvalid == false) {
+                     echo $INVALID_USER_PASS;
+                  }
+               ?>
+            </p>
          </div>
-       <br>
-       <div>
-         <?php displayUsernamePasswordField(); ?>
-       <p>
-         <?php displayLoginSubmitButton(); ?>
-       </p>
-       <p>
-         <?php 
-            if (isset($_POST['login']) && $loginvalid == false) {
-               echo "Username and password are invalid. Please try again.";
-            }
-         ?>
-       </p></div>
-       
-     </form>
+      </form>
    </body>
 </html>

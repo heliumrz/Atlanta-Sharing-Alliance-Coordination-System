@@ -9,8 +9,10 @@
    // Ensure session is valid. If not, go to login page.
    checkValidSession();
    
-   logout(isset($_POST['logout']));
-   goToUserHome(isset($_POST['userHome']));
+   // Inlude in all pages
+   logout(isset($_POST['formAction']) && ($_POST['formAction'] == 'logout'));
+   goToUserHome(isset($_POST['formAction']) && ($_POST['formAction'] == 'userHome'));
+   
    goToAddNewClient(isset($_POST['addNewClient']));
    
    if (isset($_POST['search']) && !empty($_POST['firstName']) && !empty($_POST['lastName']) && !empty($_POST['description'])) {
@@ -29,31 +31,36 @@
       }
 
       $result = executeSql($sql);
-   } 
+   }
+   
+   if (isset($_POST['clientDetail'])) {
+      $_SESSION["clientId"] = $_POST["clientId"];
+      goToClientDetail(true);
+   }
 ?>
 <html>
    <head>
-      <title><?php displayText($pageTitle);?></title>
-      <?php displayCss();?>
+      <?php 
+         displayTitle($pageTitle);
+         displayCss();
+      ?>
       <script>
-         <?php displayJsLib();?>
-         <?php displayValidateField();?>
+         <?php displayJavascriptLib();?>
       
          function validateInput() {
-            if (validateField("firstName") && validateField("lastName") && validateField("description")) {
+            if (validateField("firstName") && validateField("lastName") && validateField("description") && validateValidCharacter("phoneNumber")) {
                return true;
             } else {
-               alert("First Name, Last Name, and Description are required. \nThe following characters are not allowed in fields: ;");
+               alert(clientRequiredField);
                return false;
             }
          }
       </script>
    </head>
    <body>
-      <form id="mainForm" action="/client_search.php" method="post" onSubmit="return formValidation()">
+      <?php displayFormHeader($MAIN_FORM,$CLIENT_SEARCH_URL); ?>
          <div>
-            <div style="float: left"><strong><?php displayText($pageTitle);?></strong>
-            </div>
+            <?php displayPageHeading($pageTitle); ?>            
             <?php 
                displayLogout();
                displayUserHome();
@@ -61,10 +68,12 @@
          </div>
          <br>
          <div>
-            <?php displayClientDataField(""); ?>
+            <?php displayClientDataField($EMPTY_STRING); ?>
             <p>
                <?php displaySearchSubmitButton(); ?>
                <?php displayAddNewClientSubmitButton(); ?>
+               <?php displayClientDetailSubmitButton(); ?>
+               <?php displayHiddenField(); ?>
             </p>
          </div>
          <?php

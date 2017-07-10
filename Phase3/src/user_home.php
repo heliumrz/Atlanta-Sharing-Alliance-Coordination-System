@@ -10,7 +10,8 @@
    // Ensure session is valid. If not, go to login page.
    checkValidSession();
    
-   logout(isset($_POST['logout']));
+   // Inlude in all pages
+   logout(isset($_POST['formAction']) && ($_POST['formAction'] == 'logout'));
    
    if (isset($_POST['clientSearch'])) {
       header("Location: /client_search.php");
@@ -27,41 +28,28 @@
 ?>
 <html>
    <head>
-      <title><?php displayText($pageTitle);?></title>
+      <?php displayTitle($pageTitle); ?>
+      <?php displayCss();?>
+      <script>
+         <?php displayJavascriptLib();?>
+      </script>
    </head>
    <body>
-      <form action="/user_home.php" method="post">
+      <?php displayFormHeader($MAIN_FORM,$USER_HOME_URL); ?>
          <div>
-            <div style="float: left"><strong><?php displayText($pageTitle);?></strong>
-            </div>
+            <?php displayPageHeading($pageTitle); ?>            
             <?php 
                displayLogout();
             ?>
          </div>
          <br>
          <div>
+            <?php displayUserHomeDataField($userRow); ?>
             <p>
-               <label>
-                  First Name: <?php echo $userRow['firstName']?>
-               </label> 
-            </p>
-            <p>
-               <label>
-                  Last Name: <?php echo $userRow['lastName']?>
-               </label> 
-            </p>
-            <p>
-               <label>
-                  Email: <?php echo $userRow['email']?>
-               </label> 
-            </p>
-            <p>
-               <label>
-                  <strong>Actions</strong>
-               </label> 
-            </p>
-            <p>
-               <?php displayClientSearchSubmitButton(); ?>
+               <?php 
+                  displayClientSearchSubmitButton();
+                  displayHiddenField(); 
+               ?>
             </p>
          </div>
       </form>
