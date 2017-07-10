@@ -117,10 +117,9 @@ CREATE TABLE ClientServiceUsage (
    SiteId int(16) unsigned NOT NULL,
    FacilityId int(16) unsigned NOT NULL,
    Username varchar(30) NOT NULL,
-   ServiceDateTime date NOT NULL,
+   ServiceDateTime datetime NOT NULL,
    Description varchar(2000) NOT NULL,
    Note varchar(2000),
-   PRIMARY KEY (ClientId,SiteId,FacilityId,Username,ServiceDateTime),
    CONSTRAINT fk_ClientServiceUsage_FacilityId_ClientService_FacilityId  FOREIGN KEY (FacilityId) REFERENCES ClientService (FacilityId) ON DELETE CASCADE,
    CONSTRAINT fk_ClientServiceUsage_ClientId_Client_ClientId  FOREIGN KEY (ClientId) REFERENCES Client (ClientId) ON DELETE CASCADE,
    CONSTRAINT fk_ClientServiceUsage_SiteId_Site_SiteId FOREIGN KEY (SiteId) REFERENCES Site (SiteId)  ON DELETE CASCADE,
@@ -130,10 +129,9 @@ CREATE TABLE ClientServiceUsage (
 CREATE TABLE ClientLog (
    ClientId int(16) unsigned NOT NULL,
    Username varchar(30) NOT NULL,
-   ModifiedDateTime date NOT NULL,
+   ModifiedDateTime datetime NOT NULL,
    FieldModified varchar(50) NOT NULL,
    PreviousValue varchar(2000),
-   PRIMARY KEY (ClientId,Username,ModifiedDateTime,FieldModified),
    CONSTRAINT fk_ClientLog_ClientId_Client_ClientId FOREIGN KEY (ClientId) REFERENCES Client (ClientId) ON DELETE CASCADE,
    CONSTRAINT fk_ClientLog_Username_User_Username FOREIGN KEY (Username) REFERENCES `User` (Username) ON DELETE CASCADE
    );
