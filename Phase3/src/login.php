@@ -85,9 +85,8 @@ section {
     overflow: hidden;
 }
 
-	</style>
-   
-   </head>
+</style>
+</head>
    <body>
       <div class="container">
         <header>
@@ -96,7 +95,7 @@ section {
 		<nav>
 		  <h3>Find available housing options and food supply levels</h3>
           <ul>
-            <li><a href="avialable_bunks.php">Avialable bunks</a></li>
+            <li><a href="available_bunks.php">Avialable bunks</a></li>
             <li><a href="meal_report.php">Meal infomation</a></li>
           </ul>
         </nav>
