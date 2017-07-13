@@ -34,26 +34,32 @@
 ?>
    
 <html>
-   <head>
-      <?php displayTitle($pageTitle); ?>
-   </head>
+  <head>
+      <title><?php displayText($pageTitle);?></title>
+  </head>
    <body>
-      <?php displayFormHeader($MAIN_FORM,$LOGIN_URL); ?>
-         <?php displayPageHeading($pageTitle); ?>
-         <br>
-         <div>
-            <?php displayUsernamePasswordField(); ?>
-            <p>
-               <?php displayLoginSubmitButton(); ?>
-            </p>
-            <p>
-               <?php 
-                  if (isset($_POST['login']) && $loginvalid == false) {
-                     echo $INVALID_USER_PASS;
-                  }
-               ?>
-            </p>
-         </div>
-      </form>
+     <form action="/login.php" method="post">
+       <div>
+       <label>
+         <strong>Username</strong>
+       </label> 
+       <input name="username" required="" type="text" value="test1" />
+       <p>
+       <label>
+         <strong>Password</strong>
+       </label> 
+       <input name="pwd" required="" type="password" value="test1" /></p>
+       <p>
+         <button name="login" type="submit">Login</button>
+       </p>
+       <p>
+         <?php 
+            if (isset($_POST['login']) && $loginvalid == false) {
+               echo "Username and password are required. Please try again.";
+            }
+         ?>
+       </p></div>
+       
+     </form>
    </body>
 </html>
