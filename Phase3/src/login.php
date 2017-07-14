@@ -32,16 +32,80 @@
       }
    } 
 ?>
-   
+ 
 <html>
-   <head>
-      <?php displayTitle($pageTitle); ?>
-   </head>
+<head>
+<style>
+
+div.container {
+    width: 100%;
+	
+}
+
+header, footer {
+    padding: 1em;
+    color: black;
+    background-color: BAE8CB;
+	
+    clear: left;
+    text-align: center;
+}
+
+ footer{   
+	clear: both;
+    position: relative;
+    z-index: 10;
+    height: 3em;
+    margin-top: -3em;
+ }
+
+nav {
+    float: right;
+    width: 200px;
+	height:65%;
+	background-color: CCF4FF;
+    margin: 0;
+    padding: 1em;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+   
+nav ul a {
+    text-decoration: none;
+}
+
+section {
+	height:65%;
+	text-align: center;
+	background-color: D9FFF2;
+	padding: 1em;
+    overflow: hidden;
+}
+
+</style>
+</head>
    <body>
-      <?php displayFormHeader($MAIN_FORM,$LOGIN_URL); ?>
+      <div class="container">
+        <header>
+            <h1>Atlanta Sharing Alliance Coordination System</h1>
+        </header>
+		<nav>
+		  <h3>Find available housing options and food supply levels</h3>
+          <ul>
+            <li><a href="available_bunks.php">Avialable bunks</a></li>
+            <li><a href="meal_report.php">Meal infomation</a></li>
+          </ul>
+        </nav>
+		<section>
+		<div style="box-sizing: border-box; display: inline-block; width: auto; max-width: 550px; background-color:#F1F1F1; border: 2px solid #BAE8E5; border-radius: 5px; box-shadow: 0px 0px 8px #BAE8E5; margin: 50px auto auto;padding: 50px;">
+		 <?php displayTitle($pageTitle); ?>
+         <?php displayFormHeader($MAIN_FORM,$LOGIN_URL); ?>
          <?php displayPageHeading($pageTitle); ?>
          <br>
-         <div>
+     
             <?php displayUsernamePasswordField(); ?>
             <p>
                <?php displayLoginSubmitButton(); ?>
@@ -53,7 +117,10 @@
                   }
                ?>
             </p>
-         </div>
-      </form>
+			
+        </div>
+      </section>
+	 <footer>Copyright &copy;</footer>
+	  </div>
    </body>
 </html>
