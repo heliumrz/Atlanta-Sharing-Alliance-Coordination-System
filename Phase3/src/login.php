@@ -95,8 +95,8 @@ section {
 		<nav>
 		  <h3>Find available housing options and food supply levels</h3>
           <ul>
-            <li><a href="available_bunks.php">Avialable bunks</a></li>
-            <li><a href="meal_report.php">Meal infomation</a></li>
+            <li><a href="available_bunks.php">Available Bunks</a></li>
+            <li><a href="meal_report.php">Meal Infomation</a></li>
           </ul>
         </nav>
 		<section>

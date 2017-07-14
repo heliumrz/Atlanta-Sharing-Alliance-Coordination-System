@@ -199,11 +199,11 @@ function displayUsernamePasswordField() {
    echo '
             <p>
                <label>Username:</label>
-               <input name="username" required="true" type="text" value="test1" />
+               <input name="username" required="true" type="text" value="emp1" />
             </p>
             <p>
                <label>Password:</label>
-               <input name="pwd" required="true" type="password" value="test1" /></p>
+               <input name="pwd" required="true" type="password" value="gatech123" /></p>
             </p>';
 }
 
@@ -234,9 +234,9 @@ function displayUserHomeDataField($userRow) {
 
 // Display empty fields if no data provided or display data provided on field
 function displayClientDataField($clientData) {
-   $firstName = "Jane";
-   $lastName = "Doe";
-   $description = "FL";
+   $firstName = "Joe";
+   $lastName = "Client";
+   $description = "TestID";
    $phoneNumber = "";
 
    if (!empty($clientData)) {
