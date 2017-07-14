@@ -72,4 +72,27 @@ values
 (1,1,1,'test1',NOW(),'Soup Kitchen',NULL),
 (2,1,1,'test1',NOW(),'Soup Kitchen',NULL);
 
+delete from FoodBank;
+insert into FoodBank (facilityId)
+values
+(1);
+
+delete from Item;
+insert into Item (itemId,name,storageType,expirationDate,itemType)
+values
+(1,'potato','Dry Good','2018-01-01','Food'),
+(2,'cheese','Dry Good','2017-10-01','Food');
+
+delete from FoodBankToItem;
+insert into FoodBankToItem (facilityId,itemId,availableQuantity)
+values
+(1,1,100),
+(1,2,50);
+
+delete from Request;
+insert into Request (requestID,username,facilityId,itemId,status,quantityRequested,quantityFulfilled)
+values
+(1,'test1',1,1,'pending',10,0),
+(2,'test1',1,1,'pending',10,0),
+(3,'test2',1,2,'pending',1000,0);
 
