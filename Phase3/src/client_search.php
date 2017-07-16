@@ -21,7 +21,8 @@
       $description = $_POST['description'];
       $phoneNumber = $_POST['phoneNumber'];
    
-      $sql = "SELECT clientId, firstName, lastName, description, phoneNumber FROM Client " .
+      $sql = "SELECT clientId, firstName, lastName, description, phoneNumber " .
+             "FROM Client " .
              "WHERE firstName like '%" . $firstName . "%' " .
              "AND lastName like '%" . $lastName . "%' " .
              "AND description like '%" . $description . "%' ";
@@ -72,7 +73,7 @@
             <p>
                <?php displaySearchSubmitButton(); ?>
                <?php displayAddNewClientSubmitButton(); ?>
-               <?php displayClientDetailSubmitButton(); ?>
+               <?php displayClientDetailSubmitButtonHidden(); ?>
                <?php displayHiddenField(); ?>
             </p>
          </div>

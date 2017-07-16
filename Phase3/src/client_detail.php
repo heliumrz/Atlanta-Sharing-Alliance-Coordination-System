@@ -6,7 +6,6 @@
    session_start();
    $currentClient = null;
    $clientRow = null;
-   $clientUpdated = false;
    $clientModificationHistory = null;
    $clientServiceUsageHistory = null;
    
@@ -20,61 +19,27 @@
 
    $clientId = $_SESSION["clientId"];
    $username = $_SESSION["username"];
-
+   
+   // Handle data update logic
    if (isset($_POST['updateClient']) && !empty($clientId) && !empty($username)) {
-      $updatedFirstName = $_POST['firstName'];
-      $updatedLastName = $_POST['lastName'];
-      $updatedDescription = $_POST['description'];
-      $updatedPhoneNumber = $_POST['phoneNumber'];
-      
-      $sql = "SELECT clientId, firstName, lastName, description, phoneNumber FROM Client " .
-             "WHERE clientId = " . $clientId;
-      $currentClient = executeSql($sql)->fetch_assoc();
-      
-      $currentFirstName = $currentClient['firstName'];
-      $currentLastName = $currentClient['lastName'];
-      $currentDescription = $currentClient['description'];
-      $currentPhoneNumber = $currentClient['phoneNumber'];
-      
-      if (isDifferent($currentFirstName,$updatedFirstName)) {
-         $clientUpdated = true;
-         insertClientLog($clientId,$username,"FirstName",$currentFirstName);
-      }
-      
-      if (isDifferent($currentLastName,$updatedLastName)) {
-         $clientUpdated = true;
-         insertClientLog($clientId,$username,"LastName",$currentLastName);
-      }
-      
-      if (isDifferent($currentDescription,$updatedDescription)) {
-         $clientUpdated = true;
-         insertClientLog($clientId,$username,"Description",$currentDescription);
-      }
-      
-      if (isDifferent($currentPhoneNumber,$updatedPhoneNumber)) {
-         $clientUpdated = true;
-         insertClientLog($clientId,$username,"PhoneNumber",$currentPhoneNumber);
-      }
-      
-      // If any field was updated, update client record
-      if ($clientUpdated) {
-         updateClient($clientId,$updatedFirstName,$updatedLastName,$updatedDescription,$updatedPhoneNumber);
-      }
+      updateClientData($clientId,$username,$_POST);
+   }
+   
+   // Go to Client Check-In
+   if (isset($_POST['checkinClient']) && !empty($clientId) && !empty($username)) {
+      goToClientCheckin(true);
    }
    
    if (!empty($clientId)) {
-      $sql = "SELECT clientId, firstName, lastName, description, phoneNumber FROM Client " .
-             "WHERE clientId = " . $clientId;
-
-      $result = executeSql($sql);
+      $result = retrieveClientFromId($clientId);
       
       if ($result->num_rows > 0) {
          // Client exists, pull back data and process.
          $clientRow = $result->fetch_assoc();
 
          // Retrieve history
-         $clientModificationHistory = retrieveModificationHistory($clientId);
-         $clientServiceUsageHistory = retrieveServiceUsageHistory($clientId);
+         $clientModificationHistory = retrieveClientModificationHistory($clientId);
+         $clientServiceUsageHistory = retrieveClientServiceUsageHistory($clientId);
       } else {
          // If no client exist, go to Client Search screen
          goToClientSearch(true);          
@@ -89,10 +54,33 @@
       ?>
       <script>
          <?php displayJavascriptLib();?>
-      
+         
+         // Determine whether any data element was changed
+         function validateDataUpdated() {
+            var currentFirstName = document.getElementById("currentFirstName").value;
+            var currentLastName = document.getElementById("currentLastName").value;
+            var currentDescription = document.getElementById("currentDescription").value;
+            var currentPhoneNumber = document.getElementById("currentPhoneNumber").value;
+            
+            var firstName = document.getElementById("firstName").value;
+            var lastName = document.getElementById("lastName").value;
+            var description = document.getElementById("description").value;
+            var phoneNumber = document.getElementById("phoneNumber").value;
+            
+            if ((currentFirstName != firstName) || (currentLastName != lastName) || (currentDescription != description) || (currentPhoneNumber != phoneNumber)) {
+               return true;
+            }
+            return false;
+         }
+         
          function validateInput() {
             if (validateField("firstName") && validateField("lastName") && validateField("description") && validateValidCharacter("phoneNumber")) {
-               return true;
+               if (validateDataUpdated()) {
+                  return true;
+               } else {
+                  alert(clientNoDataUpdated);
+                  return false;
+               }
             } else {
                alert(clientRequiredField);
                return false;
@@ -120,8 +108,8 @@
             </p>
          </div>
          <?php
-           displayModificationHistory($clientModificationHistory);
-           displayServiceUsageHistory($clientServiceUsageHistory);
+           displayClientModificationHistory($clientModificationHistory);
+           displayClientServiceUsageHistory($clientServiceUsageHistory);
          ?>
    </tbody>
 </form>

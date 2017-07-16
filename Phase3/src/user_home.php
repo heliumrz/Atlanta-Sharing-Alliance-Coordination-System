@@ -18,12 +18,7 @@
       exit;
    } else {
       $username = $_SESSION["username"];
-            
-      $sql = "SELECT firstName, lastName, email FROM User " .
-             "WHERE username = '" . $username . "' ";
-
-      $result = executeSql($sql);
-      $userRow = $result->fetch_assoc();
+      $userRow = retrieveUserData($username);
    } 
 ?>
 <html>

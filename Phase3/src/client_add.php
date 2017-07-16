@@ -80,7 +80,7 @@
          </div>
          <br>
          <div>
-            <?php displayClientDataField("");?>
+            <?php displayClientDataField($EMPTY_STRING);?>
             <p>
                <?php displayAddClientSubmitButton(); ?>
                <?php displayClientSearchSubmitButton(); ?>

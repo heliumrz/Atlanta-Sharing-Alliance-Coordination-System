@@ -10,11 +10,37 @@ static $CLIENT_DETAIL_URL = "/client_detail.php";
 static $CLIENT_CHECKIN_URL = "/client_checkin.php";
 static $MAIN_FORM = "mainForm";
 
+// Display CSS styling
+function displayCss() {
+   echo "
+      <style>
+         .hide {
+            display: none;
+         }
+         table.altcolor th {
+            border: 1px solid black;
+            background-color: #ecede8;
+         }
+         table.altcolor tr:nth-child(even) {
+            background-color: #ecede8;
+         }
+         table.datatable {
+            border: solid black;
+         }
+         table.datatable th, tr, td {
+            border: solid black;
+            height: 40px;
+         }
+      </style>\n";
+}
+
 // Display Javascript library functions
 function displayJavascriptLib() {
    echo '
          validationRequired = false;
          clientRequiredField = "First Name, Last Name, and Description are required in search. \nThe following characters are not allowed: ;";
+         checkinRequiredField = "Facility and Service Description are required. \nThe following characters are not allowed: ;";
+         clientNoDataUpdated="No data was updated. Please update data fields and try again.";
 
          function mainFormValidation() {
             if (validationRequired) {
@@ -102,6 +128,10 @@ function goToClientDetail($isClientDetail) {
    goToLocation($isClientDetail,"/client_detail.php");
 }
 
+function goToClientCheckin($isClientCheckin) {
+   goToLocation($isClientCheckin,"/client_checkin.php");
+}
+
 // Display the text provided
 function displayText($text) {
    echo "$text";
@@ -160,6 +190,12 @@ function displayAddNewClientSubmitButton() {
 // Display a hidden Client Detail submit button
 function displayClientDetailSubmitButton() {
    echo '
+               <button id="clientDetail" name="clientDetail" type="submit" onClick="validationRequired=false">Client Detail</button>';
+}
+
+// Display a hidden Client Detail submit button
+function displayClientDetailSubmitButtonHidden() {
+   echo '
                <button id="clientDetail" name="clientDetail" type="submit" onClick="validationRequired=false" hidden="hidden">Client Detail</button>';
 }
 
@@ -185,6 +221,12 @@ function displayUpdateClientSubmitButton() {
 function displayCheckinClientSubmitButton() {
    echo '
                <button id="checkinClient" name="checkinClient" type="submit" onClick="validationRequired=false">Check-In Client</button>';
+}
+
+// Display Check-In submit button
+function displayCheckinSubmitButton() {
+   echo '
+               <button id="checkin" name="checkin" type="submit" onClick="validationRequired=true">Check-In</button>';
 }
 
 // Display hidden fields
@@ -227,9 +269,37 @@ function displayUserHomeDataField($userRow) {
             </p>
             <p>
                <label>
+                  User Type: ' . $userRow['userType'] . '
+               </label> 
+            </p>
+            <p>
+               <label>
                   <strong>Actions</strong>
                </label> 
             </p>';
+}
+
+// Display user home data
+function displayUserHomeDataFieldTable($userRow) {
+   echo '
+  <table class="datatable">
+    <tr>
+      <td align="left">First Name:</td>
+      <td align="left">' . $userRow['firstName'] . '</td>
+    </tr>
+    <tr>
+      <td align="left">Last Name:</td>
+      <td align="left">' . $userRow['lastName'] . '</td>
+    </tr>
+    <tr>
+      <td align="left">Email:</td>
+      <td align="left">' . $userRow['email'] . '</td>
+    </tr>
+    <tr>
+      <td align="left">Email:</td>
+      <td align="left">' . $userRow['userType'] . '</td>
+    </tr>
+  </table>';
 }
 
 // Display empty fields if no data provided or display data provided on field
@@ -265,29 +335,99 @@ function displayClientDataField($clientData) {
             </p>
             <p>
                <label>(*)</strong> denotes required fields.</label>
+            </p>
+            <input id="currentFirstName" name="" type="hidden" value="' . $firstName . '"/>
+            <input id="currentLastName" name="" type="hidden" value="' . $lastName . '"/>
+            <input id="currentDescription" name="" type="hidden" value="' . $description . '"/>
+            <input id="currentPhoneNumber" name="" type="hidden" value="' . $phoneNumber . '"/>
+            ';
+            
+}
+
+// Display client data in read only format
+function displayClientDataFieldRO($clientData) {
+   $firstName = $clientData["firstName"];
+   $lastName = $clientData["lastName"];
+   $description = $clientData["description"];
+   $phoneNumber = $clientData["phoneNumber"];
+   
+   echo '
+            <p>
+               <label>First Name: ' . $firstName . '</label>
+            </p>
+            <p>
+               <label>Last Name: ' . $lastName . '</label>
+            </p>
+            <p>
+               <label>Description: ' . $description . '</label>
+            </p>
+            <p>
+               <label>Phone Number: ' . $phoneNumber . '</label>
             </p>';
+}
+
+// Display Client Check-In data fields
+function displayClientCheckinDataFieldLabel() {
+   $EMPTY_STRING = "";
+   echo '
+            <p>
+               <label><strong>Check-In Details</strong></label>
+            </p>   
+            <p>
+               <label>Check-In Date/Time (*):</label>
+               <input id="checkinDateTime" name="checkinDateTime" type="text" value="' . $EMPTY_STRING . '"/>
+            </p>
+            <p>
+               <label>Facility (*):</label>
+               <input id="checkinDateTime" name="checkinDateTime" type="text" value="' . $EMPTY_STRING . '"/>
+            </p>
+            <p>
+               <label>Service Description (*):</label>
+               <input id="description" name="description" type="text" value="' . $EMPTY_STRING . '"/>
+            </p>
+            <p>
+               <label>Note:</label>
+               <input id="note" name="note" type="text" value="' . $EMPTY_STRING . '"/>
+            </p>
+            <p>
+               <label>(*) denotes required fields.</label>
+            </p>';
+}
+
+function displayClientCheckinDataField($siteId) {
+   $EMPTY_STRING = "";
+   echo '
+            <p>
+               <label><strong>Check-In Details</strong></label>
+            </p>   
+  <table class="datatable">
+    <col width="20%">
+    <col width="80%">
+    <tr>
+      <td align="right">Facility (*):</td>
+      <td align="left">' . 
+         displaySiteFacility($siteId) . '
+      </td>
+    </tr>
+    <tr>
+      <td align="right">Service Description (*):</td>
+      <td align="left"><input id="description" name="description" type="text" style="width:100%" value="' . $EMPTY_STRING . '"/></td>
+    </tr>
+    <tr>
+      <td align="right">Notes:</td>
+      <td align="left"><input id="note" name="note" type="text" style="width:100%" value="' . $EMPTY_STRING . '"/></td>
+    </tr>
+  </table>
+            <p>
+               <label>(*) denotes required fields.</label>
+            </p>';
+  
 }
 
 function displayClientExistsMessage($clientExists) {
    if ($clientExists) {
       echo "Client already exists. Please search for the client or change input data.";
    }
-}
-
-// Display CSS styling
-function displayCss() {
-   echo "
-      <style>
-         .hide {
-            display: none;
-         }
-         th {
-            background-color: #ecede8;
-         }
-         tr:nth-child(even) {
-            background-color: #ecede8;
-         }
-      </style>\n";
 }
 
 // Display Client Search results in a table format
@@ -308,7 +448,7 @@ function displayClientSearchResult($result) {
       <label>
          <strong>Search Results:</strong>
       </label>
-      <table border='1'>
+      <table border='1' class='altcolor'>
          <thead>
             <tr>
                <th align='left' class='hide'>Client Id</th>
@@ -348,12 +488,12 @@ function displayClientSearchResult($result) {
 }
 
 // Display client data modification history
-function displayModificationHistory($result) {
+function displayClientModificationHistory($result) {
    echo "
       <label>
          <strong>Modification History:</strong>
       </label> 
-      <table border='1'>
+      <table border='1' class='altcolor'>
          <thead>
            <tr>
              <th>Modified DateTime</th>
@@ -379,16 +519,16 @@ function displayModificationHistory($result) {
 }
 
 // Display client service usage history
-function displayServiceUsageHistory($result) {
+function displayClientServiceUsageHistory($result) {
    echo "
       <label>
          <strong>Service Usage History:</strong>
       </label> 
-      <table border='1'>
+      <table border='1' class='altcolor'>
          <thead>
          <tr>
-            <th>Site Id</th>
-            <th>Facility Id</th>
+            <th>Site Name</th>
+            <th>Facility Name</th>
             <th>Service DateTime</th>
             <th>Description</th>
             <th>Note</th>
@@ -399,8 +539,8 @@ function displayServiceUsageHistory($result) {
    while($row = $result->fetch_assoc()) {
          echo "
             <tr>
-               <td>" . $row['siteId'] . "</td>
-               <td>" . $row['facilityId'] . "</td>
+               <td>" . $row['siteName'] . "</td>
+               <td>" . $row['facilityName'] . "</td>
                <td>" . $row['serviceDateTime'] . "</td>
                <td>" . $row['description'] . "</td>
                <td>" . $row['note'] . "</td>
@@ -409,6 +549,21 @@ function displayServiceUsageHistory($result) {
    echo "
          </tbody>
       </table>";
+}
+
+// Display all facility associated with a site
+function displaySiteFacility($siteId) {
+   $result = retrieveFacilityFromSite($siteId);
+   $str = "
+      <select id='facilityId' name='facilityId' style='width:100%'>";
+   
+   while($row = $result->fetch_assoc()) {
+      $str = $str . "
+         <option value='" . $row['facilityId'] . "'>" . $row['facilityName'] . "</option>";
+   }
+   $str = $str . "
+      </select>";
+   return $str;
 }
 
 // Open a mysql connection
@@ -454,7 +609,7 @@ function insertSql($sql) {
 }
 
 // Retrieve Client Modification history for a client
-function retrieveModificationHistory($clientId) {
+function retrieveClientModificationHistory($clientId) {
    $sql = "SELECT modifiedDateTime, fieldModified, previousValue " .
           "FROM ClientLog " .
           "WHERE clientId = " . $clientId . " " . 
@@ -465,10 +620,12 @@ function retrieveModificationHistory($clientId) {
 }
 
 // Retrieve ClientServiceUsage history for a client
-function retrieveServiceUsageHistory($clientId) {
-   $sql = "SELECT siteId, facilityId, serviceDateTime, description, note " .
-          "FROM ClientServiceUsage " .
-          "WHERE clientId = " . $clientId . " " . 
+function retrieveClientServiceUsageHistory($clientId) {
+   $sql = "SELECT sit.shortName siteName, cse.facilityName, serviceDateTime, description, note " .
+          "FROM ClientServiceUsage csu, Site sit, ClientService cse " .
+          "WHERE csu.siteId = sit.siteId " .
+          "AND csu.facilityId = cse.facilityId " .
+          "AND clientId = " . $clientId . " " . 
           "ORDER BY serviceDateTime DESC";
 
    $result = executeSql($sql);
@@ -502,4 +659,92 @@ function updateClient($clientId,$firstName,$lastName,$description,$phoneNumber) 
    return executeSql($sql);
 }
 
+function retrieveUserData($username) {
+   $sql = "SELECT firstName, lastName, email, userType " . 
+          "FROM User " .
+          "WHERE username = '" . $username . "' ";
+
+   $result = executeSql($sql);
+   return $result->fetch_assoc();
+}
+
+function retrieveClientFromId($clientId) {
+   $sql = "SELECT clientId, firstName, lastName, description, phoneNumber " . 
+           "FROM Client " .
+          "WHERE clientId = " . $clientId;
+
+   $result = executeSql($sql);
+   return $result;
+}
+
+function updateClientData($clientId,$username,$updatedData) {
+   $clientUpdated = false;   
+   $updatedFirstName = $updatedData['firstName'];
+   $updatedLastName = $updatedData['lastName'];
+   $updatedDescription = $updatedData['description'];
+   $updatedPhoneNumber = $updatedData['phoneNumber'];
+   
+   $sql = "SELECT clientId, firstName, lastName, description, phoneNumber " .
+          "FROM Client " .
+          "WHERE clientId = " . $clientId;
+   $currentClient = executeSql($sql)->fetch_assoc();
+   
+   $currentFirstName = $currentClient['firstName'];
+   $currentLastName = $currentClient['lastName'];
+   $currentDescription = $currentClient['description'];
+   $currentPhoneNumber = $currentClient['phoneNumber'];
+   
+   if (isDifferent($currentFirstName,$updatedFirstName)) {
+      $clientUpdated = true;
+      insertClientLog($clientId,$username,"FirstName",$currentFirstName);
+   }
+   
+   if (isDifferent($currentLastName,$updatedLastName)) {
+      $clientUpdated = true;
+      insertClientLog($clientId,$username,"LastName",$currentLastName);
+   }
+   
+   if (isDifferent($currentDescription,$updatedDescription)) {
+      $clientUpdated = true;
+      insertClientLog($clientId,$username,"Description",$currentDescription);
+   }
+   
+   if (isDifferent($currentPhoneNumber,$updatedPhoneNumber)) {
+      $clientUpdated = true;
+      insertClientLog($clientId,$username,"PhoneNumber",$currentPhoneNumber);
+   }
+   
+   // If any field was updated, update client record
+   if ($clientUpdated) {
+      updateClient($clientId,$updatedFirstName,$updatedLastName,$updatedDescription,$updatedPhoneNumber);
+   }
+}
+
+function retrieveFacilityFromSite($siteId) {
+   $sql = "SELECT cse.facilityId, cse.facilityName " . 
+          "FROM SiteToService sts, ClientService cse " .
+          "WHERE sts.facilityId = cse.facilityId " . 
+          "AND sts.siteId = " . $siteId;
+
+   $result = executeSql($sql);
+   return $result;
+}
+
+function retrieveSiteFromUser($username) {
+   $sql = "SELECT siteId " . 
+          "FROM User " .
+          "WHERE username = '" . $username . "'";
+
+   $result = executeSql($sql);
+   $row = $result->fetch_assoc();
+   return $row['siteId'];
+}
+
+// Insert into Client Service Usage
+function addClientServiceUsage($clientId,$siteId,$facilityId,$username,$description,$note) {
+   $sql = "INSERT INTO ClientServiceUsage (clientId,siteId,facilityId,username,serviceDateTime,description,note) " . 
+          "VALUES (" . $clientId . "," . $siteId . "," . $facilityId . "," . "'" . $username . "',now(),'" . $description . "','" . $note . "')";
+   // echo "addClientServiceUsage sql: " . $sql;
+   return insertSql($sql);
+}
 ?>
