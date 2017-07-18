@@ -96,7 +96,7 @@ CREATE TABLE FoodBank (
    );
 
 CREATE TABLE Item (
-   ItemId varchar(50) NOT NULL,
+   ItemId int(16) unsigned NOT NULL,
    Name varchar(50) NOT NULL,
    StorageType varchar(50) NOT NULL,
    ExpirationDate varchar(50) NOT NULL,
@@ -140,7 +140,7 @@ CREATE TABLE SiteToService (
 
 CREATE TABLE FoodBankToItem (
    FacilityId int(16) unsigned NOT NULL,
-   ItemId varchar(50) NOT NULL,
+   ItemId int(16) unsigned NOT NULL,
    AvailableQuantity int(10) NOT NULL,
    UNIQUE(FacilityId, ItemId),
    CONSTRAINT fk_FoodBankToItem_FacilityId_FoodBank_FacilityId FOREIGN KEY (FacilityId) REFERENCES FoodBank (FacilityId) ON DELETE CASCADE,
@@ -151,7 +151,7 @@ CREATE TABLE Request (
    RequestID int(16) unsigned NOT NULL AUTO_INCREMENT,
    Username varchar(30) NOT NULL,
    FacilityId int(16) unsigned NOT NULL,
-   ItemId varchar(50) NOT NULL,
+   ItemId int(16) unsigned NOT NULL,
    Status varchar(50) NOT NULL,
    QuantityRequested int NOT NULL,
    QuantityFulfilled int NOT NULL,
@@ -162,14 +162,14 @@ CREATE TABLE Request (
 );
 
 CREATE TABLE Food (
-   ItemId varchar(50) NOT NULL,
+   ItemId int(16) unsigned NOT NULL,
    FoodCategory varchar(50) NOT NULL,
    PRIMARY KEY (ItemId),
    CONSTRAINT fk_Food_ItemId_Item_ItemId FOREIGN KEY (ItemId) REFERENCES Item (ItemId) ON DELETE CASCADE
 );
 
 CREATE TABLE Supply (
-   ItemId varchar(50) NOT NULL,
+   ItemId int(16) unsigned NOT NULL,
    SupplyCategory varchar(50) NOT NULL,
    PRIMARY KEY (ItemId),
    CONSTRAINT fk_Supply_ItemId_Item_ItemId FOREIGN KEY (ItemId) REFERENCES Item (ItemId) ON DELETE CASCADE

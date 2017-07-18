@@ -1,11 +1,17 @@
 -- user
 
+delete from Site;
+
+insert into Site (siteId,shortName,streetAddress,city,state,zipCode,phoneNumber)
+values
+(1,'OC People Service','123 Street','Irvine','CA','92618','9497894566');
+
 delete from User;
 
-insert into user (username,password,firstname,lastname,email,usertype)
+insert into user (username,password,firstname,lastname,email,usertype,siteId)
 values
-('test1','test1','Test1','User','test1@gmail.com','Employee'),
-('test2','test2','Test2','User','test2@gmail.com','Employee');
+('test1','test1','Test1','User','test1@gmail.com','Employee',1),
+('test2','test2','Test2','User','test2@gmail.com','Employee',1);
 
 delete from Client;
 
@@ -21,12 +27,6 @@ values
 (8,'John','Dof','CA Birth Certificate: 234567','6122223333'),
 (9,'John','Dog','CA Birth Certificate: 345678','6123334444'),
 (10,'John','Doh','CA Birth Certificate: 456789','7634445555');
-
-delete from Site;
-
-insert into Site (siteId,shortName,streetAddress,city,state,zipCode,phoneNumber)
-values
-(1,'OC People Service','123 Street','Irvine','CA','92618','9497894566');
 
 delete from Service;
 
@@ -51,12 +51,6 @@ delete from SiteToService;
 insert into SiteToService (siteId,facilityId)
 values
 (1,1);
-
-delete from UserSite;
-
-insert into UserSite (username,siteId)
-values
-('test1',1);
 
 delete from ClientLog;
 

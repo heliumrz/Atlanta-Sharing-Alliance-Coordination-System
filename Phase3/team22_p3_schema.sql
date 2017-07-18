@@ -19,26 +19,6 @@ FLUSH PRIVILEGES;
 
 -- Tables 
 
-CREATE TABLE `User` (
-   Username varchar(30) NOT NULL,
-   Password varchar(30) NOT NULL,
-   FirstName varchar(100) NOT NULL,
-   LastName varchar(100) NOT NULL,
-   Email varchar(100) NOT NULL,
-   UserType varchar(50) NOT NULL,
-   PRIMARY KEY (Username),
-   UNIQUE KEY Email (Email)
-   );
-
-CREATE TABLE Client (
-   ClientId int(16) unsigned NOT NULL AUTO_INCREMENT,
-   FirstName varchar(100) NOT NULL,
-   LastName varchar(100) NOT NULL,
-   Description varchar(2000) NOT NULL,
-   PhoneNumber varchar(30),
-   PRIMARY KEY (ClientId)
-   );
-
 CREATE TABLE Site (
    SiteId int(16) unsigned NOT NULL AUTO_INCREMENT,
    ShortName varchar(100) NOT NULL,
@@ -49,6 +29,28 @@ CREATE TABLE Site (
    PhoneNumber varchar(30) NOT NULL,
    PRIMARY KEY (SiteId)
    );   
+
+CREATE TABLE `User` (
+   Username varchar(30) NOT NULL,
+   Password varchar(30) NOT NULL,
+   FirstName varchar(100) NOT NULL,
+   LastName varchar(100) NOT NULL,
+   Email varchar(100) NOT NULL,
+   UserType varchar(50) NOT NULL,
+   SiteId int(16) unsigned NOT NULL,
+   PRIMARY KEY (Username),
+   UNIQUE KEY Email (Email),
+   CONSTRAINT fk_User_SiteId_Site_SiteId FOREIGN KEY (SiteId) REFERENCES Site (SiteId) ON DELETE CASCADE
+   );
+
+CREATE TABLE Client (
+   ClientId int(16) unsigned NOT NULL AUTO_INCREMENT,
+   FirstName varchar(100) NOT NULL,
+   LastName varchar(100) NOT NULL,
+   Description varchar(2000) NOT NULL,
+   PhoneNumber varchar(30),
+   PRIMARY KEY (ClientId)
+   );
 
 CREATE TABLE Service (
    FacilityId int(16) unsigned NOT NULL AUTO_INCREMENT,
@@ -103,14 +105,6 @@ CREATE TABLE Item (
 );
 
 -- Table Matrix   
-   
-CREATE TABLE UserSite (
-   Username varchar(30) NOT NULL,
-   SiteId int(16) unsigned NOT NULL,
-   PRIMARY KEY (Username,SiteId),
-   CONSTRAINT fk_UserSite_Username_User_Username FOREIGN KEY (Username) REFERENCES `User` (Username) ON DELETE CASCADE,
-   CONSTRAINT fk_UserSite_SiteId_Site_SiteId FOREIGN KEY (SiteId) REFERENCES Site (SiteId)  ON DELETE CASCADE
-   );
 
 CREATE TABLE ClientServiceUsage (
    ClientId int(16) unsigned NOT NULL,
