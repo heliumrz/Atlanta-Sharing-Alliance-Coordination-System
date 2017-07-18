@@ -4,26 +4,12 @@ include 'lib.php';
 $pageTitle = "Available Bunk Report";
 
 //drop the old table if exists
-$query = "DROP TEMPORARY TABLE IF EXISTS BunkReport";
-executeSql($query);
+//$query = "DROP TEMPORARY TABLE IF EXISTS BunkReport";
+//executeSql($query);
 
 //save the update result into new table
-$query = "CREATE TEMPORARY TABLE BunkReport AS( ".
-        "SELECT s.FacilityId, s.BunkCountMale, s.BunkCountFemale,".  
-               "s.BunkCountMixed, c.FacilityName, c.EligibilityCondition,".
-               "c.HoursOfOperation, t.SiteId, i.LocationStreetAddress, i.LocationCity,". 
-               "i.LocationState, i.LocationZipCode, i.phone".
-        "FROM Shelter AS s".
-            "INNER JOIN ClientService AS c".
-                "ON s.FacilityId = c.FacilityId".
-            "LEFT JOIN SiteToService AS t".
-                "ON s.FacilityId = t.FacilityId".
-            "LEFT JOIN Site AS i".
-                "ON t.SiteId = i.SiteId".
-        "WHERE s.BunkCountMale > 0".
-        "OR s.BunkCountFemale >0".
-        "OR s.BunkCountMixed >0".
-        ")";
+$query ="SELECT t1.FacilityId, t1.BunkCountMale, t1.BunkCountFemale, t1.BunkCountMixed,t2.FacilityName,t2.EligibilityCondition,t2.HoursOfOperation,t2.SiteID,t3.StreetAddress, t3.City, t3.State, t3.ZipCode, t3.PhoneNumber FROM Shelter t1 INNER JOIN ClientService t2 ON t1.FacilityId = t2.FacilityId LEFT JOIN Site t3 ON t2.SiteId = t3.SiteId WHERE t1.BunkCountMale > 0 OR t1.BunkCountFemale >0 OR t1.BunkCountMixed >0";
+		 
 $result = executeSql($query);
 ?>
 <html>
@@ -87,7 +73,7 @@ header, footer {
 <table class="table table-hover table-striped table-condensed table-scrollable">
     <tbody>
 								<?php								
-								    if (empty($result) || (mysqli_num_rows($result) == 0) )
+								    if ($result->num_rows == 0)
 								        echo("Sorry, all shelters are currently at maximum capacity.");
                                     else {
                                         while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
@@ -97,8 +83,8 @@ header, footer {
                                             print "<td>{$row['BunkCountMale']}</td>";
                                             print "<td>{$row['BunkCountFemale']}</td>";
                                             print "<td>{$row['BunkCountMixed']}</td>";
-                                            print "<td>{$row['LocationStreetAddress']}{$row['LocationCity']}{$row['LocationState']}{$row['LocationZipCode']}</td>";
-                                            print "<td>{$row['Phone']}</td>";
+                                            print "<td>{$row['StreetAddress']}{$row['City']}{$row['State']}{$row['ZipCode']}</td>";
+                                            print "<td>{$row['PhoneNumber']}</td>";
                                             print "<td>{$row['HoursOfOperation']}</td>";
                                             print "<td>{$row['EligibilityCondition']}</td>";
                                             print "</tr>";							
