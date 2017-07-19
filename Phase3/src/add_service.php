@@ -4,21 +4,17 @@ include 'lib.php';
 $pageTitle = "Add New Service";
 
 session_start();
-$result = null;
-$insertSql = null;
-$clientExists = false;
 
 logout(isset($_POST['logout']));
-goToUserHome(isset($_POST['userHome']));   
+goToUserHome(isset($_POST['userHome']));
 goToClientSearch(isset($_POST['cancel']));
 
 if (isset($_POST['save']) && $_POST['serviceType'] != '0' ) {
 
 	$serviceType = $_POST['serviceType'];
 	$_SESSION["serviceType"] = $serviceType;
-	header("Location: ./create_service.php");
-	echo "something is messed up!"
-	exit;
+	header('Location: create_service.php');
+	exit();
 //	$insertSql = "INSERT INTO request (Username, FacilityId, ItemId, QuantityRequested, Status, QuantityFulfilled) " .
   //                 "VALUES ('" . $userName . "','" . $facilityId . "','"  . $itemId . "', '" . $quantityRequested . "','Pending','0' )";
 	  
@@ -35,7 +31,6 @@ if (isset($_POST['save']) && $_POST['serviceType'] != '0' ) {
 		 //          echo "Error: " . $insertSql . "<br>" .$requestId;
 		 //       }  
 } 
-
 ?>
 <html>
    <head>

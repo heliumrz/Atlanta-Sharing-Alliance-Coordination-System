@@ -1,24 +1,44 @@
 <?php
    include 'lib.php';
    
-   $pageTitle = "Create a new service";
+   $svc = [
+       "soupkitchen" => "Soup Kitchen",
+       "foodpantry" => "Food Pantry",
+	   "shelter" => "Shelter",
+	   "foodbank" => "Food Bank",
+   ];
+   $pageTitle = "Create a new service"; //. $svc[ $_SESSION["serviceType"] ];
   
    session_start();
-   $currentClient = null;
-   $clientRow = null;
-   $clientModificationHistory = null;
-   $clientServiceUsageHistory = null;
-   
+   // $serviceType = $_SESSION["serviceType"];
    // Ensure session is valid. If not, go to login page.
    checkValidSession();
    
    // Inlude in all pages
    logout(isset($_POST['formAction']) && ($_POST['formAction'] == 'logout'));
    goToUserHome(isset($_POST['formAction']) && ($_POST['formAction'] == 'userHome'));
-   goToClientSearch(isset($_POST['clientSearch']));
 
-   $serviceType = $_SESSION["serviceType"];
-
+   if (isset($_POST['create']) && !empty($_POST['serviceTyeToAdd'])) {
+	   switch ($serviceType) {
+	   	case 'soupkitchen':
+	   		# code...
+	   		break;
+		case 'shelter':
+			#code
+			break;
+		case 'foodbank':
+			#code
+			break;
+		case 'foodpantry':
+			#code
+			break;
+	   	default:
+	   		# code...
+	   		break;
+	   }
+	} else {
+		//do nothing.
+	}	
    // // Handle data update logic
    // if (isset($_POST['updateClient']) && !empty($clientId) && !empty($username)) {
    //    updateClientData($clientId,$username,$_POST);
@@ -54,63 +74,52 @@
       <script>
          <?php displayJavascriptLib();?>
          
-         // Determine whether any data element was changed
-         function validateDataUpdated() {
-            var currentFirstName = document.getElementById("currentFirstName").value;
-            var currentLastName = document.getElementById("currentLastName").value;
-            var currentDescription = document.getElementById("currentDescription").value;
-            var currentPhoneNumber = document.getElementById("currentPhoneNumber").value;
-            
-            var firstName = document.getElementById("firstName").value;
-            var lastName = document.getElementById("lastName").value;
-            var description = document.getElementById("description").value;
-            var phoneNumber = document.getElementById("phoneNumber").value;
-            
-            if ((currentFirstName != firstName) || (currentLastName != lastName) || (currentDescription != description) || (currentPhoneNumber != phoneNumber)) {
-               return true;
-            }
-            return false;
-         }
-         
-         function validateInput() {
-            if (validateField("firstName") && validateField("lastName") && validateField("description") && validateValidCharacter("phoneNumber")) {
-               if (validateDataUpdated()) {
-                  return true;
-               } else {
-                  alert(clientNoDataUpdated);
-                  return false;
-               }
-            } else {
-               alert(clientRequiredField);
-               return false;
-            }
-         }
+		  // function validateInput() {
+//             if (validateField("firstName") && validateField("lastName") && validateField("description") && validateValidCharacter("phoneNumber")) {
+//                if (validateDataUpdated()) {
+//                   return true;
+//                } else {
+//                   alert(clientNoDataUpdated);
+//                   return false;
+//                }
+//             } else {
+//                alert(clientRequiredField);
+//                return false;
+//             }
+//          }
       </script>
    </head>
    <body>
-      <!-- <?php displayFormHeader($MAIN_FORM,$CLIENT_DETAIL_URL); ?> -->
+	   <?php displayPageHeading($pageTitle); ?>            
+      <form action="./add_service.php" method="post">
          <div>
-            <?php displayPageHeading($pageTitle); ?>            
             <?php 
                displayLogout();
                displayUserHome();
             ?>
          </div>
          <br>
-		 <?php echo $serviceType; ?>
          <div>
-            <!-- <?php displayClientDataField($clientRow);?> -->
-            <p>
-               <!-- <?php displayUpdateClientSubmitButton(); ?>
-               <?php displayCheckinClientSubmitButton(); ?>
-               <?php displayClientSearchSubmitButton(); ?>
-               <?php displayHiddenField(); ?> -->               
-            </p>
+			 <?php
+			 $serviceType = $_SESSION["serviceType"];
+			 # we need this type to find the right tables to update
+			 echo '<input id="serviceTypeToAdd" name="" type="hidden" value="' . $serviceType . '"/>';
+			 displaySiteNamesOptions();
+			 displayClientServiceInputFields();
+			 switch ($serviceType) {
+				case "soupkitchen":
+					displaySoupKitchenInputFields();
+					break;
+				case "shelter":
+					displayShelterInputFields();
+					break;
+			 	default:
+			 		echo " ";
+			 		break;
+			 }
+			 ?>
+			 <button name="create" type="submit">Create Service</button>
          </div>
-         <!-- <?php
-           displayClientModificationHistory($clientModificationHistory);
-           displayClientServiceUsageHistory($clientServiceUsageHistory);
-         ?> -->
 </form>
 </body>
 </html>
