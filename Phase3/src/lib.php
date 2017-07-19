@@ -672,6 +672,7 @@ function retrieveClientFromId($clientId) {
            "FROM Client " .
           "WHERE clientId = " . $clientId;
 
+   // echo "retrieveClientFromId sql: " . $sql;
    $result = executeSql($sql);
    return $result;
 }
@@ -721,10 +722,13 @@ function updateClientData($clientId,$username,$updatedData) {
 
 function retrieveFacilityFromSite($siteId) {
    $sql = "SELECT cse.facilityId, cse.facilityName " .
-          "FROM SiteToService sts, ClientService cse " .
-          "WHERE sts.facilityId = cse.facilityId " .
-          "AND sts.siteId = " . $siteId;
+          "FROM ClientService cse " .
+          "WHERE NOT EXISTS (SELECT 1 " .
+          "                    FROM FoodBank fba " .
+          "                   WHERE fba.facilityId = cse.facilityId) " .
+          "  AND cse.siteId = " . $siteId;
 
+   // echo "retrieveFacilityFromSite sql: " . $sql;
    $result = executeSql($sql);
    return $result;
 }
@@ -734,6 +738,7 @@ function retrieveSiteFromUser($username) {
           "FROM User " .
           "WHERE username = '" . $username . "'";
 
+   // echo "retrieveSiteFromUser sql: " . $sql;
    $result = executeSql($sql);
    $row = $result->fetch_assoc();
    return $row['siteId'];
