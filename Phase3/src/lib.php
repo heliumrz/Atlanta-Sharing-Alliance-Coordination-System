@@ -804,13 +804,11 @@ function retrieveAllSiteNames() {
 function displaySiteNamesOptions() {
    $result = retrieveAllSiteNames();
    $str = "<select id='Site' name='Site'>";
-   
    while($row = $result->fetch_assoc()) {
       $str = $str . "
          <option value='" . $row['SiteId'] . "'>" . $row['ShortName'] . "</option>";
    }
-   $str = $str . "
-      </select>";
+   $str = $str . " </select>";
    echo $str;
 }
 
