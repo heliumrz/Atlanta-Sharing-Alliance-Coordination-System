@@ -99,7 +99,7 @@ CREATE TABLE FoodBank (
    );
 
 CREATE TABLE Item (
-   ItemId varchar(50) NOT NULL,
+   ItemId int(16) unsigned NOT NULL AUTO_INCREMENT,
    Name varchar(50) NOT NULL,
    StorageType varchar(50) NOT NULL,
    ExpDate varchar(50) NOT NULL,
@@ -144,7 +144,7 @@ CREATE TABLE SiteToService (
 
 CREATE TABLE FoodBankToItem (
    FacilityId int(16) unsigned NOT NULL,
-   ItemId varchar(50) NOT NULL,
+   ItemId int(16) unsigned NOT NULL,
    AvailableQuantity int(10) NOT NULL,
    UNIQUE(FacilityId, ItemId),
    CONSTRAINT fk_FoodBankToItem_FacilityId_FoodBank_FacilityId FOREIGN KEY (FacilityId) REFERENCES FoodBank (FacilityId) ON DELETE CASCADE,
@@ -155,7 +155,7 @@ CREATE TABLE Request (
    RequestID int(16) unsigned NOT NULL AUTO_INCREMENT,
    Username varchar(30) NOT NULL,
    FacilityId int(16) unsigned NOT NULL,
-   ItemId varchar(50) NOT NULL,
+   ItemId int(16) unsigned NOT NULL,
    Status varchar(50) NOT NULL,
    QuantityRequested int NOT NULL,
    QuantityFulfilled int NOT NULL,

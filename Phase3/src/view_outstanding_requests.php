@@ -66,15 +66,7 @@
 					"WHERE requestId = " . $requestId;
 		$result = executeSql($sql);
 	}
-	
-	// $sql = "SELECT facilityId " .
-	// "FROM `sitetoservice`,`usersite` " .
-	// "WHERE `sitetoservice`.`SiteId` = `usersite`.`SiteId` AND username = '" . $username . "' AND facilityId IN " .
-	// "	(SELECT facilityId " .
-	// "	FROM `service` " .
-	// " 	WHERE facilityId IN (SELECT `foodbank`.`FacilityId` from `foodbank`))";
-	//
-	
+		
 	$sql = "SELECT facilityId " .
 	"FROM `user`, `sitetoservice` " .
 	"WHERE `user`.`SiteId` = `sitetoservice`.`SiteId` AND username = '" . $username . "' AND facilityId IN " .
@@ -107,7 +99,7 @@
    	"INNER JOIN ( " . 
 	   "SELECT sumRequests.facilityId, sumRequests.itemId " .
 	   "FROM ( " .
-	   "	SELECT facilityId, `foodbanktoitem`.`ItemId`, availableQuantity, name, storageType, expirationDate, itemType " .
+	   "	SELECT facilityId, `foodbanktoitem`.`ItemId`, availableQuantity, name, storageType, expDate, category, subCategory " .
 	   "	FROM `foodbanktoitem`, `item` " .
 	   "	WHERE `foodbanktoitem`.`ItemId` = `item`.`ItemId` AND facilityId = " . $userFoodbank .
 	   ") AS filteredFoodbankItem " .
@@ -143,13 +135,15 @@
        		 "	  	 itemTable.name as itemName, " .
        		 "		 itemTable.availableQuantity, " .
        		 "		 itemTable.storageType, " .
-       		 "		 itemTable.expirationDate, " .
-       		 "		 itemTable.itemType " .
+       		 "		 itemTable.expDate, " .
+       		 "		 itemTable.category, " .
+			 "		 itemTable.subCategory " .
 			 "FROM `request` " .
 			 "INNER JOIN ( " .
-		 	 "		SELECT facilityId, `foodbanktoitem`.itemId, availableQuantity, name, storageType, expirationDate, itemType " .
+		 	 "		SELECT facilityId, `foodbanktoitem`.itemId, availableQuantity, " .
+	         "  		   name, storageType, expDate, category, subCategory " .
 			 "	 	FROM `foodbanktoitem`, `item` " .
-			 "		WHERE `foodbanktoitem`.`ItemId` = `item`.`ItemId` " .
+			 "		WHERE `foodbanktoitem`.`ItemId` = `item`.`ItemId` AND facilityId = " . $userFoodbank .
 			 ") AS itemTable " .
 			 "ON `request`.`ItemId` = itemTable.itemId " .
 		     "ORDER BY " . $orderBy . " ASC";
@@ -170,7 +164,7 @@
 			  <input type="radio" name="orderBy" value="storageType" checked> Storage Type<br>
 			  <input type="radio" name="orderBy" value="quantityRequested"> Quantity Requested<br>
 			  <input type="radio" name="orderBy" value="availableQuantity"> Available Quantity<br>
-			  <input type="radio" name="orderBy" value="itemType"> Category<br>
+			  <input type="radio" name="orderBy" value="category"> Category<br>
 			  <input type="radio" name="orderBy" value="subCategory"> Sub Category<br>
 			  <input type="submit" value="Submit"><br>
 			</form>
@@ -188,7 +182,8 @@
 					<td class="heading">ItemName</td>
 					<td class="heading">AvailableQuantity</td>
 					<td class="heading">StorageType</td>
-					<td class="heading">ItemType</td>
+					<td class="heading">Category</td>
+					<td class="heading">SubCategory</td>
 					<td class="heading">Action</td>
                 </tr>							
 
@@ -222,7 +217,8 @@
 						print "<td>" . $row['itemName'] . "</td>";
 						print "<td>" . $row['availableQuantity'] . "</td>";
 						print "<td>" . $row['storageType'] . "</td>";
-						print "<td>" . $row['itemType'] . "</td>";
+						print "<td>" . $row['category'] . "</td>";
+						print "<td>" . $row['subCategory'] . "</td>";
 						if ($row['status'] == 'pending') {
 							print "<td>" .
 									"<a href='view_outstanding_requests.php?fullyAccept=" . $row['requestId'] . 
