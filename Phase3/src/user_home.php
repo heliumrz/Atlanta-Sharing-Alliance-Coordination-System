@@ -29,7 +29,7 @@
          <?php displayJavascriptLib();?>
       </script>
    </head>
-   <body>
+   <?php displayBodyHeading(); ?>
       <?php displayFormHeader($MAIN_FORM,$USER_HOME_URL); ?>
          <div>
             <?php displayPageHeading($pageTitle); ?>            

@@ -58,7 +58,7 @@
          }
       </script>
    </head>
-   <body>
+   <?php displayBodyHeading(); ?>
       <?php displayFormHeader($MAIN_FORM,$CLIENT_SEARCH_URL); ?>
          <div>
             <?php displayPageHeading($pageTitle); ?>            

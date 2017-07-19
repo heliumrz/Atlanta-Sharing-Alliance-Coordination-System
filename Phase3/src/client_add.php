@@ -69,7 +69,7 @@
          }
       </script>
    </head>
-   <body>
+   <?php displayBodyHeading(); ?>
       <?php displayFormHeader($MAIN_FORM,$CLIENT_ADD_URL); ?>
          <div>
             <?php displayPageHeading($pageTitle); ?>            

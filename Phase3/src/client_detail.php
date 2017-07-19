@@ -88,7 +88,7 @@
          }
       </script>
    </head>
-   <body>
+   <?php displayBodyHeading(); ?>
       <?php displayFormHeader($MAIN_FORM,$CLIENT_DETAIL_URL); ?>
          <div>
             <?php displayPageHeading($pageTitle); ?>            

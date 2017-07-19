@@ -63,7 +63,7 @@
          }
       </script>
    </head>
-   <body>
+   <?php displayBodyHeading(); ?>
       <?php displayFormHeader($MAIN_FORM,$CLIENT_CHECKIN_URL); ?>
          <div>
             <?php displayPageHeading($pageTitle); ?>            

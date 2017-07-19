@@ -1,6 +1,7 @@
 <?php
+// This file contains library functions that will be used by other scripts.
 
-static $INVALID_USER_PASS = "Username and password are invalid. Please try again."; 
+static $INVALID_USER_PASS = "Username and password are invalid. Please try again.";
 static $EMPTY_STRING = "";
 static $LOGIN_URL = "/login.php";
 static $USER_HOME_URL = "/user_home.php";
@@ -27,11 +28,24 @@ function displayCss() {
          table.datatable {
             border: solid black;
          }
-         table.datatable th, tr, td {
+         table.datatable th {
+            border: solid black;
+            height: 40px;
+         }
+         table.datatable tr {
+            border: solid black;
+            height: 40px;
+         }
+         table.datatable td {
             border: solid black;
             height: 40px;
          }
       </style>\n";
+}
+
+// Returns the text associated with required fields
+function returnRequiredFieldText() {
+   return"<label>(*) <i>denotes required fields.</i></label>";
 }
 
 // Display Javascript library functions
@@ -143,6 +157,11 @@ function displayTitle($pageTitle) {
       <title>" . $pageTitle . "</title>";
 }
 
+// Display html <body> tag with options
+function displayBodyHeading() {
+   echo "<body style='background-color:CCF4FF'>";
+}
+
 // Display page heading
 function displayPageHeading($pageHeading) {
    echo '
@@ -166,7 +185,7 @@ function displayLogout() {
 // Display form header
 function displayFormHeader($formName,$actionUrl) {
    echo '
-      <form id="' . $formName . '" action="' . $actionUrl . '" method="post" onSubmit="return ' . $formName . 'Validation()">';
+      <form id="' . $formName . '" action="' . $actionUrl . '" method="post" onSubmit="return ' . $formName . 'Validation()">' . "\n";
 }
 
 // Display Login submit button
@@ -250,56 +269,58 @@ function displayUsernamePasswordField() {
 }
 
 // Display username and password fields. Used in Login page.
-function displayUserHomeDataField($userRow) {
+function displayUserHomeDataFieldLabel($userRow) {
    echo '
             <p>
                <label>
                   First Name: ' . $userRow['firstName'] . '
-               </label> 
+               </label>
             </p>
             <p>
                <label>
                   Last Name: ' . $userRow['lastName'] . '
-               </label> 
+               </label>
             </p>
             <p>
                <label>
                   Email: ' . $userRow['email'] . '
-               </label> 
+               </label>
             </p>
             <p>
                <label>
                   User Type: ' . $userRow['userType'] . '
-               </label> 
+               </label>
             </p>
             <p>
                <label>
                   <strong>Actions</strong>
-               </label> 
+               </label>
             </p>';
 }
 
 // Display user home data
-function displayUserHomeDataFieldTable($userRow) {
+function displayUserHomeDataField($userRow) {
    echo '
-  <table class="datatable">
-    <tr>
-      <td align="left">First Name:</td>
-      <td align="left">' . $userRow['firstName'] . '</td>
-    </tr>
-    <tr>
-      <td align="left">Last Name:</td>
-      <td align="left">' . $userRow['lastName'] . '</td>
-    </tr>
-    <tr>
-      <td align="left">Email:</td>
-      <td align="left">' . $userRow['email'] . '</td>
-    </tr>
-    <tr>
-      <td align="left">Email:</td>
-      <td align="left">' . $userRow['userType'] . '</td>
-    </tr>
-  </table>';
+            <table>
+               <col width="35%">
+               <col width="65%">
+               <tr>
+                  <td align="left">First Name:</td>
+                  <td align="left">' . $userRow['firstName'] . '</td>
+               </tr>
+               <tr>
+                  <td align="left">Last Name:</td>
+                  <td align="left">' . $userRow['lastName'] . '</td>
+               </tr>
+               <tr>
+                  <td align="left">Email:</td>
+                  <td align="left">' . $userRow['email'] . '</td>
+               </tr>
+               <tr>
+                  <td align="left">User Type:</td>
+                  <td align="left">' . $userRow['userType'] . '</td>
+               </tr>
+            </table>' . "\n";
 }
 
 // Display empty fields if no data provided or display data provided on field
@@ -317,31 +338,32 @@ function displayClientDataField($clientData) {
    }
 
    echo '
-            <p>
-               <label>First Name (*):</label>
-               <input id="firstName" name="firstName" type="text" value="' . $firstName . '"/>
-            </p>
-            <p>
-               <label>Last Name (*):</label>
-               <input id="lastName" name="lastName" type="text" value="' . $lastName . '"/>
-            </p>
-            <p>
-               <label>Description (*):</label>
-               <input id="description" name="description" type="text" value="' . $description . '"/>
-            </p>
-            <p>
-               <label>Phone Number:</label>
-               <input id="phoneNumber" name="phoneNumber" type="text" value="' . $phoneNumber . '"/>
-            </p>
-            <p>
-               <label>(*)</strong> denotes required fields.</label>
-            </p>
+            <table>
+               <col width="40%">
+               <col width="60%">
+               <tr>
+                  <td align="left">First Name (*):</td>
+                  <td align="left"><input id="firstName" name="firstName" type="text" style="width:150%" value="' . $firstName . '"/></td>
+               </tr>
+               <tr>
+                  <td align="left">Last Name (*):</td>
+                  <td align="left"><input id="lastName" name="lastName" type="text" style="width:150%" value="' . $lastName . '"/></td>
+               </tr>
+               <tr>
+                  <td align="left">Description (*):</td>
+                  <td align="left"><input id="description" name="description" type="text" style="width:150%" value="' . $description . '"/></td>
+               </tr>
+               <tr>
+                  <td align="left">Phone Number:</td>
+                  <td align="left"><input id="phoneNumber" name="phoneNumber" type="text" style="width:150%" value="' . $phoneNumber . '"/></td>
+               </tr>
+            </table>
+            ' . returnRequiredFieldText() . ' 
             <input id="currentFirstName" name="" type="hidden" value="' . $firstName . '"/>
             <input id="currentLastName" name="" type="hidden" value="' . $lastName . '"/>
             <input id="currentDescription" name="" type="hidden" value="' . $description . '"/>
             <input id="currentPhoneNumber" name="" type="hidden" value="' . $phoneNumber . '"/>
-            ';
-            
+            ' . "\n";
 }
 
 // Display client data in read only format
@@ -350,48 +372,29 @@ function displayClientDataFieldRO($clientData) {
    $lastName = $clientData["lastName"];
    $description = $clientData["description"];
    $phoneNumber = $clientData["phoneNumber"];
-   
+            
    echo '
-            <p>
-               <label>First Name: ' . $firstName . '</label>
-            </p>
-            <p>
-               <label>Last Name: ' . $lastName . '</label>
-            </p>
-            <p>
-               <label>Description: ' . $description . '</label>
-            </p>
-            <p>
-               <label>Phone Number: ' . $phoneNumber . '</label>
-            </p>';
-}
-
-// Display Client Check-In data fields
-function displayClientCheckinDataFieldLabel() {
-   $EMPTY_STRING = "";
-   echo '
-            <p>
-               <label><strong>Check-In Details</strong></label>
-            </p>   
-            <p>
-               <label>Check-In Date/Time (*):</label>
-               <input id="checkinDateTime" name="checkinDateTime" type="text" value="' . $EMPTY_STRING . '"/>
-            </p>
-            <p>
-               <label>Facility (*):</label>
-               <input id="checkinDateTime" name="checkinDateTime" type="text" value="' . $EMPTY_STRING . '"/>
-            </p>
-            <p>
-               <label>Service Description (*):</label>
-               <input id="description" name="description" type="text" value="' . $EMPTY_STRING . '"/>
-            </p>
-            <p>
-               <label>Note:</label>
-               <input id="note" name="note" type="text" value="' . $EMPTY_STRING . '"/>
-            </p>
-            <p>
-               <label>(*) denotes required fields.</label>
-            </p>';
+            <table>
+               <col width="40%">
+               <col width="60%">
+               <tr>
+                  <td align="left">First Name:</td>
+                  <td align="left">' . $firstName . '</td>
+               </tr>
+               <tr>
+                  <td align="left">Last Name:</td>
+                  <td align="left">' . $lastName . '</td>
+               </tr>
+               <tr>
+                  <td align="left">Description:</td>
+                  <td align="left">' . $description . '</td>
+               </tr>
+               <tr>
+                  <td align="left">Phone Number:</td>
+                  <td align="left">' . $phoneNumber . '</td>
+               </tr>
+            </table>
+            ' . "\n";            
 }
 
 function displayClientCheckinDataField($siteId) {
@@ -399,29 +402,26 @@ function displayClientCheckinDataField($siteId) {
    echo '
             <p>
                <label><strong>Check-In Details</strong></label>
-            </p>   
-  <table class="datatable">
-    <col width="20%">
-    <col width="80%">
-    <tr>
-      <td align="right">Facility (*):</td>
-      <td align="left">' . 
-         displaySiteFacility($siteId) . '
-      </td>
-    </tr>
-    <tr>
-      <td align="right">Service Description (*):</td>
-      <td align="left"><input id="description" name="description" type="text" style="width:100%" value="' . $EMPTY_STRING . '"/></td>
-    </tr>
-    <tr>
-      <td align="right">Notes:</td>
-      <td align="left"><input id="note" name="note" type="text" style="width:100%" value="' . $EMPTY_STRING . '"/></td>
-    </tr>
-  </table>
-            <p>
-               <label>(*) denotes required fields.</label>
-            </p>';
-  
+            </p>
+            <table class="datatable">
+               <col width="20%">
+               <col width="80%">
+               <tr>
+                  <td align="right">Facility (*):</td>
+                  <td align="left">' .
+                     displaySiteFacility($siteId) . '
+                  </td>
+               </tr>
+               <tr>
+                  <td align="right">Service Description (*):</td>
+                  <td align="left"><input id="description" name="description" type="text" style="width:100%" value="' . $EMPTY_STRING . '"/></td>
+               </tr>
+               <tr>
+                  <td align="right">Notes:</td>
+                  <td align="left"><input id="note" name="note" type="text" style="width:100%" value="' . $EMPTY_STRING . '"/></td>
+               </tr>
+            </table>
+            ' . returnRequiredFieldText();
 }
 
 function displayClientExistsMessage($clientExists) {
@@ -462,7 +462,7 @@ function displayClientSearchResult($result) {
 
       while($row = $result->fetch_assoc()) {
             echo "
-            <tr onClick='handleClientDetail(" . $row['clientId'] . ")'>
+            <tr style='cursor:pointer' onClick='handleClientDetail(" . $row['clientId'] . ")'>
                <td class='hide'>" . $row['clientId'] . "</td>
                <td>" . $row['firstName'] . "</td>
                <td>" . $row['lastName'] . "</td>
@@ -475,7 +475,6 @@ function displayClientSearchResult($result) {
       </table>
       <br>
       <label><i>Click row for more detail.</i></label>
-
       ";
 
    } else {
@@ -492,7 +491,7 @@ function displayClientModificationHistory($result) {
    echo "
       <label>
          <strong>Modification History:</strong>
-      </label> 
+      </label>
       <table border='1' class='altcolor'>
          <thead>
            <tr>
@@ -502,7 +501,7 @@ function displayClientModificationHistory($result) {
            </tr>
          </thead>
          <tbody>";
-   
+
    while($row = $result->fetch_assoc()) {
          echo "
             <tr>
@@ -511,7 +510,7 @@ function displayClientModificationHistory($result) {
                <td>" . $row['previousValue'] . "</td>
             </tr>";
    }
-   
+
    echo "
          </tbody>
       </table>
@@ -523,7 +522,7 @@ function displayClientServiceUsageHistory($result) {
    echo "
       <label>
          <strong>Service Usage History:</strong>
-      </label> 
+      </label>
       <table border='1' class='altcolor'>
          <thead>
          <tr>
@@ -535,7 +534,7 @@ function displayClientServiceUsageHistory($result) {
          </tr>
          </thead>
          <tbody>";
-   
+
    while($row = $result->fetch_assoc()) {
          echo "
             <tr>
@@ -556,7 +555,7 @@ function displaySiteFacility($siteId) {
    $result = retrieveFacilityFromSite($siteId);
    $str = "
       <select id='facilityId' name='facilityId' style='width:100%'>";
-   
+
    while($row = $result->fetch_assoc()) {
       $str = $str . "
          <option value='" . $row['facilityId'] . "'>" . $row['facilityName'] . "</option>";
@@ -612,7 +611,7 @@ function insertSql($sql) {
 function retrieveClientModificationHistory($clientId) {
    $sql = "SELECT modifiedDateTime, fieldModified, previousValue " .
           "FROM ClientLog " .
-          "WHERE clientId = " . $clientId . " " . 
+          "WHERE clientId = " . $clientId . " " .
           "ORDER BY modifiedDateTime DESC";
 
    $result = executeSql($sql);
@@ -625,7 +624,7 @@ function retrieveClientServiceUsageHistory($clientId) {
           "FROM ClientServiceUsage csu, Site sit, ClientService cse " .
           "WHERE csu.siteId = sit.siteId " .
           "AND csu.facilityId = cse.facilityId " .
-          "AND clientId = " . $clientId . " " . 
+          "AND clientId = " . $clientId . " " .
           "ORDER BY serviceDateTime DESC";
 
    $result = executeSql($sql);
@@ -637,13 +636,13 @@ function isDifferent($firstVal,$secondVal) {
    if ($firstVal != $secondVal) {
       return true;
    }
-   
+
    return false;
 }
 
 // Insert into ClientLog with data provided
 function insertClientLog($clientId,$username,$fieldModified,$previousValue) {
-   $sql = "INSERT INTO ClientLog (clientId,username,modifiedDateTime,fieldModified,previousValue) " . 
+   $sql = "INSERT INTO ClientLog (clientId,username,modifiedDateTime,fieldModified,previousValue) " .
           "VALUES (" . $clientId . ",'" . $username . "',now(),'" . $fieldModified . "','" . $previousValue . "')";
    //echo "insertClientLog sql: " . $sql;
    return insertSql($sql);
@@ -651,16 +650,16 @@ function insertClientLog($clientId,$username,$fieldModified,$previousValue) {
 
 // Update Client with data provided
 function updateClient($clientId,$firstName,$lastName,$description,$phoneNumber) {
-   $sql = "UPDATE Client " . 
-          "SET firstName = '" . $firstName . "', lastName = '" . $lastName . "', description = '" . $description . 
-          "', phoneNumber = '" . $phoneNumber . "' " . 
+   $sql = "UPDATE Client " .
+          "SET firstName = '" . $firstName . "', lastName = '" . $lastName . "', description = '" . $description .
+          "', phoneNumber = '" . $phoneNumber . "' " .
           "WHERE clientID = " . $clientId ;
    //echo "updateClient sql: " . $sql;
    return executeSql($sql);
 }
 
 function retrieveUserData($username) {
-   $sql = "SELECT firstName, lastName, email, userType " . 
+   $sql = "SELECT firstName, lastName, email, userType " .
           "FROM User " .
           "WHERE username = '" . $username . "' ";
 
@@ -669,7 +668,7 @@ function retrieveUserData($username) {
 }
 
 function retrieveClientFromId($clientId) {
-   $sql = "SELECT clientId, firstName, lastName, description, phoneNumber " . 
+   $sql = "SELECT clientId, firstName, lastName, description, phoneNumber " .
            "FROM Client " .
           "WHERE clientId = " . $clientId;
 
@@ -678,42 +677,42 @@ function retrieveClientFromId($clientId) {
 }
 
 function updateClientData($clientId,$username,$updatedData) {
-   $clientUpdated = false;   
+   $clientUpdated = false;
    $updatedFirstName = $updatedData['firstName'];
    $updatedLastName = $updatedData['lastName'];
    $updatedDescription = $updatedData['description'];
    $updatedPhoneNumber = $updatedData['phoneNumber'];
-   
+
    $sql = "SELECT clientId, firstName, lastName, description, phoneNumber " .
           "FROM Client " .
           "WHERE clientId = " . $clientId;
    $currentClient = executeSql($sql)->fetch_assoc();
-   
+
    $currentFirstName = $currentClient['firstName'];
    $currentLastName = $currentClient['lastName'];
    $currentDescription = $currentClient['description'];
    $currentPhoneNumber = $currentClient['phoneNumber'];
-   
+
    if (isDifferent($currentFirstName,$updatedFirstName)) {
       $clientUpdated = true;
       insertClientLog($clientId,$username,"FirstName",$currentFirstName);
    }
-   
+
    if (isDifferent($currentLastName,$updatedLastName)) {
       $clientUpdated = true;
       insertClientLog($clientId,$username,"LastName",$currentLastName);
    }
-   
+
    if (isDifferent($currentDescription,$updatedDescription)) {
       $clientUpdated = true;
       insertClientLog($clientId,$username,"Description",$currentDescription);
    }
-   
+
    if (isDifferent($currentPhoneNumber,$updatedPhoneNumber)) {
       $clientUpdated = true;
       insertClientLog($clientId,$username,"PhoneNumber",$currentPhoneNumber);
    }
-   
+
    // If any field was updated, update client record
    if ($clientUpdated) {
       updateClient($clientId,$updatedFirstName,$updatedLastName,$updatedDescription,$updatedPhoneNumber);
@@ -721,9 +720,9 @@ function updateClientData($clientId,$username,$updatedData) {
 }
 
 function retrieveFacilityFromSite($siteId) {
-   $sql = "SELECT cse.facilityId, cse.facilityName " . 
+   $sql = "SELECT cse.facilityId, cse.facilityName " .
           "FROM SiteToService sts, ClientService cse " .
-          "WHERE sts.facilityId = cse.facilityId " . 
+          "WHERE sts.facilityId = cse.facilityId " .
           "AND sts.siteId = " . $siteId;
 
    $result = executeSql($sql);
@@ -731,7 +730,7 @@ function retrieveFacilityFromSite($siteId) {
 }
 
 function retrieveSiteFromUser($username) {
-   $sql = "SELECT siteId " . 
+   $sql = "SELECT siteId " .
           "FROM User " .
           "WHERE username = '" . $username . "'";
 
@@ -742,7 +741,7 @@ function retrieveSiteFromUser($username) {
 
 // Insert into Client Service Usage
 function addClientServiceUsage($clientId,$siteId,$facilityId,$username,$description,$note) {
-   $sql = "INSERT INTO ClientServiceUsage (clientId,siteId,facilityId,username,serviceDateTime,description,note) " . 
+   $sql = "INSERT INTO ClientServiceUsage (clientId,siteId,facilityId,username,serviceDateTime,description,note) " .
           "VALUES (" . $clientId . "," . $siteId . "," . $facilityId . "," . "'" . $username . "',now(),'" . $description . "','" . $note . "')";
    // echo "addClientServiceUsage sql: " . $sql;
    return insertSql($sql);
