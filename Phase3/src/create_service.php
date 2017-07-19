@@ -88,14 +88,14 @@
    	return insertSql($sql);
    }
 
-   function addFacilityToShelter($FacilityId) {
+   function addFacilityToShelter($FacilityId, $BunkType, $BunkCountMale, $BunkCountFemale, $BunkCountMixed) {
    	$sql = 	$sql = "INSERT INTO Shelter (FacilityId, BunkType, BunkCountMale, BunkCountFemale, BunkCountMixed) VALUES ('" . 
    		$FacilityId . "','". $BunkType . "','". $BunkCountMale . "','". $BunkCountFemale . "','". $BunkCountMixed . "')";
    	return insertSql($sql);
    }
 
    function addToSiteToServiceTable($FacilityId, $SiteId) {
-   	$sql = "INSERT INTO SiteToService (FacilityId, Siteid, SeatTotal) VALUES ('" . 
+   	$sql = "INSERT INTO SiteToService (FacilityId, Siteid) VALUES ('" . 
    		$FacilityId . "','". $SiteId . "')";
    	return insertSql($sql);
    }
@@ -118,21 +118,43 @@
    goToUserHome(isset($_POST['formAction']) && ($_POST['formAction'] == 'userHome'));
 
    if (isset($_POST['create']) && !empty($_POST['serviceTyeToAdd'])) {
+	   $SiteId = $_POST['Site'];
+	   $FacilityName = $_POST['facilityName'];
+	   $EligibilityCondition = $_POST['EligibilityCondition'];
+	   $HoursOfOperation = $_POST['HoursOfOperation'];
 	   switch ($serviceType) {
 	   	case 'soupkitchen':
-	   		# code...
+			$SeatAvail = $_POST['SeatAvail'];
+			$SeatTotal = $_POST['SeatTotal'];				
+	   		$FacilityId = addFacilityToServiceTable();
+			addFacilityToClientServiceTable($FacilityId, $SiteId, $FacilityName, $EligibilityCondition, $HoursOfOperation);
+			addFacilityToSoupKitchen($FacilityId, $SeatAvail, $SeatTotal);
+			addToSiteToServiceTable($FacilityId, $SiteId);
 	   		break;
 		case 'shelter':
-			#code
+			$BunkType = $_POST['BunkType']; 
+			$BunkCountMale = $_POST['BunkCountMale'];
+			$BunkCountFemale = $_POST['BunkCountFemale'];
+			$BunkCountMixed = $_POST['BunkCountMixed'];
+			$FacilityId = addFacilityToServiceTable();
+			addFacilityToClientServiceTable($FacilityId, $SiteId, $FacilityName, $EligibilityCondition, $HoursOfOperation);
+			addFacilityToShelter($FacilityId, $BunkType, $BunkCountMale, $BunkCountFemale, $BunkCountMixed);
+			addToSiteToServiceTable($FacilityId, $SiteId);
 			break;
 		case 'foodbank':
-			#code
+			$FacilityId = addFacilityToServiceTable();
+			addFacilityToClientServiceTable($FacilityId, $SiteId, $FacilityName, $EligibilityCondition, $HoursOfOperation);
+			addFacilityToFoodBank($FacilityId);
+			addToSiteToServiceTable($FacilityId, $SiteId);
 			break;
 		case 'foodpantry':
-			#code
+			$FacilityId = addFacilityToServiceTable();
+			addFacilityToClientServiceTable($FacilityId, $SiteId, $FacilityName, $EligibilityCondition, $HoursOfOperation);
+			addFacilityToFoodPantry($FacilityId);
+			addToSiteToServiceTable($FacilityId, $SiteId);
 			break;
 	   	default:
-	   		# code...
+	   		# do nothing
 	   		break;
 	   }
 	} else {
