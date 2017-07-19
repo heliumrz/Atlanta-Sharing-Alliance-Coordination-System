@@ -3,17 +3,20 @@ include 'lib.php';
 
 $pageTitle = "Available Bunk Report";
 
-//drop the old table if exists
-//$query = "DROP TEMPORARY TABLE IF EXISTS BunkReport";
-//executeSql($query);
+If(isset($_POST['formAction']) && ($_POST['formAction'] == 'login')){
+	goToLogin(true);
+	}
 
-//save the update result into new table
+//sql query for table joining 
 $query ="SELECT t1.FacilityId, t1.BunkCountMale, t1.BunkCountFemale, t1.BunkCountMixed,t2.FacilityName,t2.EligibilityCondition,t2.HoursOfOperation,t2.SiteID,t3.StreetAddress, t3.City, t3.State, t3.ZipCode, t3.PhoneNumber FROM Shelter t1 INNER JOIN ClientService t2 ON t1.FacilityId = t2.FacilityId LEFT JOIN Site t3 ON t2.SiteId = t3.SiteId WHERE t1.BunkCountMale > 0 OR t1.BunkCountFemale >0 OR t1.BunkCountMixed >0";
 		 
 $result = executeSql($query);
 ?>
 <html>
 <head>
+	<script>
+         <?php displayJavascriptLib();?>
+	</script>
 <style>
 
 div.container {
@@ -46,11 +49,26 @@ header, footer {
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  
 </head>
 <body>
 <div class="container">
 	<header>
-  	<h2>Available Bunk Report</h2>
+  	 <?php displayFormHeader($MAIN_FORM,$USER_HOME_URL); ?>
+	 <div>
+		<?php
+		echo '<div style="float: right">
+            <button id="login" name="login" type="button" onClick="submitMainForm(' . "'login'" . ')">Login</button>
+         </div>';  
+	
+		?>
+	</div>
+	<h2>Available Bunk Report</h2>
+	<p>
+               <?php 
+			   displayHiddenField(); 
+               ?>
+    </p>
     </header>
     
 <div class="table-responsive">
@@ -90,12 +108,13 @@ header, footer {
                                             print "</tr>";							
                                         }
                                     }
+									
                                 ?>
  </tbody>
  </table>
  </div>
  </div>
  </div>
-                              
+ 		 
 </body>
 </html>
