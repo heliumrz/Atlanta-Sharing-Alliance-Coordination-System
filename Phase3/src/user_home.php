@@ -12,10 +12,16 @@
    
    // Inlude in all pages
    logout(isset($_POST['formAction']) && ($_POST['formAction'] == 'logout'));
-   
+
    if (isset($_POST['clientSearch'])) {
       header("Location: /client_search.php");
       exit;
+   } else if (isset($_POST['outstandingRequest'])) {
+       header("Location: /view_outstanding_requests.php");
+       exit;
+   } else if (isset($_POST['requestStatus'])) {
+       header("Location: /user_request_status.php");
+       exit;
    } else {
       $username = $_SESSION["username"];
       $userRow = retrieveUserData($username);
@@ -43,6 +49,8 @@
             <p>
                <?php 
                   displayClientSearchSubmitButton();
+				  displayOutstandingRequestSubmitButton();
+				  displayRequestStatusSubmitButton();
                   displayHiddenField(); 
                ?>
             </p>

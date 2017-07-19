@@ -212,6 +212,18 @@ function displayClientDetailSubmitButton() {
                <button id="clientDetail" name="clientDetail" type="submit" onClick="validationRequired=false">Client Detail</button>';
 }
 
+// Display Outstanding Request Report
+function displayOutstandingRequestSubmitButton() {
+   echo '
+               <button name="outstandingRequest" type="submit" onClick="validationRequired=false">View Outstanding Request</button>';
+}
+
+// Display Request Status Submit Button
+function displayRequestStatusSubmitButton() {
+   echo '
+               <button name="requestStatus" type="submit" onClick="validationRequired=false">View Request Status</button>';
+}
+
 // Display a hidden Client Detail submit button
 function displayClientDetailSubmitButtonHidden() {
    echo '

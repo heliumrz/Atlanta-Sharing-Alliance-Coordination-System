@@ -170,7 +170,10 @@
 			</form>
 		</div>
         <div class="report_section">
-            <div class="subtitle">Requests Report</div>  
+            <div class="subtitle">Requests Report</div> 
+			<br>
+			<?php echo "Note: Outstanding Request Will be Marked in Red" ?> 
+			<br>
             <table>
                 <tr>
                     <td class="heading">RequestId</td>
