@@ -67,9 +67,9 @@
    }
 
    function addFacilityToClientServiceTable($FacilityId, $SiteId, $FacilityName, $EligibilityCondition, $HoursOfOperation) {
-   	$sql = "INSERT INTO ClilentService (FacilityId, SiteId, FacilityName, EligibilityCondition, HoursOfOperation) VALUES (". 
+   	$sql = "INSERT INTO ClientService (FacilityId, SiteId, FacilityName, EligibilityCondition, HoursOfOperation) VALUES (". 
    		$FacilityId .",'". $SiteId ."','". $FacilityName ."','". $EligibilityCondition ."','". $HoursOfOperation ."')";
-       return insertSql($sql);
+	   return insertSql($sql);
    }
 
    function addFacilityToSoupKitchen($FacilityId, $SeatAvail, $SeatTotal) {
@@ -117,13 +117,14 @@
    logout(isset($_POST['formAction']) && ($_POST['formAction'] == 'logout'));
    goToUserHome(isset($_POST['formAction']) && ($_POST['formAction'] == 'userHome'));
 
-   if (isset($_POST['create']) && !empty($_POST['serviceTyeToAdd'])) {
+   if (isset($_POST['create']) && !empty($_POST['serviceTypeToAdd'])) {
 	   $SiteId = $_POST['Site'];
+	   $serviceTypeToAdd = $_POST['serviceTypeToAdd'];
 	   $FacilityName = $_POST['facilityName'];
 	   $EligibilityCondition = $_POST['EligibilityCondition'];
 	   $HoursOfOperation = $_POST['HoursOfOperation'];
-	   switch ($serviceType) {
-	   	case 'soupkitchen':
+	   switch ($serviceTypeToAdd) {
+	   	case "soupkitchen":
 			$SeatAvail = $_POST['SeatAvail'];
 			$SeatTotal = $_POST['SeatTotal'];				
 	   		$FacilityId = addFacilityToServiceTable();
@@ -131,7 +132,7 @@
 			addFacilityToSoupKitchen($FacilityId, $SeatAvail, $SeatTotal);
 			addToSiteToServiceTable($FacilityId, $SiteId);
 	   		break;
-		case 'shelter':
+		case "shelter":
 			$BunkType = $_POST['BunkType']; 
 			$BunkCountMale = $_POST['BunkCountMale'];
 			$BunkCountFemale = $_POST['BunkCountFemale'];
@@ -141,13 +142,13 @@
 			addFacilityToShelter($FacilityId, $BunkType, $BunkCountMale, $BunkCountFemale, $BunkCountMixed);
 			addToSiteToServiceTable($FacilityId, $SiteId);
 			break;
-		case 'foodbank':
+		case "foodbank":
 			$FacilityId = addFacilityToServiceTable();
 			addFacilityToClientServiceTable($FacilityId, $SiteId, $FacilityName, $EligibilityCondition, $HoursOfOperation);
 			addFacilityToFoodBank($FacilityId);
 			addToSiteToServiceTable($FacilityId, $SiteId);
 			break;
-		case 'foodpantry':
+		case "foodpantry":
 			$FacilityId = addFacilityToServiceTable();
 			addFacilityToClientServiceTable($FacilityId, $SiteId, $FacilityName, $EligibilityCondition, $HoursOfOperation);
 			addFacilityToFoodPantry($FacilityId);
@@ -173,7 +174,7 @@
    </head>
    <body>
 	   <?php displayPageHeading($pageTitle); ?>            
-      <form action="./add_service.php" method="post">
+      <form action="./create_service.php" method="post">
          <div>
             <?php 
                displayLogout();
@@ -185,7 +186,7 @@
 			 <?php
 			 $serviceType = $_SESSION["serviceType"];
 			 # we need this type to find the right tables to update
-			 echo '<input id="serviceTypeToAdd" name="" type="hidden" value="' . $serviceType . '"/>';
+			 echo '<input id="serviceTypeToAdd" name="serviceTypeToAdd" type="hidden" value="' . $serviceType . '"/>';
 			 displaySiteNamesOptions();
 			 displayClientServiceInputFields();
 			 switch ($serviceType) {
