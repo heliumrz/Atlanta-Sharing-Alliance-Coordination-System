@@ -21,8 +21,8 @@ if (isset($_POST['save']) && !empty($_POST['userName']) && !empty($_POST['facili
    
 
 
-	  $insertSql = "INSERT INTO request (Username, FacilityId, ItemId, QuantityRequested, Status, QuantityFulfilled) " .
-                   "VALUES ('" . $userName . "','" . $facilityId . "','"  . $itemId . "', '" . $quantityRequested . "','Pending','0' )";
+	  $insertSql = "INSERT INTO request (Username, FacilityId, ItemId,  Status, QuantityRequested,, QuantityFulfilled) " .
+                   "VALUES ('" . $userName . "','" . $facilityId . "','"  . $itemId . "', 'Pending', '" . $quantityRequested . "','0' )";
 	  
 	  // $insertSql = "INSERT INTO request (NULL, '" . $userName . "','" . $facilityId . "','"  . $itemId . "','', '" . $quantityRequested . "', '' )";
 	  

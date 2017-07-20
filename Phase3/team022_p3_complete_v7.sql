@@ -347,7 +347,7 @@ INSERT INTO Item (ItemId,Name,ExpDate,StorageType,Category,SubCategory) VALUES (
 																			  ('21','beets',NOW()+INTERVAL 10 DAY,'Refrigerated','Food','Vegetables'),
                                                                                ('22','carrots',NOW()+INTERVAL 10 DAY,'Refrigerated','Food','Vegetables'),
 																			   ('23','rice',NOW()+INTERVAL 10 DAY,'Drygoods','Food','Nuts/grains/beans'),
-																			   ('24','oats',NOW()+INTERVAL 10 DAY,'Drygoods','Food','Nuts/grains/beanse'),
+																			   ('24','oats',NOW()+INTERVAL 10 DAY,'Drygoods','Food','Nuts/grains/beans'),
 																			   ('25','A1 sauce',NOW()+INTERVAL 10 DAY,'Drygoods','Food','Sauce/condiments'),
 																			   ('26','catchups',NOW()+INTERVAL 10 DAY,'Drygoods','Food','Sauce/condiments'),
                                                                                ('27','orange juice',NOW()+INTERVAL 10 DAY,'Refrigerated','Food','Juice/drink'),
