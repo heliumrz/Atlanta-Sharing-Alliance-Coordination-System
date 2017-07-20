@@ -14,8 +14,9 @@
    logout(isset($_POST['formAction']) && ($_POST['formAction'] == 'logout'));
 
    if (isset($_POST['clientSearch'])) {
-      header("Location: /client_search.php");
-      exit;
+      goToClientSearch(true);
+   } else if (isset($_POST['itemSearch'])) {
+       goToItemSearch(true);
    } else if (isset($_POST['outstandingRequest'])) {
        header("Location: /view_outstanding_requests.php");
        exit;
@@ -49,8 +50,9 @@
             <p>
                <?php 
                   displayClientSearchSubmitButton();
-				  displayOutstandingRequestSubmitButton();
-				  displayRequestStatusSubmitButton();
+                  displayItemSearchSubmitButton();
+                  displayOutstandingRequestSubmitButton();
+                  displayRequestStatusSubmitButton();
                   displayHiddenField(); 
                ?>
             </p>

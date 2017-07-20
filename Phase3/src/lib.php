@@ -9,6 +9,8 @@ static $CLIENT_SEARCH_URL = "/client_search.php";
 static $CLIENT_ADD_URL = "/client_add.php";
 static $CLIENT_DETAIL_URL = "/client_detail.php";
 static $CLIENT_CHECKIN_URL = "/client_checkin.php";
+static $ITEM_SEARCH_URL = "/item_search.php";
+static $ITEM_ADD_URL = "/item_add.php";
 static $MAIN_FORM = "mainForm";
 
 // Display CSS styling
@@ -146,6 +148,14 @@ function goToClientCheckin($isClientCheckin) {
    goToLocation($isClientCheckin,"/client_checkin.php");
 }
 
+function goToItemSearch($isItemSearch) {
+   goToLocation($isItemSearch,"/item_search.php");
+}
+
+function goToAddNewItem($isAddNewItem) {
+   goToLocation($isAddNewItem,"/item_add.php");
+}
+
 // Display the text provided
 function displayText($text) {
    echo "$text";
@@ -210,6 +220,18 @@ function displayAddNewClientSubmitButton() {
 function displayClientDetailSubmitButton() {
    echo '
                <button id="clientDetail" name="clientDetail" type="submit" onClick="validationRequired=false">Client Detail</button>';
+}
+
+// Display Item Search submit button
+function displayItemSearchSubmitButton() {
+   echo '
+               <button name="itemSearch" type="submit" onClick="validationRequired=false">Item Search</button>';
+}
+
+// Display Add New Item submit button
+function displayAddNewItemSubmitButton() {
+   echo '
+               <button name="addNewItem" type="submit" onClick="validationRequired=false">Add New Item</button>';
 }
 
 // Display Outstanding Request Report
@@ -763,4 +785,176 @@ function addClientServiceUsage($clientId,$siteId,$facilityId,$username,$descript
    // echo "addClientServiceUsage sql: " . $sql;
    return insertSql($sql);
 }
+
+function retrieveAllFoodBank() {
+   $sql = "SELECT sts.siteId, fba.facilityId, fba.facilityName " .
+          "FROM SiteToService sts, FoodBank fba " .
+          "WHERE sts.facilityId = fba.facilityId ";
+
+   // echo "retrieveAllFoodBank sql: " . $sql;
+   $result = executeSql($sql);
+   return $result;
+}
+
+// ************* Item Search ************* //
+// Display item search fields
+function displayItemSearchDataField() {
+   $expirationDate = "";
+   $itemName = "";
+
+   echo '
+            <table>
+               <col width="40%">
+               <col width="60%">
+               <tr>
+                  <td align="left">Food Bank:</td>
+                  <td align="left">' . displayFoodBankDropdown() . '
+                  </td>
+               </tr>
+               <tr>
+                  <td align="left">Expiration Date:</td>
+                  <td align="left"><input id="expirationDate" name="expirationDate" type="text" style="width:150%" value="' . $expirationDate . '"/></td>
+               </tr>
+               <tr>
+                  <td align="left">Storage Type:</td>
+                  <td align="left">' . displayStorageTypeDropdown() . '
+                  </td>
+               </tr>
+               <tr>
+                  <td align="left">Category:</td>
+                  <td align="left">' . displayCategoryDropdown() . '
+                  </td>
+               </tr>
+               <tr>
+                  <td align="left">Sub-Category:</td>
+                  <td align="left">' . displaySubCategoryDropdown() . '
+                  </td>
+               </tr>
+               <tr>
+                  <td align="left">Item Name:</td>
+                  <td align="left"><input id="itemName" name="itemName" type="text" style="width:150%" value="' . $itemName . '"/></td>
+               </tr>               
+            </table>
+            ' . "\n";
+}
+
+// Display all facility associated with a site
+function displayFoodBankDropdown() {
+   $result = retrieveAllFoodBank();
+   $str = "
+                     <select id='facilityId' name='facilityId' style='width:100%'>
+                        <option value=''></option>";
+
+   while($row = $result->fetch_assoc()) {
+      $str = $str . "
+                        <option value='" . $row['facilityId'] . "'>" . $row['facilityName'] . "</option>";
+   }
+   $str = $str . "
+      </select>";
+   return $str;
+}
+
+// Display all storage type
+function displayStorageTypeDropdown() {
+   $str = "
+                     <select id='storageType' name='storageType' style='width:100%'>
+                        <option value=''></option>
+                        <option value='Drygoods'>Drygoods</option>
+                        <option value='Frozen'>Frozen</option>
+                        <option value='Refrigerated'>Refrigerated</option>
+                     </select>";
+   return $str;
+}
+
+// Display all category
+function displayCategoryDropdown() {
+   $str = "
+                     <select id='category' name='category' style='width:100%'>
+                        <option value=''></option>
+                        <option value='Food'>Food</option>
+                        <option value='Supply'>Supply</option>
+                     </select>";
+   return $str;
+}
+
+// Display all subcategory
+function displaySubCategoryDropdown() {
+   $str = "
+                     <select id='subcategory' name='subcategory' style='width:100%'>
+                        <option value=''></option>
+                        <option value='Vegetables'>Food-Vegetables</option>
+                        <option value='Nuts/grains/beans'>Food-Nuts/grains/beans</option>
+                        <option value='Juice/drink'>Food-Juice/drink</option>
+                        <option value='Meat/seafood'>Food-Meat/seafood</option>
+                        <option value='Dairy/eggs'>Food-Dairy/eggs</option>
+                        <option value='Sauce/condiments'>Food-Sauce/condiments</option>
+                        <option value='Personal hygiene'>Supply-Personal hygiene</option>
+                        <option value='Clothing'>Supply-Clothing</option>
+                        <option value='Shelter'>Supply-Shelter</option>
+                        <option value='Other'>Supply-Other</option>
+                     </select>";
+   return $str;
+}
+
+// Display Item Search results in a table format
+function displayItemSearchResult($result) {
+   $searchValid = false;
+   $errorMsg = "";
+   $rowcnt = $result->num_rows;
+   if ($rowcnt > 0 ) {
+       $searchValid = true;
+   } elseif ($rowcnt == 0) {
+      $errorMsg = "No item found, please try again.";
+   }
+
+   if ($searchValid) {
+      echo "
+      <label>
+         <strong>Search Results:</strong>
+      </label>
+      <table border='1' class='altcolor'>
+         <thead>
+            <tr>
+               <th align='left' class='hide'>Facility Id</th>
+               <th align='left'>Facility Name</th>
+               <th align='left' class='hide'>Item Id</th>
+               <th align='left'>Item Name</th>
+               <th align='left'>Storage Type</th>
+               <th align='left'>Expiration Date</th>
+               <th align='left'>Category</th>
+               <th align='left'>Sub-Category</th>
+               <th align='left'>Available Quantity</th>
+            </tr>
+         </thead>
+         <tbody>";
+
+      while($row = $result->fetch_assoc()) {
+            echo "
+            <tr>
+               <td class='hide'>" . $row['facilityId'] . "</td>
+               <td>" . $row['facilityName'] . "</td>
+               <td class='hide'>" . $row['itemId'] . "</td>
+               <td>" . $row['itemName'] . "</td>
+               <td>" . $row['storageType'] . "</td>
+               <td>" . $row['expDate'] . "</td>
+               <td>" . $row['category'] . "</td>
+               <td>" . $row['subcategory'] . "</td>
+               <td>" . $row['availableQuantity'] . "</td>
+            </tr>";
+      }
+      echo "
+         </tbody>
+      </table>
+      <br>
+      ";
+
+   } else {
+      echo "<p>
+            <label>
+              <strong>" . $errorMsg . "</strong>
+            </label>
+            </p>";
+   }
+}
+// ************* Item Search ************* //
 ?>
