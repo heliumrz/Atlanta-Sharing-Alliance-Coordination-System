@@ -60,6 +60,7 @@ CREATE TABLE Service (
 CREATE TABLE ClientService (
    FacilityId int(16) unsigned NOT NULL,
    SiteId int(16) unsigned NOT NULL,
+   FacilityType varchar(50) NOT NULL,
    FacilityName varchar(100) NOT NULL,
    EligibilityCondition varchar(200) NOT NULL,
    HoursOfOperation varchar(50) NOT NULL,
@@ -74,6 +75,9 @@ CREATE TABLE Shelter (
    BunkCountMale int NOT NULL,
    BunkCountFemale int NOT NULL,
    BunkCountMixed int NOT NULL,
+   BunkCapacityMale int NOT NULL,
+   BunkCapacityFemale int NOT NULL,
+   BunkCapacityMixed int NOT NULL,
    PRIMARY KEY (FacilityId),
    CONSTRAINT fk_Shelter_FacilityId_ClientService_FacilityId FOREIGN KEY (FacilityId) REFERENCES ClientService (FacilityId) ON DELETE CASCADE
    );
@@ -94,6 +98,7 @@ CREATE TABLE SoupKitchen (
    
 CREATE TABLE FoodBank (
    FacilityId int(16) unsigned NOT NULL,
+   FacilityName varchar(100) NOT NULL,
    PRIMARY KEY (FacilityId),
    CONSTRAINT fk_FoodBank_FacilityId_Service_FacilityId FOREIGN KEY (FacilityId) REFERENCES Service (FacilityId) ON DELETE CASCADE   
    );
@@ -294,21 +299,21 @@ INSERT INTO Service (FacilityId) VALUES ('41');
 INSERT INTO Service (FacilityId) VALUES ('42');
 
 -- Inserting 6 ClientServices --
-INSERT INTO ClientService (FacilityId,SiteId,FacilityName,HoursOfOperation,EligibilityCondition) VALUES ('31','1','pantry1','8:00AM-6:00PM Monday-Friday','Drivers License/PhotoID');
-INSERT INTO ClientService (FacilityId,SiteId,FacilityName,HoursOfOperation,EligibilityCondition) VALUES ('41','2','soup2','8:00AM-6:00PM Monday-Friday','Drivers License/PhotoID');
-INSERT INTO ClientService (FacilityId,SiteId,FacilityName,HoursOfOperation,EligibilityCondition) VALUES ('21','2','shelter2','9:00PM-9:00AM Sunday-Saturday','PhotoID');
-INSERT INTO ClientService (FacilityId,SiteId,FacilityName,HoursOfOperation,EligibilityCondition) VALUES ('32','3','pantry3','8:00AM-6:00PM Monday-Friday','Drivers License/PhotoID');
-INSERT INTO ClientService (FacilityId,SiteId,FacilityName,HoursOfOperation,EligibilityCondition) VALUES ('42','3','soup3','8:00AM-6:00PM Monday-Friday','Drivers License/PhotoID');
-INSERT INTO ClientService (FacilityId,SiteId,FacilityName,HoursOfOperation,EligibilityCondition) VALUES ('22','3','shelter3','9:00PM-9:00AM Sunday-Saturday','PhotoID');
+INSERT INTO ClientService (FacilityId,SiteId,FacilityType,FacilityName,HoursOfOperation,EligibilityCondition) VALUES ('31','1','FoodPantry','pantry1','8:00AM-6:00PM Monday-Friday','Drivers License/PhotoID');
+INSERT INTO ClientService (FacilityId,SiteId,FacilityType,FacilityName,HoursOfOperation,EligibilityCondition) VALUES ('41','2','SoupKitchen','soup2','8:00AM-6:00PM Monday-Friday','Drivers License/PhotoID');
+INSERT INTO ClientService (FacilityId,SiteId,FacilityType,FacilityName,HoursOfOperation,EligibilityCondition) VALUES ('21','2','Shelter','shelter2','9:00PM-9:00AM Sunday-Saturday','PhotoID');
+INSERT INTO ClientService (FacilityId,SiteId,FacilityType,FacilityName,HoursOfOperation,EligibilityCondition) VALUES ('32','3','FoodPantry','pantry3','8:00AM-6:00PM Monday-Friday','Drivers License/PhotoID');
+INSERT INTO ClientService (FacilityId,SiteId,FacilityType,FacilityName,HoursOfOperation,EligibilityCondition) VALUES ('42','3','SoupKitchen','soup3','8:00AM-6:00PM Monday-Friday','Drivers License/PhotoID');
+INSERT INTO ClientService (FacilityId,SiteId,FacilityType,FacilityName,HoursOfOperation,EligibilityCondition) VALUES ('22','3','Shelter','shelter3','9:00PM-9:00AM Sunday-Saturday','PhotoID');
 
 -- Inserting 3 FoodBanks --
-INSERT INTO FoodBank (FacilityId) VALUES ('11');
-INSERT INTO FoodBank (FacilityId) VALUES ('12');
-INSERT INTO FoodBank (FacilityId) VALUES ('13');
+INSERT INTO FoodBank (FacilityId,FacilityName) VALUES ('11','foodbank1');
+INSERT INTO FoodBank (FacilityId,FacilityName) VALUES ('12','foodbank2');
+INSERT INTO FoodBank (FacilityId,FacilityName) VALUES ('13','foodbank3');
 
 -- Inserting 2 Shelters --
-INSERT INTO Shelter (FacilityId,BunkCountMale,BunkCountFemale,BunkCountMixed) VALUES ('21','2','2','2');
-INSERT INTO Shelter (FacilityId,BunkCountMale,BunkCountFemale,BunkCountMixed) VALUES ('22','2','2','2');
+INSERT INTO Shelter (FacilityId,BunkCountMale,BunkCountFemale,BunkCountMixed,BunkCapacityMale,BunkCapacityFemale,BunkCapacityMixed) VALUES ('21','2','2','2','20','20','20');
+INSERT INTO Shelter (FacilityId,BunkCountMale,BunkCountFemale,BunkCountMixed,BunkCapacityMale,BunkCapacityFemale,BunkCapacityMixed) VALUES ('22','2','2','2','20','20','20');
 
 -- Inserting 2 FoodPantries --
 INSERT INTO FoodPantry (FacilityId) VALUES ('31');
