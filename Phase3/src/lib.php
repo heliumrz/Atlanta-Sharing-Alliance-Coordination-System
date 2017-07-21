@@ -957,4 +957,50 @@ function displayItemSearchResult($result) {
    }
 }
 // ************* Item Search ************* //
+
+// Display add new item fields
+function displayItemAddDataField($bankName) {
+   $expirationDate = "";
+   $itemName = "";
+
+   echo '
+            <table>
+               <col width="40%">
+               <col width="60%">
+               <tr>
+                  <td align="left">Food Bank:</td>
+                  <td align="left">' . $bankName . '
+                  </td>
+               </tr>
+               <tr>
+                  <td align="left">Expiration Date (*):</td>
+                  <td align="left"><input id="expirationDate" name="expirationDate" type="text" style="width:150%" value="' . $expirationDate . '"/></td>
+               </tr>
+               <tr>
+                  <td align="left">Storage Type (*):</td>
+                  <td align="left">' . displayStorageTypeDropdown() . '
+                  </td>
+               </tr>
+               <tr>
+                  <td align="left">Category (*):</td>
+                  <td align="left">' . displayCategoryDropdown() . '
+                  </td>
+               </tr>
+               <tr>
+                  <td align="left">Sub-Category (*):</td>
+                  <td align="left">' . displaySubCategoryDropdown() . '
+                  </td>
+               </tr>
+               <tr>
+                  <td align="left">Item Name (*):</td>
+                  <td align="left"><input id="itemName" name="itemName" type="text" style="width:150%" value="' . $itemName . '"/></td>
+               </tr> 
+               <tr>
+                  <td align="left">Quantity (*):</td>
+                  <td align="left"><input id="quantity" name="quantity" type="text" style="width:150%" value="' . $quantity . '"/></td>
+               </tr> 			   
+            </table>
+			' . returnRequiredFieldText() . ' 
+            ' . "\n";
+}
 ?>
