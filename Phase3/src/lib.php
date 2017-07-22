@@ -766,6 +766,51 @@ function getClientServicesForSite($siteId){
     $result = executeSql($sql);
     return $result;
 }
+# we use this in services directory page
+function displayServicesTable($services){
+    echo "<table border='1'>
+          <thead>
+            <tr>
+              <th>Facility Id</th>
+              <th>Facility Name</th>
+              <th>Eligibility Condition</th>
+              <th>Hours Of Operation</th>
+              <th>Facility Type</th>
+            </tr>
+          </thead>
+          <tbody>";
+    while($row = $result->fetch_assoc()) {
+          echo "<tr>
+                <td>" . $row['FacilityId'] . "</td>
+                <td>" . $row['FacilityName'] . "</td>
+                <td>" . $row['EligibilityCondition'] . "</td>
+                <td>" . $row['HoursOfOperation'] . "</td>
+                <td>" . $row['FacilityType'] . "</td>
+             </tr>";
+    }
+    echo "</tbody>
+       </table>";
+}
+# we use this in services directory page
+function displayFoodbankTable($services){
+    echo "<table border='1'>
+          <thead>
+            <tr>
+              <th>Facility Id</th>
+              <th>Facility Name</th>
+            </tr>
+          </thead>
+          <tbody>";
+    while($row = $result->fetch_assoc()) {
+          echo "<tr>
+                <td>" . $row['FacilityId'] . "</td>
+                <td>" . $row['FacilityName'] . "</td>
+             </tr>";
+    }
+    echo "</tbody>
+       </table>";
+}
+
 // get foodbank info for a siteId for service directory
 function getFoodBankForSite($siteId){
     $sql = "SELECT sts.SiteId, sts.FacilityId, fb.FacilityName FROM foodbank fb, sitetoservice sts".
