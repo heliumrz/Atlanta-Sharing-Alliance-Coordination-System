@@ -760,6 +760,21 @@ function updateClientData($clientId,$username,$updatedData) {
    }
 }
 
+// get services for Services directory 
+function getClientServicesForSite($siteId){
+    $sql = "SELECT * FROM clientservice WHERE SiteId= ". $siteId;
+    $result = executeSql($sql);
+    return $result;
+}
+// get foodbank info for a siteId for service directory
+function getFoodBankForSite($siteId){
+    $sql = "SELECT sts.SiteId, sts.FacilityId, fb.FacilityName FROM foodbank fb, sitetoservice sts".
+        "WHERE sts.SiteId = ".$siteId.
+        "sts.FacilityId = fb.FacilityId";
+    $result = executeSql($sql);
+    return $result;
+}
+
 function retrieveFacilityFromSite($siteId) {
    $sql = "SELECT cse.facilityId, cse.facilityName " .
           "FROM ClientService cse " .
