@@ -23,7 +23,7 @@ goToClientSearch(isset($_POST['cancel']));
    <head>
       <title><?php displayText($pageTitle);?></title>
    </head>
-   <body>
+   <?php displayBodyHeading(); ?>
        <div>
             <div style="float: right">
             <form action="./user_home.php">
