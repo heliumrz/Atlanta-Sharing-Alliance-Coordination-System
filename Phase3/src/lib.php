@@ -246,6 +246,12 @@ function displayRequestStatusSubmitButton() {
                <button name="requestStatus" type="submit" onClick="validationRequired=false">View Request Status</button>';
 }
 
+// Display Request Status Submit Button
+function displayServicesSubmitButton() {
+   echo '
+               <button name="listServices" type="submit" onClick="validationRequired=false">View All Services</button>';
+}
+
 // Display a hidden Client Detail submit button
 function displayClientDetailSubmitButtonHidden() {
    echo '
