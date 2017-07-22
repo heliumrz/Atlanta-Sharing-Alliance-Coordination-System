@@ -779,7 +779,7 @@ function displayServicesTable($services){
             </tr>
           </thead>
           <tbody>";
-    while($row = $result->fetch_assoc()) {
+    while($row = $services->fetch_assoc()) {
           echo "<tr>
                 <td>" . $row['FacilityId'] . "</td>
                 <td>" . $row['FacilityName'] . "</td>
@@ -801,7 +801,7 @@ function displayFoodbankTable($services){
             </tr>
           </thead>
           <tbody>";
-    while($row = $result->fetch_assoc()) {
+    while($row = $services->fetch_assoc()) {
           echo "<tr>
                 <td>" . $row['FacilityId'] . "</td>
                 <td>" . $row['FacilityName'] . "</td>
@@ -813,9 +813,9 @@ function displayFoodbankTable($services){
 
 // get foodbank info for a siteId for service directory
 function getFoodBankForSite($siteId){
-    $sql = "SELECT sts.SiteId, sts.FacilityId, fb.FacilityName FROM foodbank fb, sitetoservice sts".
+    $sql = "SELECT sts.SiteId, sts.FacilityId, fb.FacilityName FROM foodbank fb, sitetoservice sts ".
         "WHERE sts.SiteId = ".$siteId.
-        "sts.FacilityId = fb.FacilityId";
+        " AND sts.FacilityId = fb.FacilityId";
     $result = executeSql($sql);
     return $result;
 }
