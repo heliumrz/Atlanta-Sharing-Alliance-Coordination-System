@@ -23,6 +23,9 @@
    } else if (isset($_POST['requestStatus'])) {
        header("Location: /user_request_status.php");
        exit;
+   } else if (isset($_POST['listServices'])) {
+       header("Location: /services.php");
+       exit;
    } else {
       $username = $_SESSION["username"];
       $userRow = retrieveUserData($username);
@@ -53,6 +56,7 @@
                   displayItemSearchSubmitButton();
                   displayOutstandingRequestSubmitButton();
                   displayRequestStatusSubmitButton();
+                  displayServicesSubmitButton();
                   displayHiddenField(); 
                ?>
             </p>
