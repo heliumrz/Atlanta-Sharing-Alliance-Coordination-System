@@ -41,19 +41,19 @@ if (!empty($_GET['delete']) && !empty($_GET['type'])) {
             <form action="./user_home.php">
                 <input type="submit" value="User Home" />
             </form>
-        </div>
+            </div>
             <div style="float: right">
             <form action="./login.php">
                 <input type="submit" value="Logout" />
             </form>
-         </div>
+            </div>
        <h2>Client Services:</h2>
        <?php
        if (!empty($_SESSION['message'])){
            echo "<p>".$_SESSION['message']."</p>";
        }
        ?>
-   </div>
+     </div>
        <?php
        $services = getClientServicesForSite($siteId);
        displayServicesTable($services);
@@ -63,5 +63,21 @@ if (!empty($_GET['delete']) && !empty($_GET['type'])) {
        $foodbanks = getFoodBankForSite($siteId);
        displayFoodbankTable($foodbanks);
        ?>
+       <h2>Add New Services</h2>
+       <form action="./create_service.php" method="post">
+             <p>
+                <label>
+                   <strong>Select the type of service</strong>
+                </label> 
+           <select id="serviceType" name="serviceType">
+             <option value="0">--Select Service--</option>
+             <option value="foodbank">Food Bank</option>
+             <option value="foodpantry">Food Pantry</option>
+             <option value="soupkitchen">Soup Kitchen</option>
+             <option value="shelter">Shelter</option>
+           </select>
+             </p>
+            <button name="save" type="submit">Next</button>
+       
 </body>
 </html>
