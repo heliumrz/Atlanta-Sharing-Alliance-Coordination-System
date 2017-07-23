@@ -131,10 +131,12 @@ $_SESSION['message'] = " ";
        $EligibilityCondition = $_POST['EligibilityCondition'];
        $HoursOfOperation = $_POST['HoursOfOperation'];
        $FacilityType = $_POST['serviceTypeToAdd'];
-       if ($FacilityType = "foodbank") {
+       $check = false;
+       if ($FacilityType == "foodbank") {
           $check = doesFoodbankExist($SiteId, $FacilityType);  
        } else {
-          $check = doesServiceExist($SiteId, $FacilityType); 
+          $check = doesServiceExist($SiteId, $FacilityType);
+          
        }
        if ( $check == true) {
            $_SESSION['message'] = "This Site already owns that service. <a href=\"./services.php\">Go back to services directory.</a> ";
@@ -147,6 +149,7 @@ $_SESSION['message'] = " ";
             addFacilityToClientServiceTable($FacilityId, $SiteId, $FacilityName, $EligibilityCondition, $HoursOfOperation, $FacilityType);
             addFacilityToSoupKitchen($FacilityId, $SeatAvail, $SeatTotal);
             addToSiteToServiceTable($FacilityId, $SiteId);
+            $_SESSION['message'] = "New Facility is created successfully. <a href=\"./services.php\">Go back to services directory.</a> ";
    		break;
 	case "shelter":
 		$BunkType = $_POST['BunkType']; 
@@ -157,17 +160,20 @@ $_SESSION['message'] = " ";
 		addFacilityToClientServiceTable($FacilityId, $SiteId, $FacilityName, $EligibilityCondition, $HoursOfOperation, $FacilityType);
 		addFacilityToShelter($FacilityId, $BunkType, $BunkCountMale, $BunkCountFemale, $BunkCountMixed);
 		addToSiteToServiceTable($FacilityId, $SiteId);
+        $_SESSION['message'] = "New Facility is created successfully. <a href=\"./services.php\">Go back to services directory.</a> ";
 		break;
 	case "foodbank":
 		$FacilityId = addFacilityToServiceTable();
 		addFacilityToFoodBank($FacilityId, $FacilityName);
 		addToSiteToServiceTable($FacilityId, $SiteId);
+        $_SESSION['message'] = "New Facility is created successfully. <a href=\"./services.php\">Go back to services directory.</a> ";
 		break;
 	case "foodpantry":
 		$FacilityId = addFacilityToServiceTable();
 		addFacilityToClientServiceTable($FacilityId, $SiteId, $FacilityName, $EligibilityCondition, $HoursOfOperation, $FacilityType);
 		addFacilityToFoodPantry($FacilityId);
 		addToSiteToServiceTable($FacilityId, $SiteId);
+        $_SESSION['message'] = "New Facility is created successfully. <a href=\"./services.php\">Go back to services directory.</a> ";
 		break;
    	default:
    		break;
