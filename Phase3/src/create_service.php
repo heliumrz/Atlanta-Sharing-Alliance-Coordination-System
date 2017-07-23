@@ -121,11 +121,10 @@ function doesFoodbankExist($SiteId, $FacilityType) {
     }
 }
 $pageTitle = "Create a new service"; 
-$_SESSION['message'] = "";
 session_start();
 // Ensure session is valid. If not, go to login page.
 checkValidSession();
- 
+$_SESSION['message'] = " "; 
    if (isset($_POST['create']) && !empty($_POST['serviceTypeToAdd'])) {
        $SiteId = $_SESSION['siteId'];
        $FacilityName = $_POST['facilityName'];
@@ -209,11 +208,6 @@ checkValidSession();
      </div>
       <form action="./create_service.php" method="post">
          <div>
-            <?php
-            var_dump($_SESSION);
-            echo"<br/> POST ===> ";
-            var_dump($_POST);
-            ?>
          </div>
          <br>
          <div>

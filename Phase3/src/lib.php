@@ -787,7 +787,9 @@ function displayServicesTable($services){
                 <td>" . $row['EligibilityCondition'] . "</td>
                 <td>" . $row['HoursOfOperation'] . "</td>
                 <td>" . $row['FacilityType'] . "</td>
-                <td> <a href=\"./services.php?delete=" . $row['FacilityId'] . "&type=". $row['FacilityType'] ." \" onclick=\"return confirm('Are you sure you want to remove this facility?')\">  Remove </a></td>
+                <td> <a href=\"./services.php?delete=" . $row['FacilityId'] . "&type=". $row['FacilityType'] ." \" onclick=\"return confirm('Are you sure you want to remove this facility?')\">  Remove </a>&nbsp;&nbsp;
+                <a href=\"./edit_service.php?id=" . $row['FacilityId'] . "&type=". $row['FacilityType'] ." \">  Edit </a>
+                </td>
              </tr>";
     }
     echo "</tbody>
@@ -808,7 +810,9 @@ function displayFoodbankTable($services){
           echo "<tr>
                 <td>" . $row['FacilityId'] . "</td>
                 <td>" . $row['FacilityName'] . "</td>
-                <td> <a href=\"./services.php?delete=" . $row['FacilityId'] . "&type=foodbank \" onclick=\"return confirm('Are you sure you want to remove this facility?')\">  Remove </a></td>
+                <td> <a href=\"./services.php?delete=" . $row['FacilityId'] . "&type=foodbank \" onclick=\"return confirm('Are you sure you want to remove this facility?')\">  Remove </a>&nbsp;&nbsp;
+                <a href=\"./edit_service.php?id=" . $row['FacilityId'] . "&type=". $row['FacilityType'] ." \">  Edit </a>
+                </td>
              </tr>";
     }
     echo "</tbody>
