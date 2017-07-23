@@ -811,7 +811,7 @@ function displayFoodbankTable($services){
                 <td>" . $row['FacilityId'] . "</td>
                 <td>" . $row['FacilityName'] . "</td>
                 <td> <a href=\"./services.php?delete=" . $row['FacilityId'] . "&type=foodbank \" onclick=\"return confirm('Are you sure you want to remove this facility?')\">  Remove </a>&nbsp;&nbsp;
-                <a href=\"./edit_service.php?id=" . $row['FacilityId'] . "&type=". $row['FacilityType'] ." \">  Edit </a>
+                <a href=\"./edit_service.php?id=" . $row['FacilityId'] . "&type=foodbank \">  Edit </a>
                 </td>
              </tr>";
     }
