@@ -11,17 +11,30 @@ logout(isset($_POST['logout']));
 goToUserHome(isset($_POST['userHome']));
 goToClientSearch(isset($_POST['cancel']));
 
-// if (isset($_POST['save']) && $_POST['serviceType'] != '0' ) {
-//
-//     $serviceType = $_POST['serviceType'];
-//     $_SESSION["serviceType"] = $serviceType;
-//     header('Location: create_service.php');
-//     exit();
-// }
+if (!empty($_GET['delete']) && !empty($_GET['type'])) {
+    // let's delete this faility
+    //first make sure we have more than one facility
+    $facilityId_del = $_GET['delete'];
+    $facility_del_type = $_GET['type'];
+    if (getCountOfFacilitiesForSite($siteId) > 1) {
+        if (deleteService($facilityId_del)){
+            $_SESSION['message'] = "The Facility with ID ".$facilityId_del." is removed.\n";
+        } else {
+            $_SESSION['message'] = "There was a problem with removing Facility with ID ".$facilityId_del.". Try again later.\n";
+        }
+    } else {
+        $_SESSION['message'] = "This Site has only one Facility. You cannot remove it.\n";
+        // do not delete. Site needs at least one facility
+    }
+}
 ?>
 <html>
    <head>
       <title><?php displayText($pageTitle);?></title>
+      <script type="text/javascript">
+          
+      </script>
+          
    </head>
    <?php displayBodyHeading(); ?>
        <div>
@@ -34,12 +47,14 @@ goToClientSearch(isset($_POST['cancel']));
             <form action="./login.php">
                 <input type="submit" value="Logout" />
             </form>
-            <!-- <?php
-               displayLogout();
-               displayUserHome();
-            ?> -->
          </div>
        <h2>Client Services:</h2>
+       <?php
+       if (!empty($_SESSION['message'])){
+           echo "<p>".$_SESSION['message']."</p>";
+           unset($_SESSION['message']);
+       }
+       ?>
    </div>
        <?php
        $services = getClientServicesForSite($siteId);
@@ -50,27 +65,5 @@ goToClientSearch(isset($_POST['cancel']));
        $foodbanks = getFoodBankForSite($siteId);
        displayFoodbankTable($foodbanks);
        ?>
-      <!-- <form action="./add_service.php" method="post">
-         <div>
-            <div style="float: left"><strong><?php displayText($pageTitle);?></strong>
-         <br>
-         <div>
-            <p>
-               <label>
-                  <strong>Select the type of service</strong>
-               </label>
-            <select id="serviceType" name="serviceType">
-                <option value="0">--Select Service--</option>
-                <option value="foodbank">Food Bank</option>
-                <option value="foodpantry">Food Pantry</option>
-                <option value="soupkitchen">Soup Kitchen</option>
-                <option value="shelter">Shelter</option>
-            </select>
-            </p>
-            <p>
-               <button name="save" type="submit">Next</button>
-            </p>
-         </div>
-     </form> -->
-	</body>
+</body>
 </html>
