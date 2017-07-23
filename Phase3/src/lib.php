@@ -798,6 +798,7 @@ function displayFoodbankTable($services){
             <tr>
               <th>Facility Id</th>
               <th>Facility Name</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>";
@@ -805,6 +806,7 @@ function displayFoodbankTable($services){
           echo "<tr>
                 <td>" . $row['FacilityId'] . "</td>
                 <td>" . $row['FacilityName'] . "</td>
+                <td> <a href=\"./services.php?delete=" . $row['FacilityId'] . "&type=foodbank \" onclick=\"return confirm('Are you sure you want to remove this facility?')\">  Remove </a></td>
              </tr>";
     }
     echo "</tbody>
@@ -816,6 +818,18 @@ function getFoodBankForSite($siteId){
     $sql = "SELECT sts.SiteId, sts.FacilityId, fb.FacilityName FROM foodbank fb, sitetoservice sts ".
         "WHERE sts.SiteId = ".$siteId.
         " AND sts.FacilityId = fb.FacilityId";
+    $result = executeSql($sql);
+    return $result;
+}
+
+function getCountOfFacilitiesForSite($siteId) {
+    $sql = "SELECT * FROM sitetoservice WHERE SiteId= ".$siteId;
+    $result = executeSql($sql);
+    return mysqli_num_rows($result);
+}
+
+function deleteService($service) {
+    $sql = "DELETE FROM service WHERE FacilityId=". $service;
     $result = executeSql($sql);
     return $result;
 }
