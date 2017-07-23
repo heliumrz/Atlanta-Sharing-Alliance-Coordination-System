@@ -27,6 +27,31 @@ if (!empty($_GET['delete']) && !empty($_GET['type'])) {
         // do not delete. Site needs at least one facility
     }
 }
+function getShelterForSite($siteId) {
+    $sql = "SELECT * FROM sitetoservice, shelter WHERE sitetoservice.SiteId='".
+        $siteId."' AND sitetoservice.FacilityId = shelter.FacilityId";
+    $result = executeSql($sql);
+    return $result;
+}
+function resetShelterCount($maleCap, $femaleCap, $mixedCap,$FacilityId) {
+    $sql = "UPDATE Shelter SET BunkCountMale=".$maleCap.", BunkCountFemale=".$femaleCap.", BunkCountMixed=".$mixedCap." WHERE FacilityId=".$FacilityId;
+    return executeSql($sql);
+}
+if (isset($_POST['reset'])){
+    //get shelter for this site
+    $result = getShelterForSite($siteId);
+    //get capacity for the shelter
+    while ($row = $result->fetch_assoc()){
+        $FacilityId = $row['FacilityId'];
+        $maleCap = $row['BunkCapacityMale'];
+        $femaleCap = $row['BunkCapacityFemale'];
+        $mixedCap = $row['BunkCapacityMixed'];
+    }
+        //update shelter with those values
+    resetShelterCount($maleCap, $femaleCap, $mixedCap,$FacilityId);
+    $_SESSION['message'] = "The Shelter Bunk count is reset to original capacity.";
+}
+
 ?>
 <html>
    <head>
@@ -78,6 +103,11 @@ if (!empty($_GET['delete']) && !empty($_GET['type'])) {
            </select>
              </p>
             <button name="save" type="submit">Next</button>
-       
+       </form>
+       <h2>Reset Shelter bunk Status</h2>
+       <p> Clicking this will reset Shelter capacity.</p>
+        <form action="./services.php" method="post">
+            <button name="reset" type="submit">Reset Bunk status</button>
+        </form>
 </body>
 </html>
