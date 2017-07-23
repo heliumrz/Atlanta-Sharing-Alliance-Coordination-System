@@ -76,6 +76,7 @@
                <?php displayHiddenField(); ?>
             </p>
          </div>
+     </form>
          <?php
             if (isset($_POST['search'])) {
                displayItemSearchResult($result);

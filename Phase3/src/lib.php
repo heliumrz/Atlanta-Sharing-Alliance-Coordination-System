@@ -197,7 +197,6 @@ function displayFormHeader($formName,$actionUrl) {
    echo '
       <form id="' . $formName . '" action="' . $actionUrl . '" method="post" onSubmit="return ' . $formName . 'Validation()">' . "\n";
 }
-
 // Display Login submit button
 function displayLoginSubmitButton() {
    echo '

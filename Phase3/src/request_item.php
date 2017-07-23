@@ -12,8 +12,8 @@ logout(isset($_POST['logout']));
 goToUserHome(isset($_POST['userHome']));   
 goToClientSearch(isset($_POST['cancel']));
 
-if (isset($_POST['save']) && !empty($_POST['userName']) && !empty($_POST['facilityId']) && !empty($_POST['itemId']) && !empty($_POST['quantityRequested']) ) {
-   
+//if (isset($_POST['save']) && !empty($_POST['userName']) && !empty($_POST['facilityId']) && !empty($_POST['itemId']) && !empty($_POST['quantityRequested']) ) {
+if (isset($_POST['save']) && !empty($_GET['facilityId']) && !empty($_GET['itemId'])) ) {
    $userName = $_POST['userName'];
    $facilityId = $_POST['facilityId'];
    $itemId = $_POST['itemId'];
@@ -23,20 +23,13 @@ if (isset($_POST['save']) && !empty($_POST['userName']) && !empty($_POST['facili
 
 	  $insertSql = "INSERT INTO request (Username, FacilityId, ItemId,  Status, QuantityRequested,, QuantityFulfilled) " .
                    "VALUES ('" . $userName . "','" . $facilityId . "','"  . $itemId . "', 'Pending', '" . $quantityRequested . "','0' )";
-	  
-	  // $insertSql = "INSERT INTO request (NULL, '" . $userName . "','" . $facilityId . "','"  . $itemId . "','', '" . $quantityRequested . "', '' )";
-	  
       $requestId = insertSql($insertSql);
       if ($requestId > 0) {
          $_SESSION["requestId"] = $requestId;
          // header("Location: /request_detail.php");
 		 echo "Request submitted with id ". $requestId;
-		 
          exit;
-      } else {
-         echo "Error: " . $insertSql . "<br>" .$requestId;
       }            
-  
 } 
 
 ?>
