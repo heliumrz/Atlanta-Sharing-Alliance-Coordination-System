@@ -13,10 +13,9 @@ goToUserHome(isset($_POST['userHome']));
 goToClientSearch(isset($_POST['cancel']));
 
 if (!empty($_GET['delete']) && !empty($_GET['type'])) {
-    // let's delete this faility
-    //first make sure we have more than one facility
     $facilityId_del = $_GET['delete'];
     $facility_del_type = $_GET['type'];
+    //first make sure we have more than one facility
     if (getCountOfFacilitiesForSite($siteId) > 1) {
         if (deleteService($facilityId_del)){
             $_SESSION['message'] = "The Facility with ID ".$facilityId_del." is removed.\n";
@@ -33,7 +32,6 @@ if (!empty($_GET['delete']) && !empty($_GET['type'])) {
    <head>
       <title><?php displayText($pageTitle);?></title>
       <script type="text/javascript">
-          
       </script>
           
    </head>
@@ -51,9 +49,6 @@ if (!empty($_GET['delete']) && !empty($_GET['type'])) {
          </div>
        <h2>Client Services:</h2>
        <?php
-       if (getCountOfFacilitiesForSite($siteId) > 1) {
-           echo "count: ". getCountOfFacilitiesForSite($siteId);
-       }
        if (!empty($_SESSION['message'])){
            echo "<p>".$_SESSION['message']."</p>";
        }
