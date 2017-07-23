@@ -12,7 +12,7 @@
       $user = $_POST['username'];
       $pwd = $_POST['pwd'];
    
-      $sql    = "SELECT password FROM User WHERE username = '" . $user . "'";
+      $sql    = "SELECT password, siteId FROM User WHERE username = '" . $user . "'";
       $result = executeSql($sql);
    
       if ($result->num_rows > 0) {
@@ -21,8 +21,9 @@
           //echo "password: " . $row["password"] . "<br>";
           if ($row["password"] == $pwd) {
              $loginvalid = true;
+             $_SESSION["username"] = $user;
+             $_SESSION["siteId"] = $row["siteId"];
           }
-          $_SESSION["username"] = $user;
       }
    
       if ($loginvalid == true) {

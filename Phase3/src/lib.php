@@ -197,7 +197,6 @@ function displayFormHeader($formName,$actionUrl) {
    echo '
       <form id="' . $formName . '" action="' . $actionUrl . '" method="post" onSubmit="return ' . $formName . 'Validation()">' . "\n";
 }
-
 // Display Login submit button
 function displayLoginSubmitButton() {
    echo '
@@ -244,6 +243,12 @@ function displayOutstandingRequestSubmitButton() {
 function displayRequestStatusSubmitButton() {
    echo '
                <button name="requestStatus" type="submit" onClick="validationRequired=false">View Request Status</button>';
+}
+
+// Display Request Status Submit Button
+function displayServicesSubmitButton() {
+   echo '
+               <button name="listServices" type="submit" onClick="validationRequired=false">View All Services</button>';
 }
 
 // Display a hidden Client Detail submit button
@@ -754,6 +759,86 @@ function updateClientData($clientId,$username,$updatedData) {
    }
 }
 
+// get services for Services directory 
+function getClientServicesForSite($siteId){
+    $sql = "SELECT * FROM clientservice WHERE SiteId= ". $siteId;
+    $result = executeSql($sql);
+    return $result;
+}
+# we use this in services directory page
+function displayServicesTable($services){
+    echo "<table border='1'>
+          <thead>
+            <tr>
+              <th>Facility Id</th>
+              <th>Facility Name</th>
+              <th>Eligibility Condition</th>
+              <th>Hours Of Operation</th>
+              <th>Facility Type</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>";
+    while($row = $services->fetch_assoc()) {
+          echo "<tr>
+                <td>" . $row['FacilityId'] . "</td>
+                <td>" . $row['FacilityName'] . "</td>
+                <td>" . $row['EligibilityCondition'] . "</td>
+                <td>" . $row['HoursOfOperation'] . "</td>
+                <td>" . $row['FacilityType'] . "</td>
+                <td> <a href=\"./services.php?delete=" . $row['FacilityId'] . "&type=". $row['FacilityType'] ." \" onclick=\"return confirm('Are you sure you want to remove this facility?')\">  Remove </a>&nbsp;&nbsp;
+                <a href=\"./edit_service.php?id=" . $row['FacilityId'] . "&type=". $row['FacilityType'] ." \">  Edit </a>
+                </td>
+             </tr>";
+    }
+    echo "</tbody>
+       </table>";
+}
+# we use this in services directory page
+function displayFoodbankTable($services){
+    echo "<table border='1'>
+          <thead>
+            <tr>
+              <th>Facility Id</th>
+              <th>Facility Name</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>";
+    while($row = $services->fetch_assoc()) {
+          echo "<tr>
+                <td>" . $row['FacilityId'] . "</td>
+                <td>" . $row['FacilityName'] . "</td>
+                <td> <a href=\"./services.php?delete=" . $row['FacilityId'] . "&type=foodbank \" onclick=\"return confirm('Are you sure you want to remove this facility?')\">  Remove </a>&nbsp;&nbsp;
+                <a href=\"./edit_service.php?id=" . $row['FacilityId'] . "&type=foodbank \">  Edit </a>
+                </td>
+             </tr>";
+    }
+    echo "</tbody>
+       </table>";
+}
+
+// get foodbank info for a siteId for service directory
+function getFoodBankForSite($siteId){
+    $sql = "SELECT sts.SiteId, sts.FacilityId, fb.FacilityName FROM foodbank fb, sitetoservice sts ".
+        "WHERE sts.SiteId = ".$siteId.
+        " AND sts.FacilityId = fb.FacilityId";
+    $result = executeSql($sql);
+    return $result;
+}
+
+function getCountOfFacilitiesForSite($siteId) {
+    $sql = "SELECT * FROM sitetoservice WHERE SiteId= ".$siteId;
+    $result = executeSql($sql);
+    return mysqli_num_rows($result);
+}
+
+function deleteService($service) {
+    $sql = "DELETE FROM service WHERE FacilityId=". $service;
+    $result = executeSql($sql);
+    return $result;
+}
+
 function retrieveFacilityFromSite($siteId) {
    $sql = "SELECT cse.facilityId, cse.facilityName " .
           "FROM ClientService cse " .
@@ -924,6 +1009,7 @@ function displayItemSearchResult($result) {
                <th align='left'>Category</th>
                <th align='left'>Sub-Category</th>
                <th align='left'>Available Quantity</th>
+               <th align='left'>Request</th>
             </tr>
          </thead>
          <tbody>";
@@ -940,6 +1026,10 @@ function displayItemSearchResult($result) {
                <td>" . $row['category'] . "</td>
                <td>" . $row['subcategory'] . "</td>
                <td>" . $row['availableQuantity'] . "</td>
+               <td><form action='request_item.php' method='post'>
+               <input id='faililityId' name='faililityId' type='hidden' value='". $row['facilityId'] ."'/>
+               <input id='itemId' name='itemId' type='hidden' value='". $row['itemId'] ."'/>
+               <button name='request' type='submit'>Request</button></form></td>
             </tr>";
       }
       echo "
