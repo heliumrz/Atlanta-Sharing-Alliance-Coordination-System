@@ -1010,6 +1010,7 @@ function displayItemSearchResult($result) {
                <th align='left'>Category</th>
                <th align='left'>Sub-Category</th>
                <th align='left'>Available Quantity</th>
+               <th align='left'>Request</th>
             </tr>
          </thead>
          <tbody>";
@@ -1026,6 +1027,10 @@ function displayItemSearchResult($result) {
                <td>" . $row['category'] . "</td>
                <td>" . $row['subcategory'] . "</td>
                <td>" . $row['availableQuantity'] . "</td>
+               <td><form action='request_item.php' method='post'>
+               <input id='faililityId' name='faililityId' type='hidden' value='". $row['facilityId'] ."'/>
+               <input id='itemId' name='itemId' type='hidden' value='". $row['itemId'] ."'/>
+               <button name='request' type='submit'>Request</button></form></td>
             </tr>";
       }
       echo "
