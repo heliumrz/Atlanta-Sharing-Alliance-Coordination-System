@@ -776,6 +776,7 @@ function displayServicesTable($services){
               <th>Eligibility Condition</th>
               <th>Hours Of Operation</th>
               <th>Facility Type</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>";
@@ -786,6 +787,7 @@ function displayServicesTable($services){
                 <td>" . $row['EligibilityCondition'] . "</td>
                 <td>" . $row['HoursOfOperation'] . "</td>
                 <td>" . $row['FacilityType'] . "</td>
+                <td> <a href=\"./services.php?delete=" . $row['FacilityId'] . "&type=". $row['FacilityType'] ." \" onclick=\"return confirm('Are you sure you want to remove this facility?')\">  Remove </a></td>
              </tr>";
     }
     echo "</tbody>

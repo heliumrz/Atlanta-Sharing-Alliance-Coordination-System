@@ -6,6 +6,7 @@ $pageTitle = "Services Directory";
 if (!isset($_SESSION)) {
     session_start();
 }
+$_SESSION['message']="";
 $siteId = $_SESSION['siteId'];
 logout(isset($_POST['logout']));
 goToUserHome(isset($_POST['userHome']));
@@ -50,9 +51,11 @@ if (!empty($_GET['delete']) && !empty($_GET['type'])) {
          </div>
        <h2>Client Services:</h2>
        <?php
+       if (getCountOfFacilitiesForSite($siteId) > 1) {
+           echo "count: ". getCountOfFacilitiesForSite($siteId);
+       }
        if (!empty($_SESSION['message'])){
            echo "<p>".$_SESSION['message']."</p>";
-           unset($_SESSION['message']);
        }
        ?>
    </div>
