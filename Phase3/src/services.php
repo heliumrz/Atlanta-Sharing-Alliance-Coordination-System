@@ -55,7 +55,10 @@ if (isset($_POST['reset'])){
 ?>
 <html>
    <head>
-      <title><?php displayText($pageTitle);?></title>
+       <?php 
+          displayTitle($pageTitle);
+          displayCss();
+       ?>
       <script type="text/javascript">
       </script>
           

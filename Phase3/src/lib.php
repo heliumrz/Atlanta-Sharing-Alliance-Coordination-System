@@ -767,7 +767,7 @@ function getClientServicesForSite($siteId){
 }
 # we use this in services directory page
 function displayServicesTable($services){
-    echo "<table border='1'>
+    echo "<table border='1' class='altcolor'>
           <thead>
             <tr>
               <th>Facility Id</th>
@@ -796,7 +796,7 @@ function displayServicesTable($services){
 }
 # we use this in services directory page
 function displayFoodbankTable($services){
-    echo "<table border='1'>
+    echo "<table border='1' class='altcolor'>
           <thead>
             <tr>
               <th>Facility Id</th>
@@ -1027,7 +1027,8 @@ function displayItemSearchResult($result) {
                <td>" . $row['subcategory'] . "</td>
                <td>" . $row['availableQuantity'] . "</td>
                <td><form action='request_item.php' method='post'>
-               <input id='faililityId' name='faililityId' type='hidden' value='". $row['facilityId'] ."'/>
+               <input id='facilityId' name='facilityId' type='hidden' value='". $row['facilityId'] ."'/>
+               <input id='facilityName' name='facilityName' type='hidden' value='". $row['facilityName'] ."'/>
                <input id='itemId' name='itemId' type='hidden' value='". $row['itemId'] ."'/>
                <button name='request' type='submit'>Request</button></form></td>
             </tr>";

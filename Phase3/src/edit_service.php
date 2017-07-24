@@ -16,19 +16,21 @@ function getFacilityForFacilityId($faciltyType, $facilityId) {
 function displayClientServiceInputFields($siteId, $facilityId) {
     $result = getClientServicesForSiteandFacilityId($siteId, $facilityId);
     while($firstrow = $result->fetch_assoc()) {
-    echo ' <p>
+    echo ' 
         <input id="FacilityId" name="FacilityId" type="hidden" value="' . $facilityId . '"/>
-       <label>Facility Name: </label>
-       <input id="facilityName" name="facilityName" type="text" value="' . $firstrow['FacilityName'] . '"/>
-       </p>
-   <p>
-       <label>Eligibility Condition: </label>
-       <input id="EligibilityCondition" name="EligibilityCondition" type="text" value="' . $firstrow['EligibilityCondition'] . '"/>
-       </p>
-   <p>
-       <label>Hours Of Operation: </label>
-       <input id="HoursOfOperation" name="HoursOfOperation" type="text" value="' . $firstrow['HoursOfOperation'] . '"/>
-       </p> ';
+        <table>
+               <col width="40%">
+               <col width="60%">
+               <tr>
+       <td align="left">Facility Name: </td>
+       <td align="left"><input id="facilityName" name="facilityName" type="text" value="' . $firstrow['FacilityName'] . '"/></td>
+       </tr><tr>
+       <td align="left">Eligibility Condition: </td>
+       <td align="left"><input id="EligibilityCondition" name="EligibilityCondition" type="text" value="' . $firstrow['EligibilityCondition'] . '"/><td>
+       </tr><tr>
+       <td align="left">Hours Of Operation: </td>
+       <td align="left"><input id="HoursOfOperation" name="HoursOfOperation" type="text" value="' . $firstrow['HoursOfOperation'] . '"/></td>
+       </tr><tr> ';
        }	
 }
 function displayFoodBankInputFields($facilityId) {
@@ -44,14 +46,12 @@ function displayFoodBankInputFields($facilityId) {
 function displaySoupKitchenInputFields($facilityId) {
     $result = getFacilityForFacilityId("soupkitchen", $facilityId);
     while($firstrow = $result->fetch_assoc()) {
-    echo ' <p>
-       <label>Seat Available: </label>
-       <input id="SeatAvail" name="SeatAvail" type="text" value="' . $firstrow['SeatAvail'] . '"/>
-       </p>
-       <p>
-       <label>Seat Total: </label>
-       <input id="SeatTotal" name="SeatTotal" type="text" value="' . $firstrow['SeatTotal'] . '"/>
-       </p> ';
+    echo '<td align="left">Seat Available: </td>
+       <td align="left"><input id="SeatAvail" name="SeatAvail" type="text" value="' . $firstrow['SeatAvail'] . '"/></td>
+       </tr><tr>
+       <td align="left">Seat Total: </td>
+       <td align="left"><input id="SeatTotal" name="SeatTotal" type="text" value="' . $firstrow['SeatTotal'] . '"/></td>
+       </tr></table> ';
     }	
 }
 function displayShelterInputFields($facilityId) {
