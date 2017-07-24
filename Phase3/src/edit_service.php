@@ -22,13 +22,13 @@ function displayClientServiceInputFields($siteId, $facilityId) {
                <col width="200px">
                <col width="300px">
                <tr>
-       <td align="left">Facility Name: </td>
+       <td align="left">Facility Name :<sup> *</sup> </td>
        <td align="left"><input id="facilityName" name="facilityName" type="text" value="' . $firstrow['FacilityName'] . '"/></td>
        </tr><tr>
-       <td align="left">Eligibility Condition: </td>
+       <td align="left">Eligibility Condition: <sup> *</sup></td>
        <td align="left"><input id="EligibilityCondition" name="EligibilityCondition" type="text" value="' . $firstrow['EligibilityCondition'] . '"/><td>
        </tr><tr>
-       <td align="left">Hours Of Operation: </td>
+       <td align="left">Hours Of Operation: <sup> *</sup></td>
        <td align="left"><input id="HoursOfOperation" name="HoursOfOperation" type="text" value="' . $firstrow['HoursOfOperation'] . '"/></td>
        </tr><tr> ';
        }	
@@ -37,7 +37,7 @@ function displayFoodBankInputFields($facilityId) {
     $result = getFacilityForFacilityId("foodbank", $facilityId);
     while($firstrow = $result->fetch_assoc()) {
     echo '
-        <td align="left">Facility Name: </td>
+        <td align="left">Facility Name: <sup> *</sup></td>
         <td align="left">
         <input id="FacilityId" name="FacilityId" type="hidden" value="' . $facilityId . '"/>
         <input id="facilityName" name="facilityName" type="text" value="' . $firstrow['FacilityName'] . '"/></td>
@@ -47,10 +47,10 @@ function displayFoodBankInputFields($facilityId) {
 function displaySoupKitchenInputFields($facilityId) {
     $result = getFacilityForFacilityId("soupkitchen", $facilityId);
     while($firstrow = $result->fetch_assoc()) {
-    echo '<td align="left">Seat Available: </td>
+    echo '<td align="left">Seat Available: <sup> *</sup></td>
        <td align="left"><input id="SeatAvail" name="SeatAvail" type="text" value="' . $firstrow['SeatAvail'] . '"/></td>
        </tr><tr>
-       <td align="left">Seat Total: </td>
+       <td align="left">Seat Total: <sup> *</sup></td>
        <td align="left"><input id="SeatTotal" name="SeatTotal" type="text" value="' . $firstrow['SeatTotal'] . '"/></td>
        </tr></table> ';
     }	
@@ -59,16 +59,16 @@ function displayShelterInputFields($facilityId) {
     $result = getFacilityForFacilityId("shelter", $facilityId);
     while($firstrow = $result->fetch_assoc()) {
     echo '
-       <td align="left">Bunk Type: </td>
+       <td align="left">Bunk Type: <sup> *</sup></td>
        <td align="left"><input id="BunkType" name="BunkType" type="text" value="' . $firstrow['BunkType'] . '"/></td>
        </tr><tr>
-       <td align="left"><label>Bunk Capacity (Male): </td>
+       <td align="left"><label>Bunk Capacity (Male): <sup> *</sup></td>
        <td align="left"><input id="BunkCapacityMale" name="BunkCapacityMale" type="text" value="' . $firstrow['BunkCapacityMale'] . '"/></td>
        </tr><tr>
-       <td align="left"><label>Bunk Capacity (Female):</td>
+       <td align="left"><label>Bunk Capacity (Female):<sup> *</sup></td>
        <td align="left"><input id="BunkCapacityFemale" name="BunkCapacityFemale" type="text" value="' . $firstrow['BunkCapacityFemale'] . '"/></td>
        </tr><tr>
-       <td align="left"><label>Bunk Capacity (Mixed):</td>
+       <td align="left"><label>Bunk Capacity (Mixed):<sup> *</sup></td>
        <td align="left"><input id="BunkCapacityMixed" name="BunkCapacityMixed" type="text" value="' . $firstrow['BunkCapacityMixed'] . '"/></td>
        </tr></table> ';
    }
@@ -201,6 +201,7 @@ if (isset($_POST['edit']) && !empty($_POST['serviceTypeToEdit'])) {
                  //do nothing
              }
              ?>
+             <p>(*) <i>denotes required fields.</i></p>
              <button name="edit" type="submit">Edit Service</button>
          </div>
 </form>
