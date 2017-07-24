@@ -54,14 +54,20 @@ if (isset($_POST['save']) ) {
        ?>
    </head>
    <?php displayBodyHeading(); ?>
+   <div style="float: right">
+   <form action="./user_home.php">
+       <input type="submit" value="User Home" />
+   </form>
+   </div>
+   <div style="float: right">
+   <form action="./login.php">
+       <input type="submit" value="Logout" />
+   </form>
+   </div>
       <form action="/request_item.php" method="post">
          <div>
             <div style="float: left"><strong><?php displayText($pageTitle);?></strong>
             </div>
-            <?php 
-               displayLogout();
-               displayUserHome();
-            ?>
          </div>
          <br>
          <div>
