@@ -19,8 +19,8 @@ function displayClientServiceInputFields($siteId, $facilityId) {
     echo ' 
         <input id="FacilityId" name="FacilityId" type="hidden" value="' . $facilityId . '"/>
         <table>
-               <col width="40%">
-               <col width="60%">
+               <col width="200px">
+               <col width="300px">
                <tr>
        <td align="left">Facility Name: </td>
        <td align="left"><input id="facilityName" name="facilityName" type="text" value="' . $firstrow['FacilityName'] . '"/></td>
@@ -36,11 +36,12 @@ function displayClientServiceInputFields($siteId, $facilityId) {
 function displayFoodBankInputFields($facilityId) {
     $result = getFacilityForFacilityId("foodbank", $facilityId);
     while($firstrow = $result->fetch_assoc()) {
-    echo ' <p>
+    echo '
+        <td align="left">Facility Name: </td>
+        <td align="left">
         <input id="FacilityId" name="FacilityId" type="hidden" value="' . $facilityId . '"/>
-        <label>Facility Name: </label>
-        <input id="facilityName" name="facilityName" type="text" value="' . $firstrow['FacilityName'] . '"/>
-       </p> ';
+        <input id="facilityName" name="facilityName" type="text" value="' . $firstrow['FacilityName'] . '"/></td>
+       </tr></table>';
     }
 }
 function displaySoupKitchenInputFields($facilityId) {
@@ -57,21 +58,19 @@ function displaySoupKitchenInputFields($facilityId) {
 function displayShelterInputFields($facilityId) {
     $result = getFacilityForFacilityId("shelter", $facilityId);
     while($firstrow = $result->fetch_assoc()) {
-    echo ' <p>
-       <label>Bunk Type: </label>
-       <input id="BunkType" name="BunkType" type="text" value="' . $firstrow['BunkType'] . '"/>
-       </p>
-	   <p>
-       <label>Bunk Count (Male): </label>
-       <input id="BunkCountMale" name="BunkCountMale" type="text" value="' . $firstrow['BunkCountMale'] . '"/>
-       </p>
-	   <p>
-       <label>Bunk Count (Female):</label>
-       <input id="BunkCountFemale" name="BunkCountFemale" type="text" value="' . $firstrow['BunkCountFemale'] . '"/>
-       </p> 
-       <label>Bunk Count (Mixed):</label>
-       <input id="BunkCountMixed" name="BunkCountMixed" type="text" value="' . $firstrow['BunkCountMixed'] . '"/>
-       </p> ';
+    echo '
+       <td align="left">Bunk Type: </td>
+       <td align="left"><input id="BunkType" name="BunkType" type="text" value="' . $firstrow['BunkType'] . '"/></td>
+       </tr><tr>
+       <td align="left"><label>Bunk Capacity (Male): </td>
+       <td align="left"><input id="BunkCapacityMale" name="BunkCapacityMale" type="text" value="' . $firstrow['BunkCapacityMale'] . '"/></td>
+       </tr><tr>
+       <td align="left"><label>Bunk Capacity (Female):</td>
+       <td align="left"><input id="BunkCapacityFemale" name="BunkCapacityFemale" type="text" value="' . $firstrow['BunkCapacityFemale'] . '"/></td>
+       </tr><tr>
+       <td align="left"><label>Bunk Capacity (Mixed):</td>
+       <td align="left"><input id="BunkCapacityMixed" name="BunkCapacityMixed" type="text" value="' . $firstrow['BunkCapacityMixed'] . '"/></td>
+       </tr></table> ';
    }
 }
 
@@ -91,8 +90,8 @@ function UpdateFoodBank($FacilityId, $FacilityName) {
     return executeSql($sql);
 }
 
-function UpdateFacilityInShelter($FacilityId, $BunkType, $BunkCountMale, $BunkCountFemale, $BunkCountMixed) {
-    $sql = "UPDATE Shelter SET BunkType='".$BunkType."', BunkCountMale='".$BunkCountMale."', BunkCountFemale='".$BunkCountFemale."', BunkCountMixed='".$BunkCountMixed."' WHERE FacilityId=".$FacilityId;
+function UpdateFacilityInShelter($FacilityId, $BunkType, $BunkCapacityMale, $BunkCapacityFemale, $BunkCapacityMixed) {
+    $sql = "UPDATE Shelter SET BunkType='".$BunkType."', BunkCapacityMale=".$BunkCapacityMale.", BunkCapacityFemale=".$BunkCapacityFemale.", BunkCapacityMixed=".$BunkCapacityMixed." WHERE FacilityId=".$FacilityId;
     return executeSql($sql);
 }
 
@@ -119,17 +118,14 @@ if (isset($_POST['edit']) && !empty($_POST['serviceTypeToEdit'])) {
    		break;
 	case "shelter":
 		$BunkType = $_POST['BunkType']; 
-		$BunkCountMale = $_POST['BunkCountMale'];
-		$BunkCountFemale = $_POST['BunkCountFemale'];
-		$BunkCountMixed = $_POST['BunkCountMixed'];
+		$BunkCapacityMale = $_POST['BunkCapacityMale'];
+		$BunkCapacityFemale = $_POST['BunkCapacityFemale'];
+		$BunkCapacityMixed = $_POST['BunkCapacityMixed'];
 		UpdateFacilityInClientService($FacilityId, $SiteId, $FacilityName, $EligibilityCondition, $HoursOfOperation, $FacilityType);
-		UpdateFacilityInShelter($FacilityId, $BunkType, $BunkCountMale, $BunkCountFemale, $BunkCountMixed);
+		UpdateFacilityInShelter($FacilityId, $BunkType, $BunkCapacityMale, $BunkCapacityFemale, $BunkCapacityMixed);
         $_SESSION['message'] = "This Facility is edited successfully. <a href=\"./services.php\">Go back to services directory.</a> ";
-		break;
+        break;
 	case "foodbank":
-    // var_dump($_POST);
-    // $sql = "UPDATE FoodBank SET FacilityName='" $FacilityName ."' WHERE FacilityId=".$FacilityId;
-    // echo "<br>".$sql;
         UpdateFoodBank($FacilityId, $FacilityName);
         $_SESSION['message'] = "This Facility is edited successfully. <a href=\"./services.php\">Go back to services directory.</a> ";
 		break;
@@ -198,14 +194,14 @@ if (isset($_POST['edit']) && !empty($_POST['serviceTypeToEdit'])) {
                          displayFoodBankInputFields($facilityId);
                          break;
                      default:
-                         echo " ";
+                         echo "</tr></table> ";
                          break;
                  }
              } else {
                  //do nothing
              }
              ?>
-<button name="edit" type="submit">Edit Service</button>
+             <button name="edit" type="submit">Edit Service</button>
          </div>
 </form>
 </body>
