@@ -92,7 +92,7 @@ if (isset($_POST['save']) ) {
                     <label>
                        <strong>quantity Requested</strong>
                     </label> 
-                    <input name="quantityRequested" type="text" />
+                    <input name="quantityRequested" type="text" required/>
                  </p>
             
                  <p>
