@@ -2,46 +2,51 @@
    include 'lib.php';
    
    // input field for facilityName
-function displayClientServiceInputFields() {
+function displayFoodbankInputFields() {
     echo ' <p>
        <label>Facility Name: </label>
        <input id="facilityName" name="facilityName" type="text" value="' . $EMPTY_STRING . '"/>
-       </p>
-   <p>
-       <label>Eligibility Condition: </label>
-       <input id="EligibilityCondition" name="EligibilityCondition" type="text" value="' . $EMPTY_STRING . '"/>
-       </p>
-   <p>
-       <label>Hours Of Operation: </label>
-       <input id="HoursOfOperation" name="HoursOfOperation" type="text" value="' . $EMPTY_STRING . '"/>
-       </p> ';	
+       </p>';
+}
+
+function displayClientServiceInputFields() {
+    echo '<table>
+               <col width="200px">
+               <col width="300px">
+               <tr>
+       <td align="left">Facility Name<sup> *</sup>: </td>
+       <td align="left"><input id="facilityName" name="facilityName" type="text" value="' . $EMPTY_STRING . '"/></td>
+       </tr><tr>
+       <td align="left">Eligibility Condition<sup> *</sup>: </td>
+       <td align="left"><input id="EligibilityCondition" name="EligibilityCondition" type="text" value="' . $EMPTY_STRING . '"/></td>
+       </tr><tr>
+       <td align="left">Hours Of Operation<sup> *</sup>: </td>
+       <td align="left"><input id="HoursOfOperation" name="HoursOfOperation" type="text" value="' . $EMPTY_STRING . '"/></td>
+       </tr><tr> ';	
 }
 function displaySoupKitchenInputFields() {
-    echo ' <p>
-       <label>Seat Available: </label>
-       <input id="SeatAvail" name="SeatAvail" type="text" value="' . $EMPTY_STRING . '"/>
-       </p>
-       <p>
-       <label>Seat Total: </label>
-       <input id="SeatTotal" name="SeatTotal" type="text" value="' . $EMPTY_STRING . '"/>
-       </p> ';	
+    echo '
+        <td align="left">Seat Available<sup> *</sup>: </td>
+       <td align="left"><input id="SeatAvail" name="SeatAvail" type="text" value="' . $EMPTY_STRING . '"/></td>
+       </tr><tr>
+       <td align="left">Seat Total<sup> *</sup>: </td>
+       <td align="left"><input id="SeatTotal" name="SeatTotal" type="text" value="' . $EMPTY_STRING . '"/></td>
+       </tr><tr> ';	
 }
 function displayShelterInputFields() {
-    echo ' <p>
-       <label>Bunk Type: </label>
-       <input id="BunkType" name="BunkType" type="text" value="' . $EMPTY_STRING . '"/>
-       </p>
-	   <p>
-       <label>Bunk Count (Male): </label>
-       <input id="BunkCountMale" name="BunkCountMale" type="text" value="' . $EMPTY_STRING . '"/>
-       </p>
-	   <p>
-       <label>Bunk Count (Female):</label>
-       <input id="BunkCountFemale" name="BunkCountFemale" type="text" value="' . $EMPTY_STRING . '"/>
-       </p> 
-       <label>Bunk Count (Mixed):</label>
-       <input id="BunkCountMixed" name="BunkCountMixed" type="text" value="' . $EMPTY_STRING . '"/>
-       </p> ';	
+    echo ' 
+        <td align="left">Bunk Type<sup> *</sup>: </td>
+       <td align="left"><input id="BunkType" name="BunkType" type="text" value="' . $EMPTY_STRING . '"/></td>
+       </tr><tr>
+       <td align="left">Bunk Capacity (Male)<sup> *</sup>: </td>
+       <td align="left"><input id="BunkCapacityMale" name="BunkCapacityMale" type="text" value="' . $EMPTY_STRING . '"/></td>
+       </tr><tr>
+       <td align="left">Bunk Capacity (Female)<sup> *</sup>: </td>
+       <td align="left"><input id="BunkCapacityFemale" name="BunkCapacityFemale" type="text" value="' . $EMPTY_STRING . '"/></td>
+       </tr><tr>
+       <td align="left">Bunk Capacity (Mixed)<sup> *</sup>: </td>
+       <td align="left"><input id="BunkCapacityMixed" name="BunkCapacityMixed" type="text" value="' . $EMPTY_STRING . '"/></td>
+       </tr><tr>';	
 }
 
 function retrieveAllSiteNames() {
@@ -88,9 +93,9 @@ function addFacilityToFoodPantry($FacilityId) {
 	return insertSql($sql);
 }
 
-function addFacilityToShelter($FacilityId, $BunkType, $BunkCountMale, $BunkCountFemale, $BunkCountMixed) {
-	$sql = 	$sql = "INSERT INTO Shelter (FacilityId, BunkType, BunkCountMale, BunkCountFemale, BunkCountMixed) VALUES ('" . 
-		$FacilityId . "','". $BunkType . "','". $BunkCountMale . "','". $BunkCountFemale . "','". $BunkCountMixed . "')";
+function addFacilityToShelter($FacilityId, $BunkType, $BunkCapacityMale, $BunkCapacityFemale, $BunkCapacityMixed) {
+	$sql = "INSERT INTO Shelter (FacilityId, BunkType, BunkCapacityMale, BunkCapacityFemale, BunkCapacityMixed, BunkCountMale, BunkCountFemale, BunkCountMixed) VALUES (" . $FacilityId . ",'". $BunkType . "',". $BunkCapacityMale . ",". $BunkCapacityFemale . ",". $BunkCapacityMixed . ",". $BunkCapacityMale . ",". $BunkCapacityFemale . ",". $BunkCapacityMixed .")";
+    var_dump($sql);
 	return insertSql($sql);
 }
 
@@ -153,19 +158,19 @@ $_SESSION['message'] = " ";
    		break;
 	case "shelter":
 		$BunkType = $_POST['BunkType']; 
-		$BunkCountMale = $_POST['BunkCountMale'];
-		$BunkCountFemale = $_POST['BunkCountFemale'];
-		$BunkCountMixed = $_POST['BunkCountMixed'];
+		$BunkCapacityMale = $_POST['BunkCapacityMale'];
+		$BunkCapacityFemale = $_POST['BunkCapacityFemale'];
+		$BunkCapacityMixed = $_POST['BunkCapacityMixed'];
 		$FacilityId = addFacilityToServiceTable();
 		addFacilityToClientServiceTable($FacilityId, $SiteId, $FacilityName, $EligibilityCondition, $HoursOfOperation, $FacilityType);
-		addFacilityToShelter($FacilityId, $BunkType, $BunkCountMale, $BunkCountFemale, $BunkCountMixed);
+		addFacilityToShelter($FacilityId, $BunkType, $BunkCapacityMale, $BunkCapacityFemale, $BunkCapacityMixed);
 		addToSiteToServiceTable($FacilityId, $SiteId);
         $_SESSION['message'] = "New Facility is created successfully. <a href=\"./services.php\">Go back to services directory.</a> ";
 		break;
 	case "foodbank":
 		$FacilityId = addFacilityToServiceTable();
 		addFacilityToFoodBank($FacilityId, $FacilityName);
-		addToSiteToServiceTable($FacilityId, $SiteId);
+        addToSiteToServiceTable($FacilityId, $SiteId);
         $_SESSION['message'] = "New Facility is created successfully. <a href=\"./services.php\">Go back to services directory.</a> ";
 		break;
 	case "foodpantry":
@@ -221,20 +226,36 @@ $_SESSION['message'] = " ";
 			 $serviceType = $_POST["serviceType"];
 			 # we need this type to find the right tables to update
 			 echo '<input id="serviceTypeToAdd" name="serviceTypeToAdd" type="hidden" value="' . $serviceType . '"/>';
-			 displayClientServiceInputFields();
+			 
 			 switch ($serviceType) {
 				case "soupkitchen":
+                    displayClientServiceInputFields();
 					displaySoupKitchenInputFields();
-					break;
+                    echo '</tr></table><p>(*) <i>denotes required fields.</i></p>';
+					echo '<button name="create" type="submit">Create Service</button>';
+                    break;
 				case "shelter":
+                    displayClientServiceInputFields();
 					displayShelterInputFields();
-					break;
-			 	default:
+					echo '</tr></table><p>(*) <i>denotes required fields.</i></p>';
+                    echo '<button name="create" type="submit">Create Service</button>';
+                    break;
+                case "foodbank":
+                    displayFoodbankInputFields();
+					echo '<p>(*) <i>denotes required fields.</i></p>';
+                    echo '<button name="create" type="submit">Create Service</button>';
+                    break;
+                case "foodpantry":
+                    displayClientServiceInputFields();
+                    echo '</tr></table><p>(*) <i>denotes required fields.</i></p>';
+                    echo '<button name="create" type="submit">Create Service</button>';
+                    break;
+                default:
 			 		echo " ";
 			 		break;
 			 }
 			 ?>
-			 <button name="create" type="submit">Create Service</button>
+			 
          </div>
 </form>
 </body>

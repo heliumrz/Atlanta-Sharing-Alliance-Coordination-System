@@ -180,29 +180,40 @@ if (isset($_POST['edit']) && !empty($_POST['serviceTypeToEdit'])) {
                  $siteId = $_SESSION["siteId"];
                  
                  echo '<input id="serviceTypeToEdit" name="serviceTypeToEdit" type="hidden" value="' . $serviceType . '"/>';
-                 displayClientServiceInputFields($siteId, $facilityId);
+                 // displayClientServiceInputFields($siteId, $facilityId);
                  switch ($serviceType) {
                      case "soupkitchen":
-                        // displayClientServiceInputFields($siteId, $facilityId);
+                         displayClientServiceInputFields($siteId, $facilityId);
                          displaySoupKitchenInputFields($facilityId);
+                         echo '<p>(*) <i>denotes required fields.</i></p>';
+                         echo '<button name="edit" type="submit">Edit Service</button>';
                          break;
                      case "shelter":
-                        // displayClientServiceInputFields($siteId, $facilityId);
+                         displayClientServiceInputFields($siteId, $facilityId);
                          displayShelterInputFields($facilityId);
+                         echo '<p>(*) <i>denotes required fields.</i></p>';
+                         echo '<button name="edit" type="submit">Edit Service</button>';
+                         break;
+                     case "foodpantry":
+                         displayClientServiceInputFields($siteId, $facilityId);
+                         echo "</tr></table> ";
+                         echo '<p>(*) <i>denotes required fields.</i></p>';
+                         echo '<button name="edit" type="submit">Edit Service</button>';
                          break;
                      case "foodbank":
                          displayFoodBankInputFields($facilityId);
+                         echo '<p>(*) <i>denotes required fields.</i></p>';
+                         echo '<button name="edit" type="submit">Edit Service</button>';
                          break;
                      default:
-                         echo "</tr></table> ";
                          break;
                  }
              } else {
                  //do nothing
              }
              ?>
-             <p>(*) <i>denotes required fields.</i></p>
-             <button name="edit" type="submit">Edit Service</button>
+             
+             
          </div>
 </form>
 </body>

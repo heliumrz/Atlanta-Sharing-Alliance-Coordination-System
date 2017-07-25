@@ -37,6 +37,30 @@ function resetShelterCount($maleCap, $femaleCap, $mixedCap,$FacilityId) {
     $sql = "UPDATE Shelter SET BunkCountMale=".$maleCap.", BunkCountFemale=".$femaleCap.", BunkCountMixed=".$mixedCap." WHERE FacilityId=".$FacilityId;
     return executeSql($sql);
 }
+
+function displayCreateServiceOption(){
+    $siteId = $_SESSION['siteId'];
+    $svc = array("foodbank"=>"Food Bank", "shelter"=>"Shelter", "foodpantry"=>"Food Pantry", "soupkitchen"=>"Soup Kitchen");
+    $count = 0;
+    foreach($svc as $service => $label) {
+        $result = null;
+        if ($service == "foodbank") {
+           $result = getFoodBankForSite($siteId);
+        } else {
+            $sql = "SELECT * FROM clientservice where SiteId=".$siteId." AND FacilityType='".$service."'";
+            $result = executeSql($sql);
+        }
+        if ($result->num_rows < 1) {
+            echo'<option value="'.$service.'">'.$label.'</option>';
+            $count++;
+        }
+        if ($count == 0) {
+            $_SESSION['option_message'] = "<p>This site has Max number of services. Creating a new Service is not allowed.</p>";
+        } else {
+            $_SESSION['option_message'] = "";
+        }
+    }
+}
 if (isset($_POST['reset'])){
     //get shelter for this site
     $result = getShelterForSite($siteId);
@@ -99,12 +123,14 @@ if (isset($_POST['reset'])){
                 </label> 
            <select id="serviceType" name="serviceType">
              <option value="0">--Select Service--</option>
-             <option value="foodbank">Food Bank</option>
-             <option value="foodpantry">Food Pantry</option>
-             <option value="soupkitchen">Soup Kitchen</option>
-             <option value="shelter">Shelter</option>
+             <?php
+             displayCreateServiceOption();
+             ?>
            </select>
              </p>
+             <?php
+             echo $_SESSION['option_message'];
+             ?>
             <button name="save" type="submit">Next</button>
        </form>
        <h2>Reset Shelter bunk Status</h2>
