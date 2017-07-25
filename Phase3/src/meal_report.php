@@ -4,13 +4,14 @@ include 'lib.php';
 $pageTitle = "Meals Remaining Report";
 
 If(isset($_POST['formAction']) && ($_POST['formAction'] == 'login')){
-	goToLogin(true);
+	header("Location: /login.php");
+    exit;
 	}
 
 //sql query for table joining and group by subcategory
-$query ="SELECT t2.SubCategory,SUM(t1.AvailableQuantity)AS TotalCount FROM FoodBankToItem t1 LEFT JOIN Item t2 ON t1.ItemId = t2.ItemId GROUP BY SubCategory";
+$query ="SELECT SUM(t1.AvailableQuantity)AS TotalCount,t2.SubCategory FROM FoodBankToItem t1 LEFT JOIN Item t2 ON t1.ItemId = t2.ItemId GROUP BY SubCategory ORDER BY TotalCount";
 $result = executeSql($query);
-
+$displayresult = executeSql($query);
 
 //compare the count of different food category
 while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
@@ -57,14 +58,31 @@ header, footer {
     margin-top: -3em;
  }
  
- section {
-	height:65%;
+ 
+nav {
+    float: right;
+    width:400px;
+	height:100%;
+	background-color: CCF4FF;
+    margin: 0;
+    padding: 1em;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+   
+nav ul a {
+    text-decoration: none;
+}
+section {
+	height:100%;
 	text-align: center;
 	margin-top: 3em;
 	padding: 1em;
     overflow: hidden;
 }
-
 </style>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -92,7 +110,35 @@ header, footer {
                ?>
     </p>
     </header>
-    
+    <nav>
+	<div class="bodycontainer scrollable">
+<table style="border: 2px solid #d3d3d3;"class="table table-hover table-striped table-condensed table-scrollable">
+    <tbody>
+	<label>
+         <strong>All Items In System:</strong>
+    </label>
+		<thead>
+            <tr>
+               <th align='left'>Sub-Category</th>
+			   <th align='center'>Available Total Quantity</th>
+            </tr>
+         </thead>
+	<?php
+	
+        while($row = $displayresult->fetch_assoc()) {
+            echo "
+            <tr>
+               <td>" . $row['SubCategory'] . "</td>
+			   <td>" . $row['TotalCount'] . "</td>
+            </tr>";
+      }
+     ?>
+	 
+         </tbody>
+      </table>
+      </div>
+	
+	</nav>
 	<section>
 		<?php	
 			// tie break using alphabet order
@@ -104,9 +150,10 @@ header, footer {
 				$minType = "Vegetables";
 				            
 		?>
-		<h3>We have <?php echo '<span style="font-size: 32pt">' . $minCount . '</span>'; ?> meals remaining in inventory of all food banks in our system.</h3>
-		<h3> To provide more meals, the most needed donation types are <?php echo '<span style="font-size: 32pt">' . $minType . '</span>'; ?>.</h3>						
+		<h3>We have <?php echo '<span style="font-size: 28pt">' . $minCount . '</span>'; ?> meals remaining in inventory of all food banks in our system.</h3>
+		<h3> To provide more meals, the most needed donation types are <?php echo '<span style="font-size: 28pt">' . $minType . '</span>'; ?>.</h3>						
 	</section>
+	
 	</div>                            
 </body>
 </html>

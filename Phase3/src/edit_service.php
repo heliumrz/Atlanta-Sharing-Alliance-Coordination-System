@@ -19,59 +19,58 @@ function displayClientServiceInputFields($siteId, $facilityId) {
     echo ' 
         <input id="FacilityId" name="FacilityId" type="hidden" value="' . $facilityId . '"/>
         <table>
-               <col width="40%">
-               <col width="60%">
+               <col width="200px">
+               <col width="300px">
                <tr>
-       <td align="left">Facility Name: </td>
-       <td align="left"><input id="facilityName" name="facilityName" type="text" value="' . $firstrow['FacilityName'] . '"/></td>
+       <td align="left">Facility Name<sup> *</sup>: </td>
+       <td align="left"><input id="facilityName" name="facilityName" type="text" value="' . $firstrow['FacilityName'] . '" required/></td>
        </tr><tr>
-       <td align="left">Eligibility Condition: </td>
-       <td align="left"><input id="EligibilityCondition" name="EligibilityCondition" type="text" value="' . $firstrow['EligibilityCondition'] . '"/><td>
+       <td align="left">Eligibility Condition<sup> *</sup>: </td>
+       <td align="left"><input id="EligibilityCondition" name="EligibilityCondition" type="text" value="' . $firstrow['EligibilityCondition'] . '" required/><td>
        </tr><tr>
-       <td align="left">Hours Of Operation: </td>
-       <td align="left"><input id="HoursOfOperation" name="HoursOfOperation" type="text" value="' . $firstrow['HoursOfOperation'] . '"/></td>
+       <td align="left">Hours Of Operation<sup> *</sup>: </td>
+       <td align="left"><input id="HoursOfOperation" name="HoursOfOperation" type="text" value="' . $firstrow['HoursOfOperation'] . '" required/></td>
        </tr><tr> ';
        }	
 }
 function displayFoodBankInputFields($facilityId) {
     $result = getFacilityForFacilityId("foodbank", $facilityId);
     while($firstrow = $result->fetch_assoc()) {
-    echo ' <p>
+    echo '
+        <td align="left">Facility Name<sup> *</sup>: </td>
+        <td align="left">
         <input id="FacilityId" name="FacilityId" type="hidden" value="' . $facilityId . '"/>
-        <label>Facility Name: </label>
-        <input id="facilityName" name="facilityName" type="text" value="' . $firstrow['FacilityName'] . '"/>
-       </p> ';
+        <input id="facilityName" name="facilityName" type="text" value="' . $firstrow['FacilityName'] . '" required/></td>
+       </tr></table>';
     }
 }
 function displaySoupKitchenInputFields($facilityId) {
     $result = getFacilityForFacilityId("soupkitchen", $facilityId);
     while($firstrow = $result->fetch_assoc()) {
-    echo '<td align="left">Seat Available: </td>
-       <td align="left"><input id="SeatAvail" name="SeatAvail" type="text" value="' . $firstrow['SeatAvail'] . '"/></td>
+    echo '<td align="left">Seat Available<sup> *</sup>: </td>
+       <td align="left"><input id="SeatAvail" name="SeatAvail" type="text" value="' . $firstrow['SeatAvail'] . '" required/></td>
        </tr><tr>
-       <td align="left">Seat Total: </td>
-       <td align="left"><input id="SeatTotal" name="SeatTotal" type="text" value="' . $firstrow['SeatTotal'] . '"/></td>
+       <td align="left">Seat Total<sup> *</sup>: </td>
+       <td align="left"><input id="SeatTotal" name="SeatTotal" type="text" value="' . $firstrow['SeatTotal'] . '" required/></td>
        </tr></table> ';
     }	
 }
 function displayShelterInputFields($facilityId) {
     $result = getFacilityForFacilityId("shelter", $facilityId);
     while($firstrow = $result->fetch_assoc()) {
-    echo ' <p>
-       <label>Bunk Type: </label>
-       <input id="BunkType" name="BunkType" type="text" value="' . $firstrow['BunkType'] . '"/>
-       </p>
-	   <p>
-       <label>Bunk Count (Male): </label>
-       <input id="BunkCountMale" name="BunkCountMale" type="text" value="' . $firstrow['BunkCountMale'] . '"/>
-       </p>
-	   <p>
-       <label>Bunk Count (Female):</label>
-       <input id="BunkCountFemale" name="BunkCountFemale" type="text" value="' . $firstrow['BunkCountFemale'] . '"/>
-       </p> 
-       <label>Bunk Count (Mixed):</label>
-       <input id="BunkCountMixed" name="BunkCountMixed" type="text" value="' . $firstrow['BunkCountMixed'] . '"/>
-       </p> ';
+    echo '
+       <td align="left">Bunk Type<sup> *</sup>: </td>
+       <td align="left"><input id="BunkType" name="BunkType" type="text" value="' . $firstrow['BunkType'] . '" required/></td>
+       </tr><tr>
+       <td align="left"><label>Bunk Capacity (Male)<sup> *</sup>: </td>
+       <td align="left"><input id="BunkCapacityMale" name="BunkCapacityMale" type="text" value="' . $firstrow['BunkCapacityMale'] . '" required/></td>
+       </tr><tr>
+       <td align="left"><label>Bunk Capacity (Female)<sup> *</sup>:</td>
+       <td align="left"><input id="BunkCapacityFemale" name="BunkCapacityFemale" type="text" value="' . $firstrow['BunkCapacityFemale'] . '" required/></td>
+       </tr><tr>
+       <td align="left"><label>Bunk Capacity (Mixed)<sup> *</sup>:</td>
+       <td align="left"><input id="BunkCapacityMixed" name="BunkCapacityMixed" type="text" value="' . $firstrow['BunkCapacityMixed'] . '" required/></td>
+       </tr></table> ';
    }
 }
 
@@ -91,8 +90,8 @@ function UpdateFoodBank($FacilityId, $FacilityName) {
     return executeSql($sql);
 }
 
-function UpdateFacilityInShelter($FacilityId, $BunkType, $BunkCountMale, $BunkCountFemale, $BunkCountMixed) {
-    $sql = "UPDATE Shelter SET BunkType='".$BunkType."', BunkCountMale='".$BunkCountMale."', BunkCountFemale='".$BunkCountFemale."', BunkCountMixed='".$BunkCountMixed."' WHERE FacilityId=".$FacilityId;
+function UpdateFacilityInShelter($FacilityId, $BunkType, $BunkCapacityMale, $BunkCapacityFemale, $BunkCapacityMixed) {
+    $sql = "UPDATE Shelter SET BunkType='".$BunkType."', BunkCapacityMale=".$BunkCapacityMale.", BunkCapacityFemale=".$BunkCapacityFemale.", BunkCapacityMixed=".$BunkCapacityMixed." WHERE FacilityId=".$FacilityId;
     return executeSql($sql);
 }
 
@@ -119,17 +118,14 @@ if (isset($_POST['edit']) && !empty($_POST['serviceTypeToEdit'])) {
    		break;
 	case "shelter":
 		$BunkType = $_POST['BunkType']; 
-		$BunkCountMale = $_POST['BunkCountMale'];
-		$BunkCountFemale = $_POST['BunkCountFemale'];
-		$BunkCountMixed = $_POST['BunkCountMixed'];
+		$BunkCapacityMale = $_POST['BunkCapacityMale'];
+		$BunkCapacityFemale = $_POST['BunkCapacityFemale'];
+		$BunkCapacityMixed = $_POST['BunkCapacityMixed'];
 		UpdateFacilityInClientService($FacilityId, $SiteId, $FacilityName, $EligibilityCondition, $HoursOfOperation, $FacilityType);
-		UpdateFacilityInShelter($FacilityId, $BunkType, $BunkCountMale, $BunkCountFemale, $BunkCountMixed);
+		UpdateFacilityInShelter($FacilityId, $BunkType, $BunkCapacityMale, $BunkCapacityFemale, $BunkCapacityMixed);
         $_SESSION['message'] = "This Facility is edited successfully. <a href=\"./services.php\">Go back to services directory.</a> ";
-		break;
+        break;
 	case "foodbank":
-    // var_dump($_POST);
-    // $sql = "UPDATE FoodBank SET FacilityName='" $FacilityName ."' WHERE FacilityId=".$FacilityId;
-    // echo "<br>".$sql;
         UpdateFoodBank($FacilityId, $FacilityName);
         $_SESSION['message'] = "This Facility is edited successfully. <a href=\"./services.php\">Go back to services directory.</a> ";
 		break;
@@ -184,28 +180,40 @@ if (isset($_POST['edit']) && !empty($_POST['serviceTypeToEdit'])) {
                  $siteId = $_SESSION["siteId"];
                  
                  echo '<input id="serviceTypeToEdit" name="serviceTypeToEdit" type="hidden" value="' . $serviceType . '"/>';
-                 displayClientServiceInputFields($siteId, $facilityId);
+                 // displayClientServiceInputFields($siteId, $facilityId);
                  switch ($serviceType) {
                      case "soupkitchen":
-                        // displayClientServiceInputFields($siteId, $facilityId);
+                         displayClientServiceInputFields($siteId, $facilityId);
                          displaySoupKitchenInputFields($facilityId);
+                         echo '<p>(*) <i>denotes required fields.</i></p>';
+                         echo '<button name="edit" type="submit">Edit Service</button>';
                          break;
                      case "shelter":
-                        // displayClientServiceInputFields($siteId, $facilityId);
+                         displayClientServiceInputFields($siteId, $facilityId);
                          displayShelterInputFields($facilityId);
+                         echo '<p>(*) <i>denotes required fields.</i></p>';
+                         echo '<button name="edit" type="submit">Edit Service</button>';
+                         break;
+                     case "foodpantry":
+                         displayClientServiceInputFields($siteId, $facilityId);
+                         echo "</tr></table> ";
+                         echo '<p>(*) <i>denotes required fields.</i></p>';
+                         echo '<button name="edit" type="submit">Edit Service</button>';
                          break;
                      case "foodbank":
                          displayFoodBankInputFields($facilityId);
+                         echo '<p>(*) <i>denotes required fields.</i></p>';
+                         echo '<button name="edit" type="submit">Edit Service</button>';
                          break;
                      default:
-                         echo " ";
                          break;
                  }
              } else {
                  //do nothing
              }
              ?>
-<button name="edit" type="submit">Edit Service</button>
+             
+             
          </div>
 </form>
 </body>
