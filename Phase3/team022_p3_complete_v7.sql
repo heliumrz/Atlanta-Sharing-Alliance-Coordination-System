@@ -164,10 +164,7 @@ CREATE TABLE Request (
    Status varchar(50) NOT NULL,
    QuantityRequested int NOT NULL,
    QuantityFulfilled int NOT NULL,
-   PRIMARY KEY (RequestID, Username, FacilityId),
-   CONSTRAINT fk_Request_Username_User_Username FOREIGN KEY (Username) REFERENCES `User` (Username) ON DELETE CASCADE,
-   CONSTRAINT fk_Request_FacilityId_FoodBank_FacilityId FOREIGN KEY (FacilityId) REFERENCES FoodBank (FacilityId) ON DELETE CASCADE,
-   CONSTRAINT fk_Request_ItemId_Item_ItemId FOREIGN KEY (ItemId) REFERENCES Item (ItemId) ON DELETE CASCADE
+   PRIMARY KEY (RequestID, Username, FacilityId)
 );
 
 
