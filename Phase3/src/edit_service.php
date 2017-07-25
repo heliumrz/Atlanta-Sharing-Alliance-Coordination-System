@@ -189,11 +189,12 @@ if (isset($_POST['edit']) && !empty($_POST['serviceTypeToEdit'])) {
          <br>
          <div>
 <?php
+$svc = array("foodbank"=>"Food Bank", "shelter"=>"Shelter", "foodpantry"=>"Food Pantry", "soupkitchen"=>"Soup Kitchen");
              if (isset($_GET["type"]) && isset($_GET["id"])){
                  $serviceType = $_GET["type"];
                  $facilityId = $_GET["id"];
                  $siteId = $_SESSION["siteId"];
-                 
+                 echo "<h2>".$svc[$serviceType].":</h2>";
                  echo '<input id="serviceTypeToEdit" name="serviceTypeToEdit" type="hidden" value="' . $serviceType . '"/>';
                  // displayClientServiceInputFields($siteId, $facilityId);
                  switch ($serviceType) {
