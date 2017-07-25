@@ -27,6 +27,10 @@
 			$requestId = $_GET['requestId'];
 			$acceptNum = $_GET['partiallyAccept'];
 			$availableQuantity = $_GET['availableQuantity'];
+			if (!is_numeric($acceptNum)) {
+				echo "Please enter numeric number for partially accepted quantity. <br>";
+				exit;
+			}
 		}
 		// echo "requestId: " . $requestId . "<br>";
 		// echo "acceptNum: " . $acceptNum . "<br>";
@@ -52,7 +56,7 @@
 		// Update request
 		$sql = "UPDATE `request` SET " .
 					"quantityFulfilled = " . $acceptNum . 
-					", `request`.`Status` = 'CLOSED' " .
+					", `request`.`Status` = 'closed' " .
 					"WHERE requestId = " . $requestId;
 		$result = executeSql($sql);
 	}
@@ -62,7 +66,7 @@
 		//echo "reject request id: " . $requestId . "<br>";
 		// Update request
 		$sql = "UPDATE `request` SET " .
-					"`request`.`Status` = 'CLOSED' " .
+					"`request`.`Status` = 'closed' " .
 					"WHERE requestId = " . $requestId;
 		$result = executeSql($sql);
 	}
@@ -153,11 +157,13 @@
 
 ?>
 <html>
-	<head>
- 		<title>View Outstanding Requests</title>
-   	</head>
-   	<body>
-		<div><?php displayPageHeading($pageTitle); ?></div>
+    <head>
+      <?php displayTitle($pageTitle); ?>
+    </head>
+   	<body><?php displayBodyHeading(); ?>
+        <div>
+           <?php displayPageHeading($pageTitle); ?>
+        </div>
 		<br>
 		<div class="report_section">
 			<form action="view_outstanding_requests.php" method="get">

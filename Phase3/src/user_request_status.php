@@ -14,9 +14,14 @@
 	
 	// $_GET['editRequest'], need to have requestId and updateQuantityRequested passed in
 	if (!empty($_GET['editRequest'])) {
-		echo "Handle edit request...<br>";
+		//echo "Handle edit request...<br>";
 		$requestId = $_GET['requestId'];
 		$updateQuantityRequested = $_GET['editRequest'];
+		
+		if (!is_numeric($updateQuantityRequested)) {
+			echo "Please enter numeric number for request quantity. <br>";
+			exit;
+		}
 
 		//echo "requestId: " . $requestId . "<br>";
 		//echo "updateQuantityRequested: " . $updateQuantityRequested . "<br>";
@@ -35,7 +40,7 @@
 		// Update request
 		$sql = "UPDATE `request` SET " .
 					"quantityRequested = 0 " . 
-					", `request`.`Status` = 'CLOSED' " .
+					", `request`.`Status` = 'closed' " .
 					"WHERE requestId = " . $requestId;
 		//echo "Cancel query is: " . $sql . "<br>";
 		$result = executeSql($sql);
@@ -49,7 +54,6 @@
 		  "			`request`.`Status`, " .
 		  "			`request`.`QuantityRequested`, " .
 		  "			`request`.`QuantityFulfilled`, " .
-		  "			`foodbanktoitem`.`ItemId`, " .
 		  "			`foodbanktoitem`.`AvailableQuantity`, " .
 		  "			`item`.`Name` AS ItemName, " .
 		  "			`item`.`Category`, " .
@@ -71,6 +75,7 @@
  		<title>Item Requests Status For Current User</title>
    	</head>
    	<body>
+		<?php displayBodyHeading(); ?>
 		<div><?php displayPageHeading($pageTitle); ?></div>
 		<br>
         <div class="report_section">
@@ -83,7 +88,6 @@
 					<td class="heading">Status</td>
 					<td class="heading">QuantityRequested</td>
 					<td class="heading">QuantityFulfilled</td>
-					<td class="heading">ItemId</td>
 					<td class="heading">AvailableQuantity</td>
 					<td class="heading">ItemName</td>
 					<td class="heading">Category</td>
@@ -102,7 +106,6 @@
 						print "<td>" . $row['Status'] . "</td>";
 						print "<td>" . $row['QuantityRequested'] . "</td>";
 						print "<td>" . $row['QuantityFulfilled'] . "</td>";
-						print "<td>" . $row['ItemId'] . "</td>";
 						print "<td>" . $row['AvailableQuantity'] . "</td>";
 						print "<td>" . $row['ItemName'] . "</td>";
 						print "<td>" . $row['Category'] . "</td>";
