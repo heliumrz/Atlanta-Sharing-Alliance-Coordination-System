@@ -954,7 +954,6 @@ function retrieveAllFoodBank() {
 // ************* Item Search ************* //
 // Display item search fields
 function displayItemSearchDataField() {
-   $expirationDate = "";
    $itemName = "";
 
    echo '
@@ -967,8 +966,12 @@ function displayItemSearchDataField() {
                   </td>
                </tr>
                <tr>
-                  <td align="left">Expiration Date:</td>
-                  <td align="left"><input id="expirationDate" name="expirationDate" type="text" style="width:150%" value="' . $expirationDate . '"/></td>
+                  <td align="left">Expiration Date From:</td>
+                  <td align="left"><input id="expirationDateFrom" name="expirationDateFrom" type="date" style="width:100%"/></td>
+               </tr>
+               <tr>
+                  <td align="left">Expiration Date To:</td>
+                  <td align="left"><input id="expirationDateTo" name="expirationDateTo" type="date" style="width:100%"/></td>
                </tr>
                <tr>
                   <td align="left">Storage Type:</td>
@@ -1078,8 +1081,8 @@ function displayItemSearchResult($result) {
                <th align='left'>Expiration Date</th>
                <th align='left'>Category</th>
                <th align='left'>Sub-Category</th>
-               <th align='left'>Available Quantity</th>
-               <th align='left'>Request</th>
+               <th align='left'>Available <br>Quantity</th>
+               <th align='center' colspan='2'>Actions</th>
             </tr>
          </thead>
          <tbody>";
@@ -1095,13 +1098,30 @@ function displayItemSearchResult($result) {
                <td>" . $row['expDate'] . "</td>
                <td>" . $row['category'] . "</td>
                <td>" . $row['subcategory'] . "</td>
-               <td>" . $row['availableQuantity'] . "</td>
-               <td><form action='request_item.php' method='post'>
-               <input id='facilityId' name='facilityId' type='hidden' value='". $row['facilityId'] ."'/>
-               <input id='availableQuantity' name='availableQuantity' type='hidden' value='". $row['availableQuantity'] ."'/>
-               <input id='facilityName' name='facilityName' type='hidden' value='". $row['facilityName'] ."'/>
-               <input id='itemId' name='itemId' type='hidden' value='". $row['itemId'] ."'/>
-               <button name='request' type='submit'>Request</button></form></td>
+               <td vertical-align='center'>
+                  <form action='item_search.php' method='post'>
+                    <input id='facilityId' name='facilityId' type='hidden' value='". $row['facilityId'] ."'/>
+                    <input id='itemId' name='itemId' type='hidden' value='". $row['itemId'] ."'/>
+                    <input id='availableQuantity' name='availableQuantity' type='hidden' value='". $row['availableQuantity'] ."'/>
+                    <input id='updatedAvailableQuantity' name='updatedAvailableQuantity' style='width: 50px;' value='". $row['availableQuantity'] ."'/>
+                    <button name='updateItemQuantity' type='submit'>Update</button>
+                  </form>
+               </td>
+               <td vertical-align='center'>
+                  <form action='item_search.php' method='post'>
+                    <input id='facilityId' name='facilityId' type='hidden' value='". $row['facilityId'] ."'/>
+                    <input id='itemId' name='itemId' type='hidden' value='". $row['itemId'] ."'/>
+                    <button name='deleteItem' type='submit'>Delete</button>
+                  </form>
+               </td>
+               <td>
+                  <form action='request_item.php' method='post'>
+                    <input id='facilityId' name='facilityId' type='hidden' value='". $row['facilityId'] ."'/>
+                    <input id='facilityName' name='facilityName' type='hidden' value='". $row['facilityName'] ."'/>
+                    <input id='itemId' name='itemId' type='hidden' value='". $row['itemId'] ."'/>
+                    <button name='request' type='submit'>Request</button>
+                  </form>
+               </td>
             </tr>";
       }
       echo "
