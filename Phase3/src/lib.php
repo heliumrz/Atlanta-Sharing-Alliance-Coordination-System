@@ -779,6 +779,9 @@ function printServiceTableHeader() {
 # we use this in services directory page
 function displaySoupKitchenTable($siteId){
     $services = getClientServicesForSite($siteId, "soupkitchen");
+    if ($services->num_rows < 1){
+        return;
+    }
     printServiceTableHeader();
     echo "
         <th>Total Seats</th>
@@ -805,6 +808,9 @@ function displaySoupKitchenTable($siteId){
 
 function displayShelterTable($siteId){
     $services = getClientServicesForSite($siteId, "shelter");
+    if ($services->num_rows < 1){
+        return;
+    }
     printServiceTableHeader();
     echo "<th>Bunk Type</th>
         <th>Bunk Capacity Male</th>
@@ -836,6 +842,9 @@ function displayShelterTable($siteId){
 
 function displayFoodPantryTable($siteId){
     $services = getClientServicesForSite($siteId, "foodpantry");
+    if ($services->num_rows < 1){
+        return;
+    }
     printServiceTableHeader();
     echo "</tr></thead><tbody>";
     while($row = $services->fetch_assoc()) {
@@ -854,6 +863,9 @@ function displayFoodPantryTable($siteId){
 
 # we use this in services directory page
 function displayFoodbankTable($services){
+    if ($services->num_rows < 1){
+        return;
+    }
     echo "<table border='1' class='altcolor'>
           <thead>
             <tr>
@@ -1086,6 +1098,7 @@ function displayItemSearchResult($result) {
                <td>" . $row['availableQuantity'] . "</td>
                <td><form action='request_item.php' method='post'>
                <input id='facilityId' name='facilityId' type='hidden' value='". $row['facilityId'] ."'/>
+               <input id='availableQuantity' name='availableQuantity' type='hidden' value='". $row['availableQuantity'] ."'/>
                <input id='facilityName' name='facilityName' type='hidden' value='". $row['facilityName'] ."'/>
                <input id='itemId' name='itemId' type='hidden' value='". $row['itemId'] ."'/>
                <button name='request' type='submit'>Request</button></form></td>
