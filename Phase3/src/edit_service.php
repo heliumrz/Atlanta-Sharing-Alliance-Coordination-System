@@ -55,12 +55,27 @@ function displaySoupKitchenInputFields($facilityId) {
        </tr></table> ';
     }	
 }
+function displayBunkTypeOptionsforEdit($originalVal){
+    $bunkTypes = [ "male/female/mixed" => "Male/Female/Mixed", "male"=>"Male", "female"=>"Female"];
+    $optionString = '<select id="BunkType" name="BunkType">';
+    foreach($bunkTypes as $value => $label){
+        if ($value == $originalVal) {
+            $optionString .= '<option value="' . $value .'" selected>'.$label.'</option>';
+        } else {
+            $optionString .= '<option value="' . $value .'">'.$label.'</option>';
+        }
+    }
+    $optionString .= '</select>';
+    return $optionString;
+}
 function displayShelterInputFields($facilityId) {
     $result = getFacilityForFacilityId("shelter", $facilityId);
     while($firstrow = $result->fetch_assoc()) {
     echo '
        <td align="left">Bunk Type<sup> *</sup>: </td>
-       <td align="left"><input id="BunkType" name="BunkType" type="text" value="' . $firstrow['BunkType'] . '" required/></td>
+       <td align="left">';
+       echo displayBunkTypeOptionsforEdit($firstrow['BunkType']);
+       echo '</td>
        </tr><tr>
        <td align="left"><label>Bunk Capacity (Male)<sup> *</sup>: </td>
        <td align="left"><input id="BunkCapacityMale" name="BunkCapacityMale" type="text" value="' . $firstrow['BunkCapacityMale'] . '" required/></td>

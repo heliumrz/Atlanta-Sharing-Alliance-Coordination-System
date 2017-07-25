@@ -36,7 +36,13 @@ function displaySoupKitchenInputFields() {
 function displayShelterInputFields() {
     echo ' 
         <td align="left">Bunk Type<sup> *</sup>: </td>
-       <td align="left"><input id="BunkType" name="BunkType" type="text" value="' . $EMPTY_STRING . '" required/></td>
+       <td align="left">
+        <select id="BunkType" name="BunkType">
+             <option value="male/female/mixed">Male/Female/Mixed</option>
+             <option value="male">Male</option>
+             <option value="female">Female</option>
+        </select>
+       </td>
        </tr><tr>
        <td align="left">Bunk Capacity (Male)<sup> *</sup>: </td>
        <td align="left"><input id="BunkCapacityMale" name="BunkCapacityMale" type="text" value="' . $EMPTY_STRING . '" required/></td>
