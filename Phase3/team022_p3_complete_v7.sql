@@ -312,8 +312,8 @@ INSERT INTO FoodBank (FacilityId,FacilityName) VALUES ('12','foodbank2');
 INSERT INTO FoodBank (FacilityId,FacilityName) VALUES ('13','foodbank3');
 
 -- Inserting 2 Shelters --
-INSERT INTO Shelter (FacilityId,BunkCountMale,BunkCountFemale,BunkCountMixed,BunkCapacityMale,BunkCapacityFemale,BunkCapacityMixed) VALUES ('21','2','2','2','20','20','20');
-INSERT INTO Shelter (FacilityId,BunkCountMale,BunkCountFemale,BunkCountMixed,BunkCapacityMale,BunkCapacityFemale,BunkCapacityMixed) VALUES ('22','2','2','2','20','20','20');
+INSERT INTO Shelter (FacilityId,BunkType,BunkCountMale,BunkCountFemale,BunkCountMixed,BunkCapacityMale,BunkCapacityFemale,BunkCapacityMixed) VALUES ('21','male/female/mixed','2','2','2','20','20','20');
+INSERT INTO Shelter (FacilityId,BunkType,BunkCountMale,BunkCountFemale,BunkCountMixed,BunkCapacityMale,BunkCapacityFemale,BunkCapacityMixed) VALUES ('22','male/female/mixed','2','2','2','20','20','20');
 
 -- Inserting 2 FoodPantries --
 INSERT INTO FoodPantry (FacilityId) VALUES ('31');
