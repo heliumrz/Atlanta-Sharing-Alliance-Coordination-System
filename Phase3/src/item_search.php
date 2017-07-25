@@ -59,11 +59,20 @@
    if (isset($_POST['deleteItem'])) {
       $facilityId = $_POST['facilityId'];
       $itemId = $_POST['itemId'];
-      $sql = "DELETE FROM FoodBankToItem " . 
-             " WHERE facilityId = " . $facilityId . " " .
-             "   AND itemId = " . $itemId;
+      $deletesql = "DELETE FROM FoodBankToItem " . 
+                   " WHERE facilityId = " . $facilityId . " " .
+                   "   AND itemId = " . $itemId;
              
-      $result = executeSql($sql);
+      $result = executeSql($deletesql);
+      
+      $updatesql = "UPDATE Request " . 
+                   "   SET status = 'closed' " .
+                   " WHERE facilityId = " . $facilityId . " " .
+                   "   AND itemId = " . $itemId . " " .
+                   "   AND status = 'pending'";
+      
+      $result = executeSql($updatesql);
+      
       $deleteMsg = "Item deleted successfully.";
    }
 
