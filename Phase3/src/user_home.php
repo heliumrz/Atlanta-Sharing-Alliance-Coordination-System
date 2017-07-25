@@ -54,7 +54,21 @@
                <?php 
                   displayClientSearchSubmitButton();
                   displayItemSearchSubmitButton();
-                  displayOutstandingRequestSubmitButton();
+				 
+			  	$sql = "SELECT facilityId " .
+			  	"FROM `user`, `sitetoservice` " .
+			  	"WHERE `user`.`SiteId` = `sitetoservice`.`SiteId` AND username = '" . $_SESSION["username"] . "' AND facilityId IN " .
+			  	"	(SELECT facilityId " .
+			  	"	FROM `service` " .
+			  	"	WHERE facilityId IN (SELECT `foodbank`.`FacilityId` from `foodbank`))";
+			  	") ";
+
+			    $result = executeSql($sql);
+			  	$userFoodbank = null;
+			  	if ($result->num_rows > 0) {
+					displayOutstandingRequestSubmitButton();
+			  	} 
+				
                   displayRequestStatusSubmitButton();
                   displayServicesSubmitButton();
                   displayHiddenField(); 

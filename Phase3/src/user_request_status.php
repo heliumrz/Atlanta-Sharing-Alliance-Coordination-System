@@ -8,6 +8,9 @@
    }
 	checkValidSession();
 	
+	logout(isset($_POST['logout']));
+	goToUserHome(isset($_POST['userHome']));
+	
 	# Get user's site's facilityId
 	$username = $_SESSION["username"];
 	//echo "username is: " . $username . "<br>";
@@ -71,16 +74,38 @@
 
 ?>
 <html>
-	<head>
- 		<title>Item Requests Status For Current User</title>
-   	</head>
-   	<body>
-		<?php displayBodyHeading(); ?>
-		<div><?php displayPageHeading($pageTitle); ?></div>
+   <head>
+      <?php 
+         displayTitle($pageTitle);
+         displayCss();
+      ?>
+      <script>
+         <?php displayJavascriptLib();?>
+      </script>
+   </head>
+   <?php displayBodyHeading(); ?>
+   <div>
+       <div style="float: right">
+       		<form action="./login.php">
+           		<input type="submit" value="Logout" />
+       		</form>
+       	</div>
+        <div style="float: right">
+        	<form action="./user_home.php">
+            	<input type="submit" value="User Home" />
+        	</form>
+        </div>
 		<br>
+		<div>
+			<?php displayPageHeading($pageTitle); ?>   
+		</div>
+        <div>
+           <p>
+              <?php displayHiddenField(); ?>
+           </p>
+        </div>
         <div class="report_section">
-            <div class="subtitle">Requests Status Report</div>  
-            <table>
+            <table border='1' class='altcolor'>
                 <tr>
                     <td class="heading">RequestID</td>
                     <td class="heading">Username</td>
@@ -128,5 +153,5 @@
 				?>
             </table>						
         </div>
-	</body>
+   </body>
 </html>

@@ -7,6 +7,9 @@
        session_start();
    }
 	checkValidSession();
+		
+	logout(isset($_POST['logout']));
+	goToUserHome(isset($_POST['userHome']));
 	
 	# Get user's site's facilityId
 	$username = $_SESSION["username"];
@@ -157,12 +160,35 @@
 
 ?>
 <html>
-    <head>
-      <?php displayTitle($pageTitle); ?>
-    </head>
-   	<body><?php displayBodyHeading(); ?>
+   <head>
+      <?php 
+         displayTitle($pageTitle);
+         displayCss();
+      ?>
+      <script>
+         <?php displayJavascriptLib();?>
+      </script>
+   </head>
+   <?php displayBodyHeading(); ?>
+       <div>
+           <div style="float: right">
+           <form action="./login.php">
+               <input type="submit" value="Logout" />
+           </form>
+           </div>
+            <div style="float: right">
+            <form action="./user_home.php">
+                <input type="submit" value="User Home" />
+            </form>
+        </div>
+		<br>
+		<div>
+			<?php displayPageHeading($pageTitle); ?>   
+		</div>
         <div>
-           <?php displayPageHeading($pageTitle); ?>
+           <p>
+              <?php displayHiddenField(); ?>
+           </p>
         </div>
 		<br>
 		<div class="report_section">
@@ -172,7 +198,7 @@
 			  <input type="radio" name="orderBy" value="availableQuantity"> Available Quantity<br>
 			  <input type="radio" name="orderBy" value="category"> Category<br>
 			  <input type="radio" name="orderBy" value="subCategory"> Sub Category<br>
-			  <input type="submit" value="Submit"><br>
+			  <input type="submit" value="Sort Report"><br>
 			</form>
 		</div>
         <div class="report_section">
@@ -180,7 +206,7 @@
 			<br>
 			<?php echo "Note: Outstanding Request Will be Marked in Red" ?> 
 			<br>
-            <table>
+            <table border='1' class='altcolor'>
                 <tr>
                     <td class="heading">RequestId</td>
                     <td class="heading">Username</td>
@@ -211,12 +237,7 @@
 								break;
 							}
 						}
-						if ($isOutstanding == true && $row['status'] == 'pending') {
-							print "<tr bgcolor='#FF0000'>";
-						} else {
-							print "<tr>";
-						}
-						
+						print "<tr>";						
 						print "<td>" . $row['requestId'] . "</td>";
 						print "<td>" . $row['username'] . "</td>";
 						print "<td>" . $row['facilityId'] . "</td>";
@@ -224,7 +245,13 @@
 						print "<td>" . $row['quantityRequested'] . "</td>";
 						print "<td>" . $row['quantityFulfilled'] . "</td>";
 						print "<td>" . $row['itemName'] . "</td>";
-						print "<td>" . $row['availableQuantity'] . "</td>";
+						
+						if ($isOutstanding == true && $row['status'] == 'pending') {
+							print "<td bgcolor='#FF0000'>" . $row['availableQuantity'] . "</td>";
+						} else {
+							print "<td>" . $row['availableQuantity'] . "</td>";
+						}
+
 						print "<td>" . $row['storageType'] . "</td>";
 						print "<td>" . $row['category'] . "</td>";
 						print "<td>" . $row['subCategory'] . "</td>";
@@ -250,5 +277,5 @@
 				?>
             </table>						
         </div>
-	</body>
+   </body>
 </html>
