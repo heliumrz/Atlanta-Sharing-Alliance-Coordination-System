@@ -95,7 +95,6 @@ function addFacilityToFoodPantry($FacilityId) {
 
 function addFacilityToShelter($FacilityId, $BunkType, $BunkCapacityMale, $BunkCapacityFemale, $BunkCapacityMixed) {
 	$sql = "INSERT INTO Shelter (FacilityId, BunkType, BunkCapacityMale, BunkCapacityFemale, BunkCapacityMixed, BunkCountMale, BunkCountFemale, BunkCountMixed) VALUES (" . $FacilityId . ",'". $BunkType . "',". $BunkCapacityMale . ",". $BunkCapacityFemale . ",". $BunkCapacityMixed . ",". $BunkCapacityMale . ",". $BunkCapacityFemale . ",". $BunkCapacityMixed .")";
-    var_dump($sql);
 	return insertSql($sql);
 }
 
