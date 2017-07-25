@@ -23,13 +23,13 @@ function displayClientServiceInputFields($siteId, $facilityId) {
                <col width="300px">
                <tr>
        <td align="left">Facility Name<sup> *</sup>: </td>
-       <td align="left"><input id="facilityName" name="facilityName" type="text" value="' . $firstrow['FacilityName'] . '"/></td>
+       <td align="left"><input id="facilityName" name="facilityName" type="text" value="' . $firstrow['FacilityName'] . '" required/></td>
        </tr><tr>
        <td align="left">Eligibility Condition<sup> *</sup>: </td>
-       <td align="left"><input id="EligibilityCondition" name="EligibilityCondition" type="text" value="' . $firstrow['EligibilityCondition'] . '"/><td>
+       <td align="left"><input id="EligibilityCondition" name="EligibilityCondition" type="text" value="' . $firstrow['EligibilityCondition'] . '" required/><td>
        </tr><tr>
        <td align="left">Hours Of Operation<sup> *</sup>: </td>
-       <td align="left"><input id="HoursOfOperation" name="HoursOfOperation" type="text" value="' . $firstrow['HoursOfOperation'] . '"/></td>
+       <td align="left"><input id="HoursOfOperation" name="HoursOfOperation" type="text" value="' . $firstrow['HoursOfOperation'] . '" required/></td>
        </tr><tr> ';
        }	
 }
@@ -40,7 +40,7 @@ function displayFoodBankInputFields($facilityId) {
         <td align="left">Facility Name<sup> *</sup>: </td>
         <td align="left">
         <input id="FacilityId" name="FacilityId" type="hidden" value="' . $facilityId . '"/>
-        <input id="facilityName" name="facilityName" type="text" value="' . $firstrow['FacilityName'] . '"/></td>
+        <input id="facilityName" name="facilityName" type="text" value="' . $firstrow['FacilityName'] . '" required/></td>
        </tr></table>';
     }
 }
@@ -48,10 +48,10 @@ function displaySoupKitchenInputFields($facilityId) {
     $result = getFacilityForFacilityId("soupkitchen", $facilityId);
     while($firstrow = $result->fetch_assoc()) {
     echo '<td align="left">Seat Available<sup> *</sup>: </td>
-       <td align="left"><input id="SeatAvail" name="SeatAvail" type="text" value="' . $firstrow['SeatAvail'] . '"/></td>
+       <td align="left"><input id="SeatAvail" name="SeatAvail" type="text" value="' . $firstrow['SeatAvail'] . '" required/></td>
        </tr><tr>
        <td align="left">Seat Total<sup> *</sup>: </td>
-       <td align="left"><input id="SeatTotal" name="SeatTotal" type="text" value="' . $firstrow['SeatTotal'] . '"/></td>
+       <td align="left"><input id="SeatTotal" name="SeatTotal" type="text" value="' . $firstrow['SeatTotal'] . '" required/></td>
        </tr></table> ';
     }	
 }
@@ -60,16 +60,16 @@ function displayShelterInputFields($facilityId) {
     while($firstrow = $result->fetch_assoc()) {
     echo '
        <td align="left">Bunk Type<sup> *</sup>: </td>
-       <td align="left"><input id="BunkType" name="BunkType" type="text" value="' . $firstrow['BunkType'] . '"/></td>
+       <td align="left"><input id="BunkType" name="BunkType" type="text" value="' . $firstrow['BunkType'] . '" required/></td>
        </tr><tr>
        <td align="left"><label>Bunk Capacity (Male)<sup> *</sup>: </td>
-       <td align="left"><input id="BunkCapacityMale" name="BunkCapacityMale" type="text" value="' . $firstrow['BunkCapacityMale'] . '"/></td>
+       <td align="left"><input id="BunkCapacityMale" name="BunkCapacityMale" type="text" value="' . $firstrow['BunkCapacityMale'] . '" required/></td>
        </tr><tr>
        <td align="left"><label>Bunk Capacity (Female)<sup> *</sup>:</td>
-       <td align="left"><input id="BunkCapacityFemale" name="BunkCapacityFemale" type="text" value="' . $firstrow['BunkCapacityFemale'] . '"/></td>
+       <td align="left"><input id="BunkCapacityFemale" name="BunkCapacityFemale" type="text" value="' . $firstrow['BunkCapacityFemale'] . '" required/></td>
        </tr><tr>
        <td align="left"><label>Bunk Capacity (Mixed)<sup> *</sup>:</td>
-       <td align="left"><input id="BunkCapacityMixed" name="BunkCapacityMixed" type="text" value="' . $firstrow['BunkCapacityMixed'] . '"/></td>
+       <td align="left"><input id="BunkCapacityMixed" name="BunkCapacityMixed" type="text" value="' . $firstrow['BunkCapacityMixed'] . '" required/></td>
        </tr></table> ';
    }
 }

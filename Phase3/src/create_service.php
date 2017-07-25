@@ -5,7 +5,7 @@
 function displayFoodbankInputFields() {
     echo ' <p>
        <label>Facility Name: </label>
-       <input id="facilityName" name="facilityName" type="text" value="' . $EMPTY_STRING . '"/>
+       <input id="facilityName" name="facilityName" type="text" value="' . $EMPTY_STRING . '" required/>
        </p>';
 }
 
@@ -15,37 +15,37 @@ function displayClientServiceInputFields() {
                <col width="300px">
                <tr>
        <td align="left">Facility Name<sup> *</sup>: </td>
-       <td align="left"><input id="facilityName" name="facilityName" type="text" value="' . $EMPTY_STRING . '"/></td>
+       <td align="left"><input id="facilityName" name="facilityName" type="text" value="' . $EMPTY_STRING . '" required/></td>
        </tr><tr>
        <td align="left">Eligibility Condition<sup> *</sup>: </td>
-       <td align="left"><input id="EligibilityCondition" name="EligibilityCondition" type="text" value="' . $EMPTY_STRING . '"/></td>
+       <td align="left"><input id="EligibilityCondition" name="EligibilityCondition" type="text" value="' . $EMPTY_STRING . '" required/></td>
        </tr><tr>
        <td align="left">Hours Of Operation<sup> *</sup>: </td>
-       <td align="left"><input id="HoursOfOperation" name="HoursOfOperation" type="text" value="' . $EMPTY_STRING . '"/></td>
+       <td align="left"><input id="HoursOfOperation" name="HoursOfOperation" type="text" value="' . $EMPTY_STRING . '" required/></td>
        </tr><tr> ';	
 }
 function displaySoupKitchenInputFields() {
     echo '
         <td align="left">Seat Available<sup> *</sup>: </td>
-       <td align="left"><input id="SeatAvail" name="SeatAvail" type="text" value="' . $EMPTY_STRING . '"/></td>
+       <td align="left"><input id="SeatAvail" name="SeatAvail" type="text" value="' . $EMPTY_STRING . '" required/></td>
        </tr><tr>
        <td align="left">Seat Total<sup> *</sup>: </td>
-       <td align="left"><input id="SeatTotal" name="SeatTotal" type="text" value="' . $EMPTY_STRING . '"/></td>
+       <td align="left"><input id="SeatTotal" name="SeatTotal" type="text" value="' . $EMPTY_STRING . '" required/></td>
        </tr><tr> ';	
 }
 function displayShelterInputFields() {
     echo ' 
         <td align="left">Bunk Type<sup> *</sup>: </td>
-       <td align="left"><input id="BunkType" name="BunkType" type="text" value="' . $EMPTY_STRING . '"/></td>
+       <td align="left"><input id="BunkType" name="BunkType" type="text" value="' . $EMPTY_STRING . '" required/></td>
        </tr><tr>
        <td align="left">Bunk Capacity (Male)<sup> *</sup>: </td>
-       <td align="left"><input id="BunkCapacityMale" name="BunkCapacityMale" type="text" value="' . $EMPTY_STRING . '"/></td>
+       <td align="left"><input id="BunkCapacityMale" name="BunkCapacityMale" type="text" value="' . $EMPTY_STRING . '" required/></td>
        </tr><tr>
        <td align="left">Bunk Capacity (Female)<sup> *</sup>: </td>
-       <td align="left"><input id="BunkCapacityFemale" name="BunkCapacityFemale" type="text" value="' . $EMPTY_STRING . '"/></td>
+       <td align="left"><input id="BunkCapacityFemale" name="BunkCapacityFemale" type="text" value="' . $EMPTY_STRING . '" required/></td>
        </tr><tr>
        <td align="left">Bunk Capacity (Mixed)<sup> *</sup>: </td>
-       <td align="left"><input id="BunkCapacityMixed" name="BunkCapacityMixed" type="text" value="' . $EMPTY_STRING . '"/></td>
+       <td align="left"><input id="BunkCapacityMixed" name="BunkCapacityMixed" type="text" value="' . $EMPTY_STRING . '" required/></td>
        </tr><tr>';	
 }
 
