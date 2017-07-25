@@ -54,11 +54,13 @@ function displayCreateServiceOption(){
             echo'<option value="'.$service.'">'.$label.'</option>';
             $count++;
         }
-        if ($count == 0) {
-            $_SESSION['option_message'] = "<p>This site has Max number of services. Creating a new Service is not allowed.</p>";
-        } else {
-            $_SESSION['option_message'] = "";
-        }
+    }
+    echo "</select>";
+    if ($count == 0) {
+        $_SESSION['option_message'] = "<p>This site has Max number of services. Creating a new Service is not allowed.</p>";
+    } else {
+        $_SESSION['option_message'] = "";
+        echo "<button name='save' type='submit'>Next</button>";
     }
 }
 if (isset($_POST['reset'])){
@@ -135,12 +137,10 @@ if (isset($_POST['reset'])){
              <?php
              displayCreateServiceOption();
              ?>
-           </select>
              </p>
              <?php
              echo $_SESSION['option_message'];
              ?>
-            <button name="save" type="submit">Next</button>
        </form>
        <h2>Reset Shelter bunk Status</h2>
        <p> Clicking this will reset Shelter capacity.</p>
