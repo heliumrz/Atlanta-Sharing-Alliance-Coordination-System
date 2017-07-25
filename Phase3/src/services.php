@@ -107,14 +107,23 @@ if (isset($_POST['reset'])){
        ?>
      </div>
        <?php
-       $services = getClientServicesForSite($siteId);
-       displayServicesTable($services);
+       // $services = getClientServicesForSite($siteId);
+       // displayServicesTable($services);
+       
+       echo "<h2>Soup Kitchen:</h2>";
+       displaySoupKitchenTable($siteId);
+       
+       echo "<h2>Shelter:</h2>";
+       displayShelterTable($siteId);
+       
+       echo "<h2>Food Pantry:</h2>";
+       displayFoodPantryTable($siteId);
+       
+       echo "<h2>Food Bank:</h2>";
+       $foodbank = getFoodBankForSite($siteId);
+       displayFoodbankTable($foodbank);
        ?>
-       <h2>Food Banks:</h2>
-       <?php
-       $foodbanks = getFoodBankForSite($siteId);
-       displayFoodbankTable($foodbanks);
-       ?>
+       
        <h2>Add New Services</h2>
        <form action="./create_service.php" method="post">
              <p>

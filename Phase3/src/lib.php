@@ -760,58 +760,116 @@ function updateClientData($clientId,$username,$updatedData) {
 }
 
 // get services for Services directory 
-function getClientServicesForSite($siteId){
-    $sql = "SELECT * FROM clientservice WHERE SiteId= ". $siteId;
+function getClientServicesForSite($siteId, $serviceType){
+    $sql = "SELECT * FROM clientservice WHERE SiteId= ". $siteId . " AND FacilityType='". $serviceType . "'";
     $result = executeSql($sql);
     return $result;
 }
-# we use this in services directory page
-function displayServicesTable($services){
+
+function printServiceTableHeader() {
     echo "<table border='1' class='altcolor'>
-          <thead>
-            <tr>
-              <th>Facility Id</th>
-              <th>Facility Name</th>
-              <th>Eligibility Condition</th>
-              <th>Hours Of Operation</th>
-              <th>Facility Type</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>";
+             <thead><tr>
+                 <th>Actions</th>
+                 <th>Facility Id</th>
+                 <th>Facility Name</th>
+                 <th>Eligibility Condition</th>
+                 <th>Hours Of Operation</th>";
+}
+
+# we use this in services directory page
+function displaySoupKitchenTable($siteId){
+    $services = getClientServicesForSite($siteId, "soupkitchen");
+    printServiceTableHeader();
+    echo "
+        <th>Total Seats</th>
+        </tr></thead><tbody>";
     while($row = $services->fetch_assoc()) {
-          echo "<tr>
+        $facilityId = $row['FacilityId'];
+          echo "<tr><td> <a href=\"./services.php?delete=" . $row['FacilityId'] . "&type=". $row['FacilityType'] ." \" onclick=\"return confirm('Are you sure you want to remove this facility?')\">  Remove </a>&nbsp;&nbsp;
+              <a href=\"./edit_service.php?id=" . $row['FacilityId'] . "&type=". $row['FacilityType'] ." \">  Edit </a>
+              </td>
                 <td>" . $row['FacilityId'] . "</td>
                 <td>" . $row['FacilityName'] . "</td>
                 <td>" . $row['EligibilityCondition'] . "</td>
-                <td>" . $row['HoursOfOperation'] . "</td>
-                <td>" . $row['FacilityType'] . "</td>
-                <td> <a href=\"./services.php?delete=" . $row['FacilityId'] . "&type=". $row['FacilityType'] ." \" onclick=\"return confirm('Are you sure you want to remove this facility?')\">  Remove </a>&nbsp;&nbsp;
-                <a href=\"./edit_service.php?id=" . $row['FacilityId'] . "&type=". $row['FacilityType'] ." \">  Edit </a>
-                </td>
-             </tr>";
+                <td>" . $row['HoursOfOperation'] . "</td>";
     }
-    echo "</tbody>
+    $sql = "SELECT * FROM soupkitchen WHERE FacilityId= ". $facilityId;
+    $sk = executeSql($sql);
+    while($row = $sk->fetch_assoc()) {
+        echo "
+            <td>" . $row['SeatTotal'] . "</td>";
+    }
+    echo "</tr></tbody>
        </table>";
 }
+
+function displayShelterTable($siteId){
+    $services = getClientServicesForSite($siteId, "shelter");
+    printServiceTableHeader();
+    echo "<th>Bunk Type</th>
+        <th>Bunk Capacity Male</th>
+        <th>Bunk Capacity Female</th>
+        <th>Bunk Capacity Mixed</th>
+        </tr></thead><tbody>";
+    while($row = $services->fetch_assoc()) {
+        $facilityId = $row['FacilityId'];
+          echo "<tr><td> <a href=\"./services.php?delete=" . $row['FacilityId'] . "&type=". $row['FacilityType'] ." \" onclick=\"return confirm('Are you sure you want to remove this facility?')\">  Remove </a>&nbsp;&nbsp;
+              <a href=\"./edit_service.php?id=" . $row['FacilityId'] . "&type=". $row['FacilityType'] ." \">  Edit </a>
+              </td>
+                <td>" . $row['FacilityId'] . "</td>
+                <td>" . $row['FacilityName'] . "</td>
+                <td>" . $row['EligibilityCondition'] . "</td>
+                <td>" . $row['HoursOfOperation'] . "</td>";
+    }
+    $sql = "SELECT * FROM shelter WHERE FacilityId= ". $facilityId;
+    $sh = executeSql($sql);
+    while($row = $sh->fetch_assoc()) {
+        echo "
+            <td>" . $row['BunkType'] . "</td>
+            <td>" . $row['BunkCapacityMale'] . "</td>
+            <td>" . $row['BunkCapacityFemale'] . "</td>
+            <td>" . $row['BunkCapacityMixed'] . "</td>";
+    }
+    echo "</tr></tbody>
+       </table>";
+}
+
+function displayFoodPantryTable($siteId){
+    $services = getClientServicesForSite($siteId, "foodpantry");
+    printServiceTableHeader();
+    echo "</tr></thead><tbody>";
+    while($row = $services->fetch_assoc()) {
+        // $facilityId = $row['FacilityId'];
+          echo "<tr><td> <a href=\"./services.php?delete=" . $row['FacilityId'] . "&type=". $row['FacilityType'] ." \" onclick=\"return confirm('Are you sure you want to remove this facility?')\">  Remove </a>&nbsp;&nbsp;
+              <a href=\"./edit_service.php?id=" . $row['FacilityId'] . "&type=". $row['FacilityType'] ." \">  Edit </a>
+              </td>
+                <td>" . $row['FacilityId'] . "</td>
+                <td>" . $row['FacilityName'] . "</td>
+                <td>" . $row['EligibilityCondition'] . "</td>
+                <td>" . $row['HoursOfOperation'] . "</td>";
+    }
+    echo "</tr></tbody>
+       </table>";
+}
+
 # we use this in services directory page
 function displayFoodbankTable($services){
     echo "<table border='1' class='altcolor'>
           <thead>
             <tr>
+              <th>Actions</th>
               <th>Facility Id</th>
               <th>Facility Name</th>
-              <th>Actions</th>
             </tr>
           </thead>
           <tbody>";
     while($row = $services->fetch_assoc()) {
           echo "<tr>
+              <td> <a href=\"./services.php?delete=" . $row['FacilityId'] . "&type=foodbank \" onclick=\"return confirm('Are you sure you want to remove this facility?')\">  Remove </a>&nbsp;&nbsp;
+              <a href=\"./edit_service.php?id=" . $row['FacilityId'] . "&type=foodbank \">  Edit </a>
+              </td>
                 <td>" . $row['FacilityId'] . "</td>
                 <td>" . $row['FacilityName'] . "</td>
-                <td> <a href=\"./services.php?delete=" . $row['FacilityId'] . "&type=foodbank \" onclick=\"return confirm('Are you sure you want to remove this facility?')\">  Remove </a>&nbsp;&nbsp;
-                <a href=\"./edit_service.php?id=" . $row['FacilityId'] . "&type=foodbank \">  Edit </a>
-                </td>
              </tr>";
     }
     echo "</tbody>
