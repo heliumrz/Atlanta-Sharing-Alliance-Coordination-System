@@ -1053,6 +1053,7 @@ function displayItemSearchResult($result) {
 function displayItemAddDataField($bankName) {
    $expirationDate = "";
    $itemName = "";
+   $quantity = null;
 
    echo '
             <table>
