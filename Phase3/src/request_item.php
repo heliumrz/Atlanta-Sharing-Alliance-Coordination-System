@@ -4,6 +4,7 @@ include 'lib.php';
 $pageTitle = "Add New Request";
 
 session_start();
+$displayResult = false;
 
 logout(isset($_POST['logout']));
 goToUserHome(isset($_POST['userHome']));   
@@ -54,16 +55,16 @@ if (isset($_POST['save']) ) {
        ?>
    </head>
    <?php displayBodyHeading(); ?>
-   <div style="float: right">
-   <form action="./user_home.php">
-       <input type="submit" value="User Home" />
-   </form>
-   </div>
-   <div style="float: right">
-   <form action="./login.php">
-       <input type="submit" value="Logout" />
-   </form>
-   </div>
+      <div style="float: right">
+      <form action="./login.php">
+         <input type="submit" value="Logout" />
+      </form>
+      </div>
+      <div style="float: right">
+      <form action="./user_home.php">
+         <input type="submit" value="User Home" />
+      </form>
+      </div>
       <form action="/request_item.php" method="post">
          <div>
             <div style="float: left"><strong><?php displayText($pageTitle);?></strong>
@@ -74,29 +75,29 @@ if (isset($_POST['save']) ) {
                 <?php
                 if ($displayItemToRequest) {
                     echo '
-                        <p>
-                           <label>
-                              <strong>Facility Name: </strong>
-                           </label> 
-                           <strong>'.$facilityName.'<strong/>
-                        </p>
-                    <label>
-                       <strong> Item: </strong>
-                    </label> 
-                    <strong>'.$itemName.'</strong>
-                 </p>
-                    <input name="itemId" value="'. $itemId. '" type="hidden" />
-                    <input name="facilityId" value="'. $FacilityId. '" type="hidden" />
-                    <input name="userName" value="'. $_SESSION['username']. '" type="hidden" />
-                 <p>
-                    <label>
-                       <strong>quantity Requested</strong>
-                    </label> 
-                    <input name="quantityRequested" type="text" required/>
-                 </p>
-            
-                 <p>
-                    <button name="save" type="submit">Submit Request</button>
+            <table>
+               <col width="40%">
+               <col width="60%">
+               <tr>
+                  <td align="left">Facility Name:</td>
+                  <td align="left">' . $facilityName . '</td>
+               </tr>
+               <tr>
+                  <td align="left">Item:</td>
+                  <td align="left">' . $itemName . '</td>
+               </tr>
+               <tr>
+                  <td align="left">Quantity Requested:</td>
+                  <td align="left">
+                     <input name="quantityRequested" type="text" required/>
+                  </td>
+               </tr>
+            </table>
+            <input name="itemId" value="'. $itemId. '" type="hidden" />
+            <input name="facilityId" value="'. $FacilityId. '" type="hidden" />
+            <input name="userName" value="'. $_SESSION['username']. '" type="hidden" />
+            <p>
+            <button name="save" type="submit">Submit Request</button>
                     ';
                 }
                 if ($displayResult) {
@@ -104,6 +105,6 @@ if (isset($_POST['save']) ) {
                 }
                 ?>
          </div>
-</form>
-</body>
+      </form>
+   </body>
 </html>
