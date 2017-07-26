@@ -41,6 +41,7 @@ function displayShelterInputFields() {
              <option value="male/female/mixed">Male/Female/Mixed</option>
              <option value="male">Male</option>
              <option value="female">Female</option>
+             <option value="mixed">Mixed</option>
         </select>
        </td>
        </tr><tr>
@@ -130,7 +131,7 @@ function doesFoodbankExist($SiteId, $FacilityType) {
         return false;
     }
 }
-$pageTitle = "Create a new service"; 
+$pageTitle = "Create Service"; 
 session_start();
 // Ensure session is valid. If not, go to login page.
 checkValidSession();
@@ -205,31 +206,31 @@ $_SESSION['message'] = " ";
    </head>
    <?php displayBodyHeading(); ?>
        <div>
+           <div style="float: right">
+           <form action="./login.php">
+               <input type="submit" value="Logout" />
+           </form>
+           </div>
             <div style="float: right">
             <form action="./user_home.php">
                 <input type="submit" value="User Home" />
             </form>
             </div>
-            <div style="float: right">
-            <form action="./login.php">
-                <input type="submit" value="Logout" />
-            </form>
-            </div>
-       <h2><?php echo $pageTitle; ?></h2>
+            
        <?php
+       $svc = array("foodbank"=>"Food Bank", "shelter"=>"Shelter", "foodpantry"=>"Food Pantry", "soupkitchen"=>"Soup Kitchen");
+       echo "<h1>".$pageTitle."</h1>";
        if (!empty($_SESSION['message'])){
            echo "<p>".$_SESSION['message']."</p>";
        }
        ?>
      </div>
       <form action="./create_service.php" method="post">
-         <div>
-         </div>
-         <br>
-         <div>
 			 <?php
 			 $serviceType = $_POST["serviceType"];
-			 # we need this type to find the right tables to update
+			 echo "<h2>".$svc[$serviceType]."</h2>";
+             echo "<div>";
+             # we need this type to find the right tables to update
 			 echo '<input id="serviceTypeToAdd" name="serviceTypeToAdd" type="hidden" value="' . $serviceType . '"/>';
 			 
 			 switch ($serviceType) {

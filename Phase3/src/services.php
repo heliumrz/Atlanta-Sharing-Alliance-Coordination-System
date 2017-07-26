@@ -60,7 +60,7 @@ function displayCreateServiceOption(){
         $_SESSION['option_message'] = "<p>This site has Max number of services. Creating a new Service is not allowed.</p>";
     } else {
         $_SESSION['option_message'] = "";
-        echo "<button name='save' type='submit'>Next</button>";
+        echo "&nbsp;&nbsp;&nbsp; <button name='save' type='submit'>Next</button>";
     }
 }
 if (isset($_POST['reset'])){
@@ -91,17 +91,18 @@ if (isset($_POST['reset'])){
    </head>
    <?php displayBodyHeading(); ?>
        <div>
+           <div style="float: right">
+           <form action="./login.php">
+               <input type="submit" value="Logout" />
+           </form>
+           </div>
             <div style="float: right">
             <form action="./user_home.php">
                 <input type="submit" value="User Home" />
             </form>
             </div>
-            <div style="float: right">
-            <form action="./login.php">
-                <input type="submit" value="Logout" />
-            </form>
-            </div>
-       <h2>Client Services:</h2>
+            
+       <h1>Services:</h1>
        <?php
        if (!empty($_SESSION['message'])){
            echo "<p>".$_SESSION['message']."</p>";
@@ -142,10 +143,16 @@ if (isset($_POST['reset'])){
              echo $_SESSION['option_message'];
              ?>
        </form>
-       <h2>Reset Shelter bunk Status</h2>
-       <p> Clicking this will reset Shelter capacity.</p>
-        <form action="./services.php" method="post">
-            <button name="reset" type="submit">Reset Bunk status</button>
-        </form>
+       
+       <?php
+       $services = getClientServicesForSite($siteId, "shelter");
+       if ($services->num_rows > 0){
+           echo '<h2>Reset Shelter bunk Status</h2>
+           <p> Clicking this will reset Shelter capacity.</p>
+            <form action="./services.php" method="post">
+                <button name="reset" type="submit">Reset Bunk status</button>
+            </form>';
+       }
+       ?>
 </body>
 </html>

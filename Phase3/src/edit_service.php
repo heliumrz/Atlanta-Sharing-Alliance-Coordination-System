@@ -47,16 +47,14 @@ function displayFoodBankInputFields($facilityId) {
 function displaySoupKitchenInputFields($facilityId) {
     $result = getFacilityForFacilityId("soupkitchen", $facilityId);
     while($firstrow = $result->fetch_assoc()) {
-    echo '<td align="left">Seat Available<sup> *</sup>: </td>
-       <td align="left"><input id="SeatAvail" name="SeatAvail" type="text" value="' . $firstrow['SeatAvail'] . '" required/></td>
-       </tr><tr>
+    echo '
        <td align="left">Seat Total<sup> *</sup>: </td>
        <td align="left"><input id="SeatTotal" name="SeatTotal" type="text" value="' . $firstrow['SeatTotal'] . '" required/></td>
        </tr></table> ';
     }	
 }
 function displayBunkTypeOptionsforEdit($originalVal){
-    $bunkTypes = [ "male/female/mixed" => "Male/Female/Mixed", "male"=>"Male", "female"=>"Female"];
+    $bunkTypes = [ "male/female/mixed" => "Male/Female/Mixed", "male"=>"Male", "female"=>"Female", "mixed"=>"Mixed"];
     $optionString = '<select id="BunkType" name="BunkType">';
     foreach($bunkTypes as $value => $label){
         if ($value == $originalVal) {
@@ -95,8 +93,8 @@ function UpdateFacilityInClientService($FacilityId, $SiteId, $FacilityName, $Eli
    return executeSql($sql);
 }
 
-function UpdateFacilityInSoupKitchen($FacilityId, $SeatAvail, $SeatTotal) {
-    $sql = "UPDATE SoupKitchen SET SeatAvail=".$SeatAvail .", SeatTotal=". $SeatTotal. " WHERE FacilityId=".$FacilityId;
+function UpdateFacilityInSoupKitchen($FacilityId, $SeatTotal) {
+    $sql = "UPDATE SoupKitchen SET SeatTotal=". $SeatTotal. " WHERE FacilityId=".$FacilityId;
 	return executeSql($sql);
 }
 
@@ -124,11 +122,11 @@ if (isset($_POST['edit']) && !empty($_POST['serviceTypeToEdit'])) {
        $FacilityType = $_POST['serviceTypeToEdit'];
    switch ($FacilityType) {
    	case "soupkitchen":
-            $SeatAvail = $_POST['SeatAvail'];
+            // $SeatAvail = $_POST['SeatAvail'];
             $SeatTotal = $_POST['SeatTotal'];
             $sql = "UPDATE ClientService SET FacilityName='".$FacilityName ."', EligibilityCondition='".$EligibilityCondition. "', HoursOfOperation='".$HoursOfOperation. "' WHERE FacilityId=".$FacilityId;
             UpdateFacilityInClientService($FacilityId, $SiteId, $FacilityName, $EligibilityCondition, $HoursOfOperation, $FacilityType);
-            UpdateFacilityInSoupKitchen($FacilityId, $SeatAvail, $SeatTotal);
+            UpdateFacilityInSoupKitchen($FacilityId, $SeatTotal);
             $_SESSION['message'] = "This Facility is edited successfully. <a href=\"./services.php\">Go back to services directory.</a> ";
    		break;
 	case "shelter":
@@ -166,16 +164,17 @@ if (isset($_POST['edit']) && !empty($_POST['serviceTypeToEdit'])) {
    </head>
    <?php displayBodyHeading(); ?>
        <div>
+           <div style="float: right">
+           <form action="./login.php">
+               <input type="submit" value="Logout" />
+           </form>
+           </div>
             <div style="float: right">
             <form action="./user_home.php">
                 <input type="submit" value="User Home" />
             </form>
             </div>
-            <div style="float: right">
-            <form action="./login.php">
-                <input type="submit" value="Logout" />
-            </form>
-            </div>
+            
        <h2><?php echo $pageTitle; ?></h2>
        <?php
        if (!empty($_SESSION['message'])){
@@ -202,24 +201,24 @@ $svc = array("foodbank"=>"Food Bank", "shelter"=>"Shelter", "foodpantry"=>"Food 
                          displayClientServiceInputFields($siteId, $facilityId);
                          displaySoupKitchenInputFields($facilityId);
                          echo '<p>(*) <i>denotes required fields.</i></p>';
-                         echo '<button name="edit" type="submit">Edit Service</button>';
+                         echo '<button name="edit" type="submit">Update Service</button>';
                          break;
                      case "shelter":
                          displayClientServiceInputFields($siteId, $facilityId);
                          displayShelterInputFields($facilityId);
                          echo '<p>(*) <i>denotes required fields.</i></p>';
-                         echo '<button name="edit" type="submit">Edit Service</button>';
+                         echo '<button name="edit" type="submit">Update Service</button>';
                          break;
                      case "foodpantry":
                          displayClientServiceInputFields($siteId, $facilityId);
                          echo "</tr></table> ";
                          echo '<p>(*) <i>denotes required fields.</i></p>';
-                         echo '<button name="edit" type="submit">Edit Service</button>';
+                         echo '<button name="edit" type="submit">Update Service</button>';
                          break;
                      case "foodbank":
                          displayFoodBankInputFields($facilityId);
                          echo '<p>(*) <i>denotes required fields.</i></p>';
-                         echo '<button name="edit" type="submit">Edit Service</button>';
+                         echo '<button name="edit" type="submit">Update Service</button>';
                          break;
                      default:
                          break;
