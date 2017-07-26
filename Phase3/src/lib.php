@@ -1191,7 +1191,7 @@ function displayItemAddDataField($bankName) {
                </tr>
                <tr>
                   <td align="left">Expiration Date (*):</td>
-                  <td align="left"><input id="expirationDate" name="expirationDate" type="text" style="width:150%" value="' . $expirationDate . '"/></td>
+                  <td align="left"><input id="expirationDate" name="expirationDate" type="date" style="width:150%" value="' . $expirationDate . '"/></td>
                </tr>
                <tr>
                   <td align="left">Storage Type (*):</td>
