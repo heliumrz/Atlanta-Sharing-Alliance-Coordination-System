@@ -74,13 +74,16 @@
 	  
 	}
 	else{
-		echo'<span style="color:red;"> Please enter a number in Quantity. </span>';
+		echo '<script language="javascript">';
+		echo 'alert("Please enter a number in Quantity.")';
+		echo '</script>';
 	}
    }
    else{
 	if (isset($_POST['addItem'])){
-
-	   echo '<span style="color:red;">Expiration Date, Storage Type, Category, Sub-Category and Item Name are required in Add New Item. </span>';
+		echo '<script language="javascript">';
+		echo 'alert("Expiration Date, Storage Type, Category, Sub-Category and Item Name are required in Add New Item.")';
+		echo '</script>';
 	}
 	
    }
@@ -93,7 +96,7 @@
       ?>
       <script>
          <?php displayJavascriptLib();?>  
-         	 
+          
       </script>
    </head>
    <?php displayBodyHeading(); ?>
@@ -111,7 +114,7 @@
             <p>
                <?php 
 				echo '<button name="addItem" type="submit" onClick="validationRequired=true">Add Item</button>'; 
-				echo '<button name="itemSearch" type="submit" onClick="validationRequired=true">Item Search</button>'; ?>
+				echo '<button name="itemSearch" type="submit" onClick="validationRequired=true">Item Search in System</button>'; ?>
                
                <?php displayHiddenField(); ?>
             </p>
@@ -125,7 +128,7 @@
 			 "AND tdi.facilityId = '" . $facilityId . "'".
 			 "ORDER BY itm.ItemId DESC";
 	     $result = executeSql($sql);
-            if (isset($_POST['addItem']) && $added) {
+       if (isset($_POST['addItem']) && $added) {
 				echo "
       <label>
          <strong>Added item into $bankName:</strong>
@@ -165,8 +168,7 @@
       </table>
       <br>
       ";
-              // displayItemSearchResult($result);
-            }
+    }
         ?>
       </form>
    </body>
