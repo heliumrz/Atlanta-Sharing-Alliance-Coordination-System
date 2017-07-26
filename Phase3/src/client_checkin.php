@@ -28,7 +28,11 @@
    
    // Process checkin logic
    if (isset($_POST['checkin']) && !empty($clientId) && !empty($username)) {
-      addClientServiceUsage($clientId,$siteId,$_POST['facilityId'],$username,$_POST['description'],$_POST['note']);
+      $bunkType = $_POST['bunkType'];
+      $facilityId = $_POST['facilityId'];
+      $facilityType = retrieveTypeFromFacility($facilityId);
+      
+      addClientServiceUsage($clientId,$siteId,$facilityId,$username,$_POST['description'],$_POST['note']);
       goToClientDetail(true);
    }
    
@@ -59,6 +63,16 @@
             } else {
                alert(checkinRequiredField);
                return false;
+            }
+         }
+         
+         function toggleBunkType() {
+            var facility = document.getElementById("facilityId");
+            var facilityText = facility.options[facility.selectedIndex].text;            
+            if (facilityText.startsWith("Shelter")) {
+               document.getElementById("bunkTypeRow").style.display = "";               
+            } else {
+               document.getElementById("bunkTypeRow").style.display = "none";
             }
          }
       </script>

@@ -364,9 +364,9 @@ function displayUserHomeDataField($userRow) {
 
 // Display empty fields if no data provided or display data provided on field
 function displayClientDataField($clientData) {
-   $firstName = "Joe";
-   $lastName = "Client";
-   $description = "TestID";
+   $firstName = "";
+   $lastName = "";
+   $description = "";
    $phoneNumber = "";
 
    if (!empty($clientData)) {
@@ -451,9 +451,19 @@ function displayClientCheckinDataField($siteId) {
                      displaySiteFacility($siteId) . '
                   </td>
                </tr>
+               <tr id="bunkTypeRow" style="display:none">
+                  <td align="right">Bunk Type (*):</td>
+                  <td>
+                     <select id="bunkType" name="bunkType" style="width:100%">
+                        <option value="Mixed">Mixed</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                     </select>              
+                  </td>
+               </tr>
                <tr>
                   <td align="right">Service Description (*):</td>
-                  <td align="left"><input id="description" name="description" type="text" style="width:100%" value="' . $EMPTY_STRING . '"/></td>
+                  <td align="left"><input id="description" name="description" required type="text" style="width:100%" value="' . $EMPTY_STRING . '"/></td>
                </tr>
                <tr>
                   <td align="right">Notes:</td>
@@ -593,11 +603,12 @@ function displayClientServiceUsageHistory($result) {
 function displaySiteFacility($siteId) {
    $result = retrieveFacilityFromSite($siteId);
    $str = "
-      <select id='facilityId' name='facilityId' style='width:100%'>";
+      <select id='facilityId' name='facilityId' style='width:100%' onchange='toggleBunkType()' required>
+         <option value=''></option>";
 
    while($row = $result->fetch_assoc()) {
       $str = $str . "
-         <option value='" . $row['facilityId'] . "'>" . $row['facilityName'] . "</option>";
+         <option value='" . $row['facilityId'] . "'>" . $row['facilityType'] . " - " . $row['facilityName'] . "</option>";
    }
    $str = $str . "
       </select>";
@@ -910,7 +921,7 @@ function deleteService($service) {
 }
 
 function retrieveFacilityFromSite($siteId) {
-   $sql = "SELECT cse.facilityId, cse.facilityName " .
+   $sql = "SELECT cse.facilityId, cse.facilityName, cse.facilityType " .
           "FROM ClientService cse " .
           "WHERE NOT EXISTS (SELECT 1 " .
           "                    FROM FoodBank fba " .
@@ -931,6 +942,17 @@ function retrieveSiteFromUser($username) {
    $result = executeSql($sql);
    $row = $result->fetch_assoc();
    return $row['siteId'];
+}
+
+function retrieveTypeFromFacility($facilityId) {
+   $sql = "SELECT facilityType " .
+          "  FROM ClientService " .
+          " WHERE facilityId = " . $facilityId;
+
+   // echo "retrieveTypeFromFacility sql: " . $sql;
+   $result = executeSql($sql);
+   $row = $result->fetch_assoc();
+   return $row['facilityType'];
 }
 
 // Insert into Client Service Usage
