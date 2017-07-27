@@ -911,7 +911,9 @@ function getFoodBankForSite($siteId){
 }
 
 function getCountOfFacilitiesForSite($siteId) {
-    $sql = "SELECT * FROM sitetoservice WHERE SiteId= ".$siteId;
+    $sql = "SELECT facilityId FROM sitetoservice WHERE SiteId = " . $siteId . " " . 
+           " UNION " . 
+           "SELECT facilityId FROM clientservice WHERE SiteId = " . $siteId;
     $result = executeSql($sql);
     return mysqli_num_rows($result);
 }
