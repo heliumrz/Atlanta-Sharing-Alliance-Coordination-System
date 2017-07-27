@@ -13,6 +13,8 @@ static $ITEM_SEARCH_URL = "/item_search.php";
 static $ITEM_ADD_URL = "/item_add.php";
 static $MAIN_FORM = "mainForm";
 
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
+
 // Display CSS styling
 function displayCss() {
    echo "
@@ -455,15 +457,15 @@ function displayClientCheckinDataField($siteId) {
                   <td align="right">Bunk Type (*):</td>
                   <td>
                      <select id="bunkType" name="bunkType" style="width:100%">
-                        <option value="Mixed">Mixed</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="mixed">Mixed</option>
                      </select>              
                   </td>
                </tr>
                <tr>
                   <td align="right">Service Description (*):</td>
-                  <td align="left"><input id="description" name="description" required type="text" style="width:100%" value="' . $EMPTY_STRING . '"/></td>
+                  <td align="left"><input id="description" name="description" type="text" style="width:100%" value="' . $EMPTY_STRING . '"/></td>
                </tr>
                <tr>
                   <td align="right">Notes:</td>
@@ -603,7 +605,7 @@ function displayClientServiceUsageHistory($result) {
 function displaySiteFacility($siteId) {
    $result = retrieveFacilityFromSite($siteId);
    $str = "
-      <select id='facilityId' name='facilityId' style='width:100%' onchange='toggleBunkType()' required>
+      <select id='facilityId' name='facilityId' style='width:100%' onchange='toggleBunkType()'>
          <option value=''></option>";
 
    while($row = $result->fetch_assoc()) {
@@ -961,6 +963,30 @@ function addClientServiceUsage($clientId,$siteId,$facilityId,$username,$descript
           "VALUES (" . $clientId . "," . $siteId . "," . $facilityId . "," . "'" . $username . "',now(),'" . $description . "','" . $note . "')";
    // echo "addClientServiceUsage sql: " . $sql;
    return insertSql($sql);
+}
+
+// Retrieve bunk count availability
+function bunkTypeAvailable($facilityId,$bunkType) {
+   $sql = "SELECT (bunkCount" . $bunkType . ") as bunkAvailable " .
+          "  FROM Shelter " .
+          " WHERE facilityId = " . $facilityId . " " .
+          "   AND bunkType = '" . $bunkType . "'";
+
+   // echo "bunkTypeAvailable sql: " . $sql;
+   $result = executeSql($sql);
+   $row = $result->fetch_assoc();
+   return $row['bunkAvailable'];
+}
+
+// Update bunk count for check-in
+function updateBunkCountOnCheckin($facilityId,$bunkType) {
+   $sql = "UPDATE Shelter " .
+          "   SET bunkCount" . $bunkType . " = " . "bunkCount" . $bunkType . " - 1 " .
+          " WHERE facilityId = " . $facilityId . " " .
+          "   AND bunkType = '" . $bunkType . "'";
+
+   // echo "updateBunkCountOnCheckin sql: " . $sql;
+   return executeSql($sql);
 }
 
 function retrieveAllFoodBank() {

@@ -8,6 +8,7 @@
    $clientRow = null;
    $clientModificationHistory = null;
    $clientServiceUsageHistory = null;
+   $checkInMsg = "";
    
    // Ensure session is valid. If not, go to login page.
    checkValidSession();
@@ -28,12 +29,27 @@
    
    // Process checkin logic
    if (isset($_POST['checkin']) && !empty($clientId) && !empty($username)) {
+      $checkInSuccess = true;
       $bunkType = $_POST['bunkType'];
       $facilityId = $_POST['facilityId'];
       $facilityType = retrieveTypeFromFacility($facilityId);
+      echo "facilityType: " . $facilityType;
+      if (strtolower($facilityType) == "shelter") {
+         if (bunkTypeAvailable($facilityId,$bunkType) > 0) {
+            addClientServiceUsage($clientId,$siteId,$facilityId,$username,$_POST['description'],$_POST['note']);
+            updateBunkCountOnCheckin($facilityId,$bunkType);
+         } else {
+            $checkInMsg = "Shelter at full capacity. Please check in at another time.";
+            $checkInSuccess = false;
+         }
+      } else {
+         addClientServiceUsage($clientId,$siteId,$facilityId,$username,$_POST['description'],$_POST['note']);
+      }
       
-      addClientServiceUsage($clientId,$siteId,$facilityId,$username,$_POST['description'],$_POST['note']);
-      goToClientDetail(true);
+      if ($checkInSuccess) {
+         goToClientDetail(true);
+      }
+      
    }
    
    if (!empty($clientId)) {
@@ -58,7 +74,9 @@
          <?php displayJavascriptLib();?>
       
          function validateInput() {
-            if (validateField("description") && validateValidCharacter("note")) {
+            var facility = document.getElementById("facilityId");
+            var facilityText = facility.options[facility.selectedIndex].text;            
+            if (validateField("description") && validateValidCharacter("note") && (facilityText != '')) {
                return true;
             } else {
                alert(checkinRequiredField);
@@ -69,7 +87,7 @@
          function toggleBunkType() {
             var facility = document.getElementById("facilityId");
             var facilityText = facility.options[facility.selectedIndex].text;            
-            if (facilityText.startsWith("Shelter")) {
+            if (facilityText.toLowerCase().startsWith("shelter")) {
                document.getElementById("bunkTypeRow").style.display = "";               
             } else {
                document.getElementById("bunkTypeRow").style.display = "none";
@@ -97,6 +115,11 @@
                <?php displayHiddenField(); ?>
             </p>
          </div>
+         <?php
+            if (!(empty($checkInMsg))) {
+               echo $checkInMsg;
+            }
+        ?>         
    </tbody>
 </form>
 </body>
