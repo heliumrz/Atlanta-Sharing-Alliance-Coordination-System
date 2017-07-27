@@ -2,6 +2,7 @@
 include 'lib.php';
 
 $pageTitle = "Add New Request";
+$displayResult = false;
 
 session_start();
 
@@ -114,7 +115,7 @@ if (isset($_POST['save']) ) {
                     <input name="facilityId" value="'. $facilityId. '" type="hidden" />
                     <input name="userName" value="'. $_SESSION['username']. '" type="hidden" />
                     <input id="availQuant" name="availQuant" type="hidden" value="'. $availQuant .'"/>
-                    <td align="left">quantity Requested: </td>
+                    <td align="left">Quantity Requested: </td>
                     <td align="left"><input name="quantityRequested" type="text" required/></td>
                     </tr><tr>
                     <td align="left"></td>
