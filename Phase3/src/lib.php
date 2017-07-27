@@ -1110,7 +1110,7 @@ function displayItemSearchResult($result) {
          <tbody>";
 
       while($row = $result->fetch_assoc()) {
-            echo "
+         echo "
             <tr>
                <td class='hide'>" . $row['facilityId'] . "</td>
                <td>" . $row['facilityName'] . "</td>
@@ -1119,7 +1119,10 @@ function displayItemSearchResult($result) {
                <td>" . $row['storageType'] . "</td>
                <td>" . $row['expDate'] . "</td>
                <td>" . $row['category'] . "</td>
-               <td>" . $row['subcategory'] . "</td>
+               <td>" . $row['subcategory'] . "</td>";
+
+         if ($row['owned'] == 1) {
+            echo "
                <td vertical-align='center'>
                   <form action='item_search.php' method='post'>
                     <input id='facilityId' name='facilityId' type='hidden' value='". $row['facilityId'] ."'/>
@@ -1136,27 +1139,22 @@ function displayItemSearchResult($result) {
                     <button name='deleteItem' type='submit'>Delete</button>
                   </form>
                </td>
+               <td/>";
+         } else {
+            echo "
+               <td>" . $row['availableQuantity'] . "</td>
+               <td/>
                <td>
-                  <form action='request_item.php' method='post'>";
-                  // This is to determine if the item is from the foodbank
-                  // in the user's site
-                    $username = $_SESSION['username'];
-                    $siteId = retrieveSiteFromUser($username);
-                    $foodbankRow = getFoodBankForSite($siteId);
-                    $fbrow = $foodbankRow->fetch_assoc();
-                    $fbid = $fbrow['FacilityId'];
-                    $disabled = " ";
-                    if ($fbid == $row['facilityId']) {
-                        $disabled = "disabled";
-                    }
-                    echo "<input id='facilityId' name='facilityId' type='hidden' value='". $row['facilityId'] ."'/>
+                  <form action='request_item.php' method='post'>
+                    <input id='facilityId' name='facilityId' type='hidden' value='". $row['facilityId'] ."'/>
                     <input id='facilityName' name='facilityName' type='hidden' value='". $row['facilityName'] ."'/>
                     <input id='itemId' name='itemId' type='hidden' value='". $row['itemId'] ."'/>
                     <input id='availQuant' name='availQuant' type='hidden' value='". $row['availableQuantity'] ."'/>
-                    <button name='request' type='submit' ".$disabled.">Request</button>
+                    <button name='request' type='submit'>Request</button>
                   </form>
                </td>
             </tr>";
+         }
       }
       echo "
          </tbody>
