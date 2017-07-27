@@ -135,7 +135,8 @@ function doesFoodbankExist($SiteId, $FacilityType) {
         return false;
     }
 }
-$pageTitle = "Create Service"; 
+$pageTitle = "Create Service";
+$serviceType = "";
 session_start();
 // Ensure session is valid. If not, go to login page.
 checkValidSession();
@@ -231,9 +232,11 @@ $_SESSION['message'] = " ";
      </div>
       <form action="./create_service.php" method="post">
 			 <?php
-			 $serviceType = $_POST["serviceType"];
-			 echo "<h2>".$svc[$serviceType]."</h2>";
-             echo "<div>";
+          if (isset($_POST["serviceType"])) {
+             $serviceType = $_POST["serviceType"];
+             echo "<h2>".$svc[$serviceType]."</h2>";
+          }
+          echo "<div>";
              # we need this type to find the right tables to update
 			 echo '<input id="serviceTypeToAdd" name="serviceTypeToAdd" type="hidden" value="' . $serviceType . '"/>';
 			 
