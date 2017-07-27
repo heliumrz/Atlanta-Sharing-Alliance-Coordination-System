@@ -18,6 +18,7 @@
    goToAddNewItem(isset($_POST['addNewItem']));
    
    if (isset($_POST['search'])) {
+      $siteId = $_SESSION['siteId'];
       $facilityId = $_POST['facilityId'];
       $expirationDateFrom = $_POST['expirationDateFrom'];
       $expirationDateTo = $_POST['expirationDateTo'];
@@ -26,11 +27,13 @@
       $subcategory = $_POST['subcategory'];
       $itemName = $_POST['itemName'];
       
-      $sql = "SELECT tdi.facilityId, fba.facilityName, itm.itemId, itm.name itemName, itm.storageType, itm.expDate, itm.category, itm.subcategory, tdi.availableQuantity " .
-             "FROM FoodBankToItem tdi, item itm, sitetoservice sts, foodbank fba " .
-             "WHERE tdi.itemId = itm.itemId " .
-             "AND tdi.facilityId = sts.facilityId " .
-             "AND tdi.facilityId = fba.facilityId " ;
+      $sql = "SELECT tdi.facilityId, fba.facilityName, itm.itemId, itm.name itemName, " .
+             "       itm.storageType, itm.expDate, itm.category, itm.subcategory, tdi.availableQuantity, " .
+             "       CASE sts.siteId WHEN " . $siteId . " THEN 1 ELSE 0 END AS owned " .
+             "  FROM FoodBankToItem tdi, item itm, sitetoservice sts, foodbank fba " .
+             " WHERE tdi.itemId = itm.itemId " .
+             "   AND tdi.facilityId = sts.facilityId " .
+             "   AND tdi.facilityId = fba.facilityId " ;
                   
       if (!empty($facilityId )) {
          $sql = $sql . "AND tdi.facilityId = '" . $facilityId . "' ";

@@ -3,14 +3,16 @@
    
    // input field for facilityName
 function displayFoodbankInputFields() {
-    echo ' <p>
+   $EMPTY_STRING = "";
+   echo ' <p>
        <label>Facility Name: </label>
        <input id="facilityName" name="facilityName" type="text" value="' . $EMPTY_STRING . '" required/>
        </p>';
 }
 
 function displayClientServiceInputFields() {
-    echo '<table>
+   $EMPTY_STRING = "";
+   echo '<table>
                <col width="200px">
                <col width="300px">
                <tr>
@@ -25,7 +27,8 @@ function displayClientServiceInputFields() {
        </tr><tr> ';	
 }
 function displaySoupKitchenInputFields() {
-    echo '
+   $EMPTY_STRING = "";
+   echo '
         <td align="left">Seat Available<sup> *</sup>: </td>
        <td align="left"><input id="SeatAvail" name="SeatAvail" type="text" value="' . $EMPTY_STRING . '" required/></td>
        </tr><tr>
@@ -34,7 +37,8 @@ function displaySoupKitchenInputFields() {
        </tr><tr> ';	
 }
 function displayShelterInputFields() {
-    echo ' 
+   $EMPTY_STRING = "";
+   echo ' 
         <td align="left">Bunk Type<sup> *</sup>: </td>
        <td align="left">
         <select id="BunkType" name="BunkType">
@@ -131,7 +135,8 @@ function doesFoodbankExist($SiteId, $FacilityType) {
         return false;
     }
 }
-$pageTitle = "Create Service"; 
+$pageTitle = "Create Service";
+$serviceType = "";
 session_start();
 // Ensure session is valid. If not, go to login page.
 checkValidSession();
@@ -227,9 +232,11 @@ $_SESSION['message'] = " ";
      </div>
       <form action="./create_service.php" method="post">
 			 <?php
-			 $serviceType = $_POST["serviceType"];
-			 echo "<h2>".$svc[$serviceType]."</h2>";
-             echo "<div>";
+          if (isset($_POST["serviceType"])) {
+             $serviceType = $_POST["serviceType"];
+             echo "<h2>".$svc[$serviceType]."</h2>";
+          }
+          echo "<div>";
              # we need this type to find the right tables to update
 			 echo '<input id="serviceTypeToAdd" name="serviceTypeToAdd" type="hidden" value="' . $serviceType . '"/>';
 			 

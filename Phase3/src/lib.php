@@ -13,6 +13,8 @@ static $ITEM_SEARCH_URL = "/item_search.php";
 static $ITEM_ADD_URL = "/item_add.php";
 static $MAIN_FORM = "mainForm";
 
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
+
 // Display CSS styling
 function displayCss() {
    echo "
@@ -364,9 +366,9 @@ function displayUserHomeDataField($userRow) {
 
 // Display empty fields if no data provided or display data provided on field
 function displayClientDataField($clientData) {
-   $firstName = "Joe";
-   $lastName = "Client";
-   $description = "TestID";
+   $firstName = "";
+   $lastName = "";
+   $description = "";
    $phoneNumber = "";
 
    if (!empty($clientData)) {
@@ -449,6 +451,16 @@ function displayClientCheckinDataField($siteId) {
                   <td align="right">Facility (*):</td>
                   <td align="left">' .
                      displaySiteFacility($siteId) . '
+                  </td>
+               </tr>
+               <tr id="bunkTypeRow" style="display:none">
+                  <td align="right">Bunk Type (*):</td>
+                  <td>
+                     <select id="bunkType" name="bunkType" style="width:100%">
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="mixed">Mixed</option>
+                     </select>              
                   </td>
                </tr>
                <tr>
@@ -593,11 +605,12 @@ function displayClientServiceUsageHistory($result) {
 function displaySiteFacility($siteId) {
    $result = retrieveFacilityFromSite($siteId);
    $str = "
-      <select id='facilityId' name='facilityId' style='width:100%'>";
+      <select id='facilityId' name='facilityId' style='width:100%' onchange='toggleBunkType()'>
+         <option value=''></option>";
 
    while($row = $result->fetch_assoc()) {
       $str = $str . "
-         <option value='" . $row['facilityId'] . "'>" . $row['facilityName'] . "</option>";
+         <option value='" . $row['facilityId'] . "'>" . $row['facilityType'] . " - " . $row['facilityName'] . "</option>";
    }
    $str = $str . "
       </select>";
@@ -910,7 +923,7 @@ function deleteService($service) {
 }
 
 function retrieveFacilityFromSite($siteId) {
-   $sql = "SELECT cse.facilityId, cse.facilityName " .
+   $sql = "SELECT cse.facilityId, cse.facilityName, cse.facilityType " .
           "FROM ClientService cse " .
           "WHERE NOT EXISTS (SELECT 1 " .
           "                    FROM FoodBank fba " .
@@ -933,12 +946,47 @@ function retrieveSiteFromUser($username) {
    return $row['siteId'];
 }
 
+function retrieveTypeFromFacility($facilityId) {
+   $sql = "SELECT facilityType " .
+          "  FROM ClientService " .
+          " WHERE facilityId = " . $facilityId;
+
+   // echo "retrieveTypeFromFacility sql: " . $sql;
+   $result = executeSql($sql);
+   $row = $result->fetch_assoc();
+   return $row['facilityType'];
+}
+
 // Insert into Client Service Usage
 function addClientServiceUsage($clientId,$siteId,$facilityId,$username,$description,$note) {
    $sql = "INSERT INTO ClientServiceUsage (clientId,siteId,facilityId,username,serviceDateTime,description,note) " .
           "VALUES (" . $clientId . "," . $siteId . "," . $facilityId . "," . "'" . $username . "',now(),'" . $description . "','" . $note . "')";
    // echo "addClientServiceUsage sql: " . $sql;
    return insertSql($sql);
+}
+
+// Retrieve bunk count availability
+function bunkTypeAvailable($facilityId,$bunkType) {
+   $sql = "SELECT (bunkCount" . $bunkType . ") as bunkAvailable " .
+          "  FROM Shelter " .
+          " WHERE facilityId = " . $facilityId . " " .
+          "   AND bunkType = '" . $bunkType . "'";
+
+   // echo "bunkTypeAvailable sql: " . $sql;
+   $result = executeSql($sql);
+   $row = $result->fetch_assoc();
+   return $row['bunkAvailable'];
+}
+
+// Update bunk count for check-in
+function updateBunkCountOnCheckin($facilityId,$bunkType) {
+   $sql = "UPDATE Shelter " .
+          "   SET bunkCount" . $bunkType . " = " . "bunkCount" . $bunkType . " - 1 " .
+          " WHERE facilityId = " . $facilityId . " " .
+          "   AND bunkType = '" . $bunkType . "'";
+
+   // echo "updateBunkCountOnCheckin sql: " . $sql;
+   return executeSql($sql);
 }
 
 function retrieveAllFoodBank() {
@@ -1088,7 +1136,7 @@ function displayItemSearchResult($result) {
          <tbody>";
 
       while($row = $result->fetch_assoc()) {
-            echo "
+         echo "
             <tr>
                <td class='hide'>" . $row['facilityId'] . "</td>
                <td>" . $row['facilityName'] . "</td>
@@ -1097,7 +1145,10 @@ function displayItemSearchResult($result) {
                <td>" . $row['storageType'] . "</td>
                <td>" . $row['expDate'] . "</td>
                <td>" . $row['category'] . "</td>
-               <td>" . $row['subcategory'] . "</td>
+               <td>" . $row['subcategory'] . "</td>";
+
+         if ($row['owned'] == 1) {
+            echo "
                <td vertical-align='center'>
                   <form action='item_search.php' method='post'>
                     <input id='facilityId' name='facilityId' type='hidden' value='". $row['facilityId'] ."'/>
@@ -1114,27 +1165,22 @@ function displayItemSearchResult($result) {
                     <button name='deleteItem' type='submit'>Delete</button>
                   </form>
                </td>
+               <td/>";
+         } else {
+            echo "
+               <td>" . $row['availableQuantity'] . "</td>
+               <td/>
                <td>
-                  <form action='request_item.php' method='post'>";
-                  // This is to determine if the item is from the foodbank
-                  // in the user's site
-                    $username = $_SESSION['username'];
-                    $siteId = retrieveSiteFromUser($username);
-                    $foodbankRow = getFoodBankForSite($siteId);
-                    $fbrow = $foodbankRow->fetch_assoc();
-                    $fbid = $fbrow['FacilityId'];
-                    $disabled = " ";
-                    if ($fbid == $row['facilityId']) {
-                        $disabled = "disabled";
-                    }
-                    echo "<input id='facilityId' name='facilityId' type='hidden' value='". $row['facilityId'] ."'/>
+                  <form action='request_item.php' method='post'>
+                    <input id='facilityId' name='facilityId' type='hidden' value='". $row['facilityId'] ."'/>
                     <input id='facilityName' name='facilityName' type='hidden' value='". $row['facilityName'] ."'/>
                     <input id='itemId' name='itemId' type='hidden' value='". $row['itemId'] ."'/>
                     <input id='availQuant' name='availQuant' type='hidden' value='". $row['availableQuantity'] ."'/>
-                    <button name='request' type='submit' ".$disabled.">Request</button>
+                    <button name='request' type='submit'>Request</button>
                   </form>
                </td>
             </tr>";
+         }
       }
       echo "
          </tbody>
@@ -1169,7 +1215,7 @@ function displayItemAddDataField($bankName) {
                </tr>
                <tr>
                   <td align="left">Expiration Date (*):</td>
-                  <td align="left"><input id="expirationDate" name="expirationDate" type="text" style="width:150%" value="' . $expirationDate . '"/></td>
+                  <td align="left"><input id="expirationDate" name="expirationDate" type="date" style="width:150%" value="' . $expirationDate . '"/></td>
                </tr>
                <tr>
                   <td align="left">Storage Type (*):</td>

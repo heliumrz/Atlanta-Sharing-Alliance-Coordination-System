@@ -265,11 +265,6 @@ call insertClient(12);
 delete from ClientLog;
 call insertClientLog();
 
-select * from Site;
-select * from User;
-select * from Client;
-select * from ClientLog;
-
 -- Inserting 12 Clients' phone number --
 UPDATE Client SET PhoneNumber='1-300-738-3425' WHERE ClientId='1';
 UPDATE Client SET PhoneNumber='189-582-8672' WHERE ClientId='2';
