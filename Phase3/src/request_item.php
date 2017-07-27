@@ -47,7 +47,7 @@ if (isset($_POST['save']) ) {
        $displayItemToRequest = true;
       } else {
        $insertSql = "INSERT INTO request (Username, FacilityId, ItemId,  Status, QuantityRequested, QuantityFulfilled) " .
-                      "VALUES ('" . $userName . "','" . $facilityId . "','"  . $itemId . "', 'Pending', '" . $quantityRequested . "','0' )";
+                      "VALUES ('" . $userName . "','" . $facilityId . "','"  . $itemId . "', 'pending', '" . $quantityRequested . "','0' )";
        $requestId = insertSql($insertSql);
          if ($requestId > 0) {
             $_SESSION['message'] = "Request submitted with id ". $requestId;
