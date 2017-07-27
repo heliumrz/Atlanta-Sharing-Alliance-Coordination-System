@@ -54,7 +54,7 @@ function displaySoupKitchenInputFields($facilityId) {
     }	
 }
 function displayBunkTypeOptionsforEdit($originalVal){
-    $bunkTypes = [ "male/female/mixed" => "Male/Female/Mixed", "male"=>"Male", "female"=>"Female", "mixed"=>"Mixed"];
+    $bunkTypes = [ "male"=>"Male", "female"=>"Female", "mixed"=>"Mixed"];
     $optionString = '<select id="BunkType" name="BunkType">';
     foreach($bunkTypes as $value => $label){
         if ($value == $originalVal) {

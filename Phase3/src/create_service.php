@@ -29,9 +29,6 @@ function displayClientServiceInputFields() {
 function displaySoupKitchenInputFields() {
    $EMPTY_STRING = "";
    echo '
-        <td align="left">Seat Available<sup> *</sup>: </td>
-       <td align="left"><input id="SeatAvail" name="SeatAvail" type="text" value="' . $EMPTY_STRING . '" required/></td>
-       </tr><tr>
        <td align="left">Seat Total<sup> *</sup>: </td>
        <td align="left"><input id="SeatTotal" name="SeatTotal" type="text" value="' . $EMPTY_STRING . '" required/></td>
        </tr><tr> ';	
@@ -42,7 +39,6 @@ function displayShelterInputFields() {
         <td align="left">Bunk Type<sup> *</sup>: </td>
        <td align="left">
         <select id="BunkType" name="BunkType">
-             <option value="male/female/mixed">Male/Female/Mixed</option>
              <option value="male">Male</option>
              <option value="female">Female</option>
              <option value="mixed">Mixed</option>
@@ -90,7 +86,7 @@ function addFacilityToClientServiceTable($FacilityId, $SiteId, $FacilityName, $E
 
 function addFacilityToSoupKitchen($FacilityId, $SeatAvail, $SeatTotal) {
 	$sql = "INSERT INTO SoupKitchen (FacilityId, SeatAvail, SeatTotal) VALUES ('" . 
-		$FacilityId . "','". $SeatAvail . "','". $SeatTotal . "')";
+		$FacilityId . "','". $SeatTotal . "','". $SeatTotal . "')";
 	return insertSql($sql);
 }
 
